@@ -2,7 +2,7 @@
 reimplementing machine learning algorithms from scratch
 
 ## Content:
-  * Template-Folder: contains the template for my reimplementation format
+  * Template-Folder: contains the template for reimplementation format
   * Perceptron: 
   
 ## To Do:
