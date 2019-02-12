@@ -3,7 +3,7 @@ reimplementing machine learning algorithms from scratch
 
 ## Content:
   * Template-Folder: contains the template for my reimplementation format
-  * Linear Regression: implementation of 
+  * Linear Regression: implementation of linear regression 
   
 ## To Do:
   * Logistic Regression
@@ -14,7 +14,15 @@ reimplementing machine learning algorithms from scratch
   * K-Means
   * Random Forest
   * Gradient Boosting algorithms
-  * 
+  * Deep Feedforward Neural Networks
+  * Regularization
+  * Dropout
+  * Convolutional Neural Networks
+  * Recurrent Neural Networks
+  * Bidirectional Recurrent Neural Networks
+  * Recursive Neural Networks
+  * NN Autoencoders
+  * Generative Adversarial Neural Networks
   
 ## Sources:
  * Template-Folder: Examples Source
