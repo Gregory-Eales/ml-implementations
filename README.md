@@ -3,9 +3,10 @@ reimplementing machine learning algorithms from scratch
 
 ## Content:
   * Template-Folder: contains the template for my reimplementation format
-  * Linear Regression: implementation of linear regression 
+  * Perceptron: 
   
 ## To Do:
+  * Linear Regression: implementation of linear regression 
   * Logistic Regression
   * Decision Tree
   * SVM
