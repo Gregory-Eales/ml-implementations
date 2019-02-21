@@ -20,6 +20,9 @@ def get_abalone():
 	abalone_dataset['Gender'] = np.where(abalone_dataset['Gender'] == "M", 1,
 	 abalone_dataset['Gender'])
 
-	print(abalone_dataset.head())
+	y = np.array(abalone_dataset["Gender"].values)
+	abalone_dataset['Gender'] = np.where(abalone_dataset['Gender'] == 0,
+	 1, abalone_dataset['Gender'])
+	x = np.array(abalone_dataset.values)
 
-	print(abalone_dataset["Gender"].loc)
+	return x, y
