@@ -6,7 +6,7 @@ import requests
 
 def get_abalone():
 
-	to_predict = "Gender"
+	to_predict = "Height"
 
 	url="https://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data"
 	s=requests.get(url).content
