@@ -4,8 +4,9 @@ import io
 import requests
 
 
-
 def get_abalone():
+
+	to_predict = "Gender"
 
 	url="https://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data"
 	s=requests.get(url).content
@@ -14,15 +15,15 @@ def get_abalone():
 		"Whole Weight", "Shucked Weight", "Viscera Weight", "Shell Weight",
 		 "Rings"]
 
-	abalone_dataset['Gender'] = np.where(abalone_dataset['Gender'] != "M", 0,
-	 abalone_dataset['Gender'])
+	abalone_dataset["Gender"] = np.where(abalone_dataset["Gender"] != "M", 0,
+	 abalone_dataset["Gender"])
 
 	abalone_dataset['Gender'] = np.where(abalone_dataset['Gender'] == "M", 1,
 	 abalone_dataset['Gender'])
 
-	y = np.array(abalone_dataset["Gender"].values)
-	abalone_dataset['Gender'] = np.where(abalone_dataset['Gender'] == 0,
-	 1, abalone_dataset['Gender'])
+	y = np.array(abalone_dataset[to_predict].values)
+	abalone_dataset[to_predict] = np.where(abalone_dataset[to_predict] == 0,
+	 0, abalone_dataset[to_predict])
 	x = np.array(abalone_dataset.values)
 
 	return x, y
