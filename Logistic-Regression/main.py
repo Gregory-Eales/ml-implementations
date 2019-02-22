@@ -28,7 +28,7 @@ y = np.array(y)
 
 regressor = logistic_regression.LogisticRegressor([1, 2])
 
-regressor.train(x, y, 1000, 0.01)
+regressor.train(x, y, 50000, 0.01)
 
 
 
@@ -41,12 +41,12 @@ db1 = []
 db2 = []
 
 
-for i in range(700):
-	for j in range(700):
-		prediction = regressor.predict(np.array([i/25, j/25]))
-		if prediction < 0.53 and prediction > 0.48:
-			db1.append(i/50)
-			db2.append(j/50)
+for i in range(200):
+	for j in range(200):
+		prediction = regressor.predict(np.array([i/20, j/20]))
+		if prediction < 0.51 and prediction > 0.49:
+			db1.append(i/20)
+			db2.append(j/20)
 
 
 

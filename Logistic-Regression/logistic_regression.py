@@ -27,7 +27,6 @@ class LogisticRegressor(object):
 	def cost(self, y_hat, y):
 		return y_hat - y
 
-  
 	def sigmoid(self, z):
 		return 1/(1+np.exp(-z))
 
