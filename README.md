@@ -4,7 +4,7 @@ reimplementing machine learning algorithms from scratch
 ## Content:
   * Template-Folder: contains the template for reimplementation format
   * Perceptron: a reimplementation of Rosenblat's original perceptron algorithm
-  * Logistic Regression
+  * Logistic Regression: simple reimplementation of logistic regression
   
 ## To Do:
   * Linear Regression: implementation of linear regression 
