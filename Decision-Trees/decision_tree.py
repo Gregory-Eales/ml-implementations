@@ -4,60 +4,41 @@ from matplotlib import pyplot as plt
 # decision tree classifier
 class DecisionTree(object):
 
-	# need to implement tree depth, pruning, purity of classification
-	# recursivly split data to find which is the best
-	# other methods besides brute force?
-	
-	def __init__(self, indxs=1, min_leaf=1, depth=1):
-		self.indxs = indxs
-		self.min_leaf = min_leaf
-		self.depth = depth
-
-	def create_tree(self):
-		conditons = []
-		for i in range(self.depth):
-			conditions.append()
-
-	def train(self, x, y, alpha, iterations):
-		
-		for i in range(iterations):
-			for j in range(x.shape[0]):
-				pass
-
-	# makes classification prediction
-	def predict(self, x):
+	def __init__(self):
 		pass
 
-	# randomly split data into sections
-	# create branch of the tree
-	def get_split(data):
-
-		group_a = []
-		group_b = []
-
-		condtion = True
-
-		for indx in range(self.indxs):
-			if condition:
-				group_a.append(data[indx])
-
-			else:
-				group_b.append(data[indx])
-
-	# puts prediction to the terminal
-	def to_terminal(self):
+	def divide_set(self):
 		pass
 
-	# finds the maximum purity value
-	def purity(self, predictions, y):
-		classes = []
-		for i in range(predictions):
-			if y[i] not in classes:
-				classes.append(y[i])
+	def unique_counts(self):
+		pass
 
-		for clss in classes:
-			counter = 0
-			for i in range(predictions):
-				if clss == y[i]:
-					counter = counter + 1
+	def entropy(self):
+		pass
 
+	def gini(self):
+		pass
+
+	def variance(self):
+		pass
+
+	def grow_decision_tree(self):
+		pass
+
+	def prune(self):
+		pass
+
+	def classify(self):
+		pass
+
+	def without_data_classify(self):
+		pass
+
+	def with_data_classify(self):
+		pass
+
+	def plot(self):
+		pass
+
+	def dot_graph(self):
+		pass
