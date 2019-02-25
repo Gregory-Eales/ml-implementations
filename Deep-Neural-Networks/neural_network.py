@@ -19,12 +19,21 @@ class NeuralNetwork(object):
 	def __init__(self):
 		pass
 
-	def tf_sigmoid(self, z):
-		tf.divide(1.000, tf.add(1.000, tf.exp(-z)))
+	def sigmoid(self, z):
+		
+		# use library based on matrix size
+		if True:
+			return tf.divide(1.000, tf.add(1.000, tf.exp(-z)))
 
-	def np_sigmoid(self, z):
-		np.divide(1.000, (np.add(1.000, np.exp(-z))))
+		else:
+			return 1.000 / (1.000 + np.exp(-z))
 
+	def tanh(self, z):
 
-	def reg_sigmoid(self, z):
-		1.000 / (1.000 + np.exp(-z))
+		# use library based on matrix size
+		if True:
+			return tf.tanh(z)
+
+		else:
+			return np.tanh(z)
+
