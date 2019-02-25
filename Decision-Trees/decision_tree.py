@@ -4,41 +4,37 @@ from matplotlib import pyplot as plt
 # decision tree classifier
 class DecisionTree(object):
 
-	def __init__(self):
+	def __init__(self, depth=2):
 		pass
 
-	def divide_set(self):
+	def train(self, x):
 		pass
 
-	def unique_counts(self):
-		pass
+	def get_purity(self, x):
 
-	def entropy(self):
-		pass
+		types = []
 
-	def gini(self):
-		pass
+		count = {}
 
-	def variance(self):
-		pass
+		for i in range(len(x)):
 
-	def grow_decision_tree(self):
-		pass
+			if x[i][-1] not in types:
+				types.append(x[i][-1])
 
-	def prune(self):
-		pass
+		for t in types:
+			count[str(t)] = 0
 
-	def classify(self):
-		pass
+		for i in range(len(x)):
+			for t in types:
+				if x[i][-1] == t:
+					count[str(t)] = count[str(t)] + 1
 
-	def without_data_classify(self):
-		pass
+		max_num = [1, "string"]
 
-	def with_data_classify(self):
-		pass
+		for i in count:
+			if max_num[0] < count[i]:
+				max_num = [count[i], i]
 
-	def plot(self):
-		pass
+		return round(max_num[0]/len(x), 4), max_num[1]
 
-	def dot_graph(self):
-		pass
+
