@@ -1,5 +1,6 @@
 import numpy as np 
 import tensorflow as tf
+from tqdm import tqdm
 
 
 # TO DO:
@@ -23,32 +24,32 @@ class NeuralNetwork(object):
 		self.create_weights(num_layers)
 
 
-	def create_weights(self, num_layers=3):
+	def create_weights(self, num_layers=3, input_shape=[1, 1], output_shape=[1, 1]):
 
 		# make sure there are three or more layers
 		if num_layers < 3:
-			raise Exception("num_layers should not be less than 3, value given was: ", num_layers)
+			raise Exception("num_layers should not be less than 3, value given was: " + str(num_layers))
 		
 			# create first set
-			self.w["w1"] = np.random.rand()
-			self.b["b1"] = np.random.rand()
+			self.w["w1"] = np.random.rand(input_shape[1]+1, input_shape[1])
+			self.b["b1"] = np.random.rand(input_shape[1]+1, 1)
 
 			# create hidden layers
 			for i in range(2, num_layers):
-				self.w["w" + str(i)] = np.random.rand()
-				self.b["b" + str(i)] = np.random.rand()
+
+				self.w["w" + str(i)] = np.random.rand(input_shape[1]+1, input_shape[1]+1)
+				self.b["b" + str(i)] = np.random.rand(input_shape[1]+1, 1)
 
 			# create last layer
-			self.w["w" + str(self.num_layers)] = np.random.rand()
-			self.b["b" + str(self.num_layers)] = np.random.rand()
+			self.w["w" + str(self.num_layers)] = np.random.rand(output_shape[1], input_shape[1]+1)
+			self.b["b" + str(self.num_layers)] = np.random.rand(output_shape[1], 1)
 
 
-	def train(self, x, y, iterations=1, alpha):
+	def train(self, x, y, iterations=1, alpha=0.01):
 
 		# loop through data set each iteration
 		for i in range(iterations):
-			for j in range(x.shape[0]):
-				pass
+			pass
 
 
 	def predict(self, x):
