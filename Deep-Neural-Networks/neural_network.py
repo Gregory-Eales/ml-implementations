@@ -93,6 +93,15 @@ class NeuralNetwork(object):
 		self.a["a" + str(self.num_layers)] = self.sigmoid(self.z["z" + str(self.num_layers)])
 
 		return self.a["a" + str(self.num_layers)]
+
+
+	def update_weights(self):
+		pass
+
+	def cost(self, y_hat, y):
+
+		if True:
+			return tf.square(tf.transpose(y_hat) - y)/y_hat.shape[1]
 		
 
 	def sigmoid(self, z):
@@ -159,9 +168,9 @@ class NeuralNetwork(object):
 
 
 
-nn = NeuralNetwork(input_shape = [1, 2])
+nn = NeuralNetwork(input_shape = [1, 2], output_shape = [1, 3])
 
-x = np.ones([1, 2], dtype=nn.num_type)
+x = np.ones([10, 2], dtype=nn.num_type)
 
 t = time.time()
 
@@ -170,6 +179,11 @@ for i in range(1):
 
 
 print("Time: " + str(time.time() - t))
+
+
+print(nn.a["a3"])
+
+print(nn.a["a3"].shape[1])
 
 
 
