@@ -25,6 +25,7 @@ class NeuralNetwork(object):
 		self.b = {}
 		self.a = {}
 		self.z = {}
+		self.historical_cost = []
 		self.num_layers = num_layers
 		self.input_shape = input_shape
 		self.output_shape = output_shape
@@ -67,7 +68,10 @@ class NeuralNetwork(object):
 		# loop through data set each iteration
 		print("    Training NeuralNetwork")
 		for i in tqdm(range(iterations)):
-			time.sleep(0.1)
+			
+			y_hat = self.a["a" + str(self.num_layers)]
+			self.historical_cost.append(self.cost(y_hat, y))
+			self.update_weights(y_hat, y)
 
 
 	def predict(self, x):
@@ -95,14 +99,13 @@ class NeuralNetwork(object):
 		return self.a["a" + str(self.num_layers)]
 
 
-	def update_weights(self, y):
+	def update_weights(self, y_hat y):
 		
-		y_hat = self.a["a" + str(self.num_layers)]
 		delta_cost = self.cost_prime(y_hat, y)
 
 		for i in reversed(range(self.num_layers)):
 
-			self.[]
+			self.w["w" + str(i)] = self.w["w" + str(i)] - self.alpha*delta_cost*y_hat
 
 	def cost_prime(self, y_hat, y):
 		
@@ -117,7 +120,7 @@ class NeuralNetwork(object):
 
 		if True:
 
-			return 0.5*tf.reduce_sum(tf.square(tf.transpose(y_hat) - y), axis=0)/y.shape[0]
+			return 0.5*tf.reduce_sum(tf.square(tf.transpose(y_hat) - y))/y.shape[0]
 		
 		else:
 			return 0.5*np.sum(np.square(y_hat.T - y), axis=0)/y_hat.shape[1]
