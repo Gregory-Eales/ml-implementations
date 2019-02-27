@@ -5,7 +5,7 @@ reimplementing machine learning algorithms from scratch
   * Template-Folder: contains the template for reimplementation format
   * Perceptron: a reimplementation of Rosenblat's original perceptron algorithm
   * Logistic Regression: simple reimplementation of logistic regression
-  * Neural Network: implementation of a feed forward neural network with gpu acceleration
+  * Deep Neural Network: implementation of a feed forward neural network with gpu acceleration
   
 ## To Do:
   * Linear Regression: implementation of linear regression 
