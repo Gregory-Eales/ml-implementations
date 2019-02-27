@@ -98,11 +98,17 @@ class NeuralNetwork(object):
 	def update_weights(self):
 		pass
 
+	def cost_prime(self, y_hat, y):
+		pass
+
 	def cost(self, y_hat, y):
 
 		if True:
-			return tf.square(tf.transpose(y_hat) - y)/y_hat.shape[1]
+			return tf.reduce_sum(tf.square(tf.transpose(y_hat) - y), axis=0)/y_hat.shape[1]
 		
+		else:
+			return np.sum(np.square(y_hat.T - y), axis=0)/y_hat.shape[1]
+
 
 	def sigmoid(self, z):
 		
