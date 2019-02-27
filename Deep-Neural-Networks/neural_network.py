@@ -63,7 +63,7 @@ class NeuralNetwork(object):
 
 
 	def train(self, x, y, iterations=1, alpha=0.01):
-
+		self.alpha = alpha
 		# loop through data set each iteration
 		print("    Training NeuralNetwork")
 		for i in tqdm(range(iterations)):
@@ -95,19 +95,32 @@ class NeuralNetwork(object):
 		return self.a["a" + str(self.num_layers)]
 
 
-	def update_weights(self):
-		pass
+	def update_weights(self, y):
+		
+		y_hat = self.a["a" + str(self.num_layers)]
+		delta_cost = self.cost_prime(y_hat, y)
+
+		for i in reversed(range(self.num_layers)):
+
+			self.[]
 
 	def cost_prime(self, y_hat, y):
-		pass
+		
+		if True:
+
+			return tf.reduce_sum(tf.square(tf.transpose(y_hat) - y), axis=0)/y.shape[0]
+		
+		else:
+			return 0.5*np.sum(np.square(y_hat.T - y), axis=0)/y_hat.shape[1]
 
 	def cost(self, y_hat, y):
 
 		if True:
-			return tf.reduce_sum(tf.square(tf.transpose(y_hat) - y), axis=0)/y_hat.shape[1]
+
+			return 0.5*tf.reduce_sum(tf.square(tf.transpose(y_hat) - y), axis=0)/y.shape[0]
 		
 		else:
-			return np.sum(np.square(y_hat.T - y), axis=0)/y_hat.shape[1]
+			return 0.5*np.sum(np.square(y_hat.T - y), axis=0)/y_hat.shape[1]
 
 
 	def sigmoid(self, z):
@@ -174,9 +187,9 @@ class NeuralNetwork(object):
 
 
 
-nn = NeuralNetwork(input_shape = [1, 2], output_shape = [1, 3])
+nn = NeuralNetwork(input_shape = [1, 3], output_shape = [1, 3])
 
-x = np.ones([10, 2], dtype=nn.num_type)
+x = np.ones([10, 3], dtype=nn.num_type)
 
 t = time.time()
 
@@ -186,10 +199,10 @@ for i in range(1):
 
 print("Time: " + str(time.time() - t))
 
+with tf.Session() as sess:
+	print(nn.cost(nn.a["a3"], x).eval())
 
-print(nn.a["a3"])
 
-print(nn.a["a3"].shape[1])
 
 
 
