@@ -16,7 +16,6 @@ reimplementing machine learning algorithms from scratch
   * K-Means
   * Random Forest
   * Gradient Boosting algorithms
-  * Deep Feedforward Neural Networks
   * Regularization
   * Dropout
   * Convolutional Neural Networks
