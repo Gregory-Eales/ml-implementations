@@ -56,7 +56,9 @@ class CNN(object):
 			return torch.sigmoid(torch.sum(x*self.conv_w[w]) + self.conv_b[b])
 
 
-	def conv_forward(self, x, conv_layer=1, step=1):
+	def conv_forward(self, x, conv_layer=1, step=1, activation="tanh"):
+
+		
 
 		# height, width, thickness
 		w = "w" + str(conv_layer)
@@ -67,6 +69,7 @@ class CNN(object):
 		w_num = self.calc_num_steps(step, x_w, w_w)
 		t_num = self.calc_num_steps(step, x_t, w_t)
 
+		self.conv_a[a+str(conv_layer)] = torch.zeros(h_num, w_num, t_num)
 
 		for h in range(h_num):
 
@@ -74,11 +77,15 @@ class CNN(object):
 
 				for t in range(t_num):
 
-					pass
+					x_slice = x.narrow(0, h*(w_h+step), w_h).narrow(1, h*(w_w+step), w_w).narrow(2, h*(w_t+step), w_t)
+
+					self.conv_a[a+str(conv_layer)][ h, w, t] = self.single_conv(x_slice, conv_layer=1, activation="tanh")
+
+					
 
 
-	def single_pool(self, x):
-		return torch.sum(x)
+	def single_average_pool(self, x):
+		return torch.sum(x)/x.numel()
 
 	def pad(self, a, pad_num = 1):
 		padding = [pad_num, pad_num, pad_num, pad_num]
