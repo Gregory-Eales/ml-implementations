@@ -124,7 +124,7 @@ class NeuralNetwork(object):
 		
 		if True:
 
-			return tf.reduce_sum(tf.square(y_hat - y), axis=1)/y.shape[0]
+			return tf.reduce_sum((y_hat - y), axis=1)/y.shape[1]
 		
 		else:
 			return 0.5*np.sum(np.square(y_hat.T - y), axis=0)/y_hat.shape[1]
@@ -201,15 +201,15 @@ class NeuralNetwork(object):
 			np.dot(a, b)
 
 
-nn = NeuralNetwork(input_shape = [1, 3], output_shape = [1, 3])
+nn = NeuralNetwork(input_shape = [1, 81], output_shape = [1, 81])
 
-x = np.ones([1000, 3], dtype=nn.num_type)
-y = np.ones([3, 1000], dtype=nn.num_type)/0.50000000
+x = np.ones([10000, 81], dtype=nn.num_type)
+y = np.ones([81, 10000], dtype=nn.num_type)*0.750000
 y.dtype = nn.num_type
 
 with tf.Session() as sess:
 	t = time.time()
-	nn.train(x, y, iterations=10, alpha=0.01)
+	nn.train(x, y, iterations=20, alpha=0.2)
 	print("Time: " + str(time.time() - t))
 	plt.plot(nn.historical_cost)
 	plt.show()
