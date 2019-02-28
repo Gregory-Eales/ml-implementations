@@ -45,24 +45,37 @@ class CNN(object):
 			pass
 
 	def single_conv(self, x, conv_layer=1, activation="tanh"):
+
+		w = "w" + str(conv_layer)
+		b = "b" + str(conv_layer)
 		
 		if activation == "tanh":
-			return torch.tanh(torch.sum(x*self.conv_w["w" + str(conv_layer)]) + self.conv_b["b" + str(conv_layer)])
+			return torch.tanh(torch.sum(x*self.conv_w[w]) + self.conv_b[b])
 
 		if activation == "sigmoid":
-			return torch.sigmoid(torch.sum(x*self.conv_w["w" + str(conv_layer)]) + self.conv_b["b" + str(conv_layer)])
+			return torch.sigmoid(torch.sum(x*self.conv_w[w]) + self.conv_b[b])
 
 
-	def conv_forward(self, x, conv_layer):
+	def conv_forward(self, x, conv_layer=1, step=1):
 
 		# height, width, thickness
+		w = "w" + str(conv_layer)
 		x_h, x_w, x_t = x.shape[0], x.shape[1], x.shape[2]
 		w_h, w_w, w_t = self.conv_w[w].shape[0], self.conv_w[w].shape[0], self.conv_w[w].shape[0], 
 
-		h_num = 
-		w_num = 
-		t_num = 
-		
+		h_num = self.calc_num_steps(step, x_h, w_h)
+		w_num = self.calc_num_steps(step, x_w, w_w)
+		t_num = self.calc_num_steps(step, x_t, w_t)
+
+
+		for h in range(h_num):
+
+			for w in range(w_num):
+
+				for t in range(t_num):
+
+					pass
+
 
 	def single_pool(self, x):
 		return torch.sum(x)
@@ -72,7 +85,8 @@ class CNN(object):
 		return torch.nn.functional.pad(a, pad=padding)
 
 
-	def 
+	def calc_num_steps(self, step, x, w):
+		return (x-w)/(step) + 1
 
 
 	
