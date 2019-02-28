@@ -34,30 +34,37 @@ class CNN(object):
 		for i in range(self.num_convs):
 			pass
 
-	def train(self):
-		pass
+	def train(self, x, y, iterations=1, alpha=0.1):
+		
+		print("    Training Convolutional Neural Network")
+		for i in tqdm(range(iterations)):
+			pass
 
-	def single_conv(self):
-		pass
+	def single_conv(self, x, w, activation="tanh"):
+		
+		if activation == "tanh":
+			return torch.tanh(torch.sum(x*w))
 
-	def conv_forward(self):
-		pass
+		if activation == "sigmoid":
+			return torch.sigmoid(torch.sum(x*w))
 
-	def single_pool(self):
-		pass
+
+	def conv_forward(self, x, w):
+		
+
+	def single_pool(self, x):
+		return torch.sum(x)
 
 	def pad(self, a, pad_num = 1):
 		padding = [pad_num, pad_num, pad_num, pad_num]
 		return torch.nn.functional.pad(a, pad=padding)
 
 
-	def sigmoid(self):
-		pass
+	def 
 
+
+	
 	def sigmoid_prime(self):
-		pass
-
-	def tanh(self):
 		pass
 
 	def tanh_prime(self):
