@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 from tqdm import tqdm
 import time
+from matplotlib import pyplot as plt
 
 
 
@@ -71,7 +72,7 @@ class NeuralNetwork(object):
 		for i in tqdm(range(iterations)):
 			self.predict(x)
 			y_hat = self.a["a" + str(self.num_layers)]
-			self.historical_cost.append(self.cost(y_hat, y))
+			self.historical_cost.append(self.cost(y_hat, y).eval())
 			self.update_weights(y_hat, y)
 
 
@@ -83,22 +84,20 @@ class NeuralNetwork(object):
 
 			xT = x.T
 			xT.dtype = self.num_type
+			self.a["a0"] = xT
 
 			# multiply then activate first layer
-			print(" W ", self.w["w1"])
-			print("b", self.b["b1"])
-			print("X.", xT)
 
-			self.z["z1"] = self.dot(self.w["w1"], xT) + self.b["b1"]
+			self.z["z1"] = self.dot(self.w["w1"], xT) #+ self.b["b1"]
 			self.a["a1"] = self.tanh(self.z["z1"])
 
 			# loop through hidden layers, multiply then activate
 			for i in range(2, self.num_layers):
-				self.z["z" + str(i)] = self.dot(self.w["w"+str(i)], self.a["a" + str(i-1)])
+				self.z["z" + str(i)] = self.dot(self.w["w"+str(i)], self.a["a" + str(i-1)]) #+ self.b["b" + str(i-1)]
 				self.a["a" + str(i)] = self.tanh(self.z["z" + str(i)])
 
 			# multiply then activate last layer
-			self.z["z" + str(self.num_layers)] = self.dot(self.w["w"+str(self.num_layers)], self.a["a" + str(self.num_layers-1)])
+			self.z["z" + str(self.num_layers)] = self.dot(self.w["w"+str(self.num_layers)], self.a["a" + str(self.num_layers-1)]) #+ self.b["b" + str(self.num_layers)]
 			self.a["a" + str(self.num_layers)] = self.sigmoid(self.z["z" + str(self.num_layers)])
 
 		return self.a["a" + str(self.num_layers)]
@@ -114,10 +113,12 @@ class NeuralNetwork(object):
 			self.e['e'+str(i)] =  tf.matmul(tf.transpose(self.w['w' + str(i+1)]), self.e['e' + str(i+1)]) * self.tanh_prime(self.z['z'+str(i)])
 
 
-		for i in reversed(range(1, self.num_layers)):
+		for i in reversed(range(1, self.num_layers+1)):
 
 			self.w["w" + str(i)] = self.w["w" + str(i)] - (self.alpha/m)*tf.matmul(self.e['e'+str(i)], tf.transpose(self.a['a'+str(i-1)]))
-
+			
+			self.b["b"+str(i)] = self.b["b"+str(i)] - (self.alpha/m)*tf.reduce_sum(self.e['e'+str(i)], axis=0)
+		
 
 	def cost_prime(self, y_hat, y):
 		
@@ -132,10 +133,10 @@ class NeuralNetwork(object):
 
 		if True:
 
-			return 0.5*tf.reduce_sum(tf.square(y_hat - y), axis=1)/y.shape[1]
+			return 0.5*tf.reduce_sum(tf.square(y_hat - y))/y.shape[1]
 		
 		else:
-			return 0.5*np.sum(np.square(y_hat.T - y), axis=0)/y_hat.shape[1]
+			return 0.5*np.sum(np.square(y_hat.T - y))/y_hat.shape[1]
 
 
 	def sigmoid(self, z):
@@ -200,26 +201,19 @@ class NeuralNetwork(object):
 			np.dot(a, b)
 
 
-
-
 nn = NeuralNetwork(input_shape = [1, 3], output_shape = [1, 3])
 
 x = np.ones([1000, 3], dtype=nn.num_type)
-y = np.ones([3, 1000])
+y = np.ones([3, 1000], dtype=nn.num_type)/0.50000000
+y.dtype = nn.num_type
 
-t = time.time()
-
-
-nn.train(x, y)
-
-
-print("Time: " + str(time.time() - t))
-
-
-"""
 with tf.Session() as sess:
-	print(nn.cost(nn.a["a3"], x).eval())
-"""
+	t = time.time()
+	nn.train(x, y, iterations=10, alpha=0.01)
+	print("Time: " + str(time.time() - t))
+	plt.plot(nn.historical_cost)
+	plt.show()
+	print(nn.a["a3"].eval())
 
 
 
