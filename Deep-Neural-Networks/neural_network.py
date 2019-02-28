@@ -25,6 +25,7 @@ class NeuralNetwork(object):
 		self.b = {}
 		self.a = {}
 		self.z = {}
+		self.e = {}
 		self.historical_cost = []
 		self.num_layers = num_layers
 		self.input_shape = input_shape
@@ -68,7 +69,7 @@ class NeuralNetwork(object):
 		# loop through data set each iteration
 		print("    Training NeuralNetwork")
 		for i in tqdm(range(iterations)):
-			
+			self.predict(x)
 			y_hat = self.a["a" + str(self.num_layers)]
 			self.historical_cost.append(self.cost(y_hat, y))
 			self.update_weights(y_hat, y)
@@ -76,42 +77,53 @@ class NeuralNetwork(object):
 
 	def predict(self, x):
 
-		xT = x.T
-		xT.dtype = self.num_type
+		#with tf.Session() as sess:
+		
+		if True:
 
-		# multiply then activate first layer
-		print(" W ", self.w["w1"])
-		print("b", self.b["b1"])
-		print("X.", xT)
+			xT = x.T
+			xT.dtype = self.num_type
 
-		self.z["z1"] = self.dot(self.w["w1"], xT) + self.b["b1"]
-		self.a["a1"] = self.tanh(self.z["z1"])
+			# multiply then activate first layer
+			print(" W ", self.w["w1"])
+			print("b", self.b["b1"])
+			print("X.", xT)
 
-		# loop through hidden layers, multiply then activate
-		for i in range(2, self.num_layers):
-			self.z["z" + str(i)] = self.dot(self.w["w"+str(i)], self.a["a" + str(i-1)])
-			self.a["a" + str(i)] = self.tanh(self.z["z" + str(i)])
+			self.z["z1"] = self.dot(self.w["w1"], xT) + self.b["b1"]
+			self.a["a1"] = self.tanh(self.z["z1"])
 
-		# multiply then activate last layer
-		self.z["z" + str(self.num_layers)] = self.dot(self.w["w"+str(self.num_layers)], self.a["a" + str(self.num_layers-1)])
-		self.a["a" + str(self.num_layers)] = self.sigmoid(self.z["z" + str(self.num_layers)])
+			# loop through hidden layers, multiply then activate
+			for i in range(2, self.num_layers):
+				self.z["z" + str(i)] = self.dot(self.w["w"+str(i)], self.a["a" + str(i-1)])
+				self.a["a" + str(i)] = self.tanh(self.z["z" + str(i)])
+
+			# multiply then activate last layer
+			self.z["z" + str(self.num_layers)] = self.dot(self.w["w"+str(self.num_layers)], self.a["a" + str(self.num_layers-1)])
+			self.a["a" + str(self.num_layers)] = self.sigmoid(self.z["z" + str(self.num_layers)])
 
 		return self.a["a" + str(self.num_layers)]
 
 
-	def update_weights(self, y_hat y):
-		
+	def update_weights(self, y_hat, y):
 		delta_cost = self.cost_prime(y_hat, y)
+		m = y.shape[0]
 
-		for i in reversed(range(self.num_layers)):
+		self.e["e" + str(self.num_layers)] = tf.multiply(self.sigmoid_prime(self.z['z'+str(self.num_layers)]), delta_cost[:,tf.newaxis])
 
-			self.w["w" + str(i)] = self.w["w" + str(i)] - self.alpha*delta_cost*y_hat
+		for i in reversed(range(1, self.num_layers)):
+			self.e['e'+str(i)] =  tf.matmul(tf.transpose(self.w['w' + str(i+1)]), self.e['e' + str(i+1)]) * self.tanh_prime(self.z['z'+str(i)])
+
+
+		for i in reversed(range(1, self.num_layers)):
+
+			self.w["w" + str(i)] = self.w["w" + str(i)] - (self.alpha/m)*tf.matmul(self.e['e'+str(i)], tf.transpose(self.a['a'+str(i-1)]))
+
 
 	def cost_prime(self, y_hat, y):
 		
 		if True:
 
-			return tf.reduce_sum(tf.square(tf.transpose(y_hat) - y), axis=0)/y.shape[0]
+			return tf.reduce_sum(tf.square(y_hat - y), axis=1)/y.shape[0]
 		
 		else:
 			return 0.5*np.sum(np.square(y_hat.T - y), axis=0)/y_hat.shape[1]
@@ -120,7 +132,7 @@ class NeuralNetwork(object):
 
 		if True:
 
-			return 0.5*tf.reduce_sum(tf.square(tf.transpose(y_hat) - y))/y.shape[0]
+			return 0.5*tf.reduce_sum(tf.square(y_hat - y), axis=1)/y.shape[1]
 		
 		else:
 			return 0.5*np.sum(np.square(y_hat.T - y), axis=0)/y_hat.shape[1]
@@ -143,7 +155,7 @@ class NeuralNetwork(object):
 		one = np.ones(1, dtype=self.num_type)
 
 		if True:
-			return tf.multiply(self.sigmoid(z), (tf.sub(one, self.sigmoid(z))))
+			return tf.multiply(self.sigmoid(z), (one - self.sigmoid(z)))
 
 		else:
 			return self.sigmoid(z)*(1-self.sigmoid(z))
@@ -192,19 +204,22 @@ class NeuralNetwork(object):
 
 nn = NeuralNetwork(input_shape = [1, 3], output_shape = [1, 3])
 
-x = np.ones([10, 3], dtype=nn.num_type)
+x = np.ones([1000, 3], dtype=nn.num_type)
+y = np.ones([3, 1000])
 
 t = time.time()
 
-for i in range(1):
-  nn.predict(x)
+
+nn.train(x, y)
 
 
 print("Time: " + str(time.time() - t))
 
+
+"""
 with tf.Session() as sess:
 	print(nn.cost(nn.a["a3"], x).eval())
-
+"""
 
 
 
