@@ -19,7 +19,6 @@ reimplementing machine learning algorithms from scratch
   * Gradient Boosting algorithms
   * Regularization
   * Dropout
-  * Convolutional Neural Networks
   * Recurrent Neural Networks
   * Bidirectional Recurrent Neural Networks
   * Recursive Neural Networks
