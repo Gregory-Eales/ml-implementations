@@ -4,11 +4,34 @@ import pytorch as pt
 
 class CNN(object):
 
-	def __init__(self):
-		pass
+	def __init__(self, num_convs, num_dense, dense_output):
+		
+		# define network topology
+		self.num_convs = num_convs
+		self.num_dense = num_dense
+		self.dense_output = dense_output
+
+		# define weights
+		self.dense_w = {}
+		self.pool_w = {}
+		self.conv_w {}
+
+		# initiate weights
+		self.initiate_weights()
+
+
+
 
 	def initiate_weights(self):
-		pass
+		
+
+		# initiating dense weights
+		for i in range(1, num_dense):
+			self.dense_w["w" + str(i)] = np.random.rand(self.dense_output+1, self.dense_output+1)
+
+		self.dense_w["w" + str(self.)] = np.random.rand(self.dense_output, self.dense_output+1)
+
+
 
 	def predict(self):
 		pass
