@@ -6,6 +6,7 @@ reimplementing machine learning algorithms from scratch
   * Perceptron: a reimplementation of Rosenblat's original perceptron algorithm
   * Logistic Regression: simple reimplementation of logistic regression
   * Deep Neural Network: implementation of a feed forward neural network with gpu acceleration
+  * Deep Convolutional Neural Network: implmentation of deep convolutional neural network
   
 ## To Do:
   * Linear Regression: implementation of linear regression 
