@@ -4,6 +4,9 @@ from tqdm import tqdm
 
 class CNN(object):
 
+	# whats the best way to input network topology
+
+
 	def __init__(self, num_convs, num_dense, dense_output):
 		
 		# define network topology
@@ -13,8 +16,9 @@ class CNN(object):
 
 		# define weights
 		self.dense_w = {}
-		self.pool_w = {}
 		self.conv_w  = {}
+		self.dense_b = {}
+		self.conv_b  = {}
 
 		# initiate weights
 		self.initiate_weights()
@@ -40,16 +44,24 @@ class CNN(object):
 		for i in tqdm(range(iterations)):
 			pass
 
-	def single_conv(self, x, w, activation="tanh"):
+	def single_conv(self, x, conv_layer=1, activation="tanh"):
 		
 		if activation == "tanh":
-			return torch.tanh(torch.sum(x*w))
+			return torch.tanh(torch.sum(x*self.conv_w["w" + str(conv_layer)]) + self.conv_b["b" + str(conv_layer)])
 
 		if activation == "sigmoid":
-			return torch.sigmoid(torch.sum(x*w))
+			return torch.sigmoid(torch.sum(x*self.conv_w["w" + str(conv_layer)]) + self.conv_b["b" + str(conv_layer)])
 
 
-	def conv_forward(self, x, w):
+	def conv_forward(self, x, conv_layer):
+
+		# height, width, thickness
+		x_h, x_w, x_t = x.shape[0], x.shape[1], x.shape[2]
+		w_h, w_w, w_t = self.conv_w[w].shape[0], self.conv_w[w].shape[0], self.conv_w[w].shape[0], 
+
+		h_num = 
+		w_num = 
+		t_num = 
 		
 
 	def single_pool(self, x):
@@ -64,11 +76,11 @@ class CNN(object):
 
 
 	
-	def sigmoid_prime(self):
-		pass
+	def sigmoid_prime(self, z):
+		return torch.sigmoid(z) * (1-torch.sigmoid(z))
 
-	def tanh_prime(self):
-		pass
+	def tanh_prime(self, z):
+		return 1 - torch.square(torch.tanh(z))
 
 	def dense_forward(self):
 		pass
