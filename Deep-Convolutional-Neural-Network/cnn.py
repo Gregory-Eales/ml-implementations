@@ -81,7 +81,7 @@ class CNN(object):
 			for w in range(w_num):
 				for t in range(t_num):
 					for f in range(w_f):
-						x_slice = x.narrow(0, h*(w_h+step-1), w_h).narrow(1, w*(w_w+step-1), w_w).narrow(2, t*(w_t+step-1), w_t)
+						x_slice = x.narrow(0, h*(w_h), w_h).narrow(1, w*(w_w), w_w).narrow(2, t*(w_t), w_t)
 						self.conv_a["a"+str(conv_layer)][h, w, t, f] = self.single_conv(x_slice, conv_layer=1, activation="tanh")
 
 	def single_pool(self, x, pool_type="average"):
