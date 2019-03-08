@@ -48,16 +48,12 @@ class CNN(object):
 		for i in tqdm(range(iterations)):
 			pass
 
-	def single_conv(self, x, conv_layer=1, activation="tanh"):
+	def single_conv(self, x, conv_layer=1):
 
 		w = "w" + str(conv_layer)
 		b = "b" + str(conv_layer)
+		return torch.sum(x*self.conv_w[w])
 		
-		if activation == "tanh":
-			return torch.tanh(torch.sum(x*self.conv_w[w]))
-
-		if activation == "sigmoid":
-			return torch.sigmoid(torch.sum(x*self.conv_w[w]))
 
 
 	def conv_forward(self, x, conv_layer=1, step=1, activation="tanh"):
@@ -103,12 +99,12 @@ class CNN(object):
 		w_w = self.calc_window_side(x_w, w_num)
 		w_t = self.calc_window_side(w_t, t_num)
 
+
 		self.pool_a["a"+str(pool_layer)] = torch.zeros(h_num, w_num, t_num, x_f)
 
 		for h in range(h_num):
 			for w in range(w_num):
 				for t in range(t_num):
-
 					x_slice = x.narrow(0, h*(w_h+step-1), w_h).narrow(1, w*(w_w+step-1), w_w).narrow(2, t*(w_t+step-1), w_t)
 					self.conv_a["a"+str(conv_layer)][h, w, t, f] = self.single_pool(x, pool_type)
 
