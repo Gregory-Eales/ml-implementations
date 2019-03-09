@@ -37,15 +37,19 @@ class CNN(object):
 
 		# initiate convolutional weights
 
-		cnn.conv_w["w1"] = torch.rand([4, 4, 1, 10])
-		cnn.conv_w["w2"] = torch.rand([4, 4, 1, 10])
-		cnn.conv_w["w3"] = torch.rand([4, 4, 1, 10])
-		cnn.conv_w["w4"] = torch.rand([4, 4, 1, 10])
+		self.conv_w["w1"] = torch.rand([4, 4, 1, 10])
+		self.conv_w["w2"] = torch.rand([4, 4, 1, 10])
+		self.conv_w["w3"] = torch.rand([4, 4, 1, 10])
+		self.conv_w["w4"] = torch.rand([4, 4, 1, 10])
 
-	def predict(self, x, y):
+	def predict(self, x):
+
+		self.conv_a["a0"] = x
 		
-		for i in range(self.num_convs):
-			pass
+		for i in range(2):
+			
+			self.conv_forward(self.conv_a["a" + str(i)], i+1, step=2)
+
 
 	def train(self, x, y, iterations=1, alpha=0.1):
 		
@@ -140,9 +144,9 @@ cnn = CNN(4, 4)
 
 x = torch.ones(28, 28, 1)
 
-cnn.conv_forward(x)
+cnn.predict(x)
 
-print(cnn.conv_a["a1"].shape)
+print(cnn.conv_a["a2"].shape)
 
 
 
