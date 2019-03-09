@@ -37,6 +37,11 @@ class CNN(object):
 
 		# initiate convolutional weights
 
+		cnn.conv_w["w1"] = torch.rand([4, 4, 1, 10])
+		cnn.conv_w["w2"] = torch.rand([4, 4, 1, 10])
+		cnn.conv_w["w3"] = torch.rand([4, 4, 1, 10])
+		cnn.conv_w["w4"] = torch.rand([4, 4, 1, 10])
+
 	def predict(self, x, y):
 		
 		for i in range(self.num_convs):
@@ -70,6 +75,7 @@ class CNN(object):
 		t_num = self.calc_num_steps(step, x_t, w_t)
 
 		print(h_num, w_num, t_num, w_f)
+		print(w_h, w_w, w_t, w_f)
 
 		self.conv_a["a"+str(conv_layer)] = torch.ones(h_num, w_num, t_num, w_f)
 
@@ -77,8 +83,10 @@ class CNN(object):
 			for w in range(w_num):
 				for t in range(t_num):
 					for f in range(w_f):
-						x_slice = x.narrow(0, h*(w_h), w_h).narrow(1, w*(w_w), w_w).narrow(2, t*(w_t), w_t)
-						self.conv_a["a"+str(conv_layer)][h, w, t, f] = self.single_conv(x_slice, conv_layer=1, activation="tanh")
+
+						x_slice = x.narrow(0, h*step, w_h).narrow(1, w*step, w_w).narrow(2, t*step, w_t)
+						self.conv_a["a"+str(conv_layer)][h, w, t, f] = self.single_conv(x_slice, conv_layer=1)
+						
 
 	def single_pool(self, x, pool_type="average"):
 
@@ -105,7 +113,7 @@ class CNN(object):
 		for h in range(h_num):
 			for w in range(w_num):
 				for t in range(t_num):
-					x_slice = x.narrow(0, h*(w_h+step-1), w_h).narrow(1, w*(w_w+step-1), w_w).narrow(2, t*(w_t+step-1), w_t)
+					x_slice = x.narrow(0, h*(w_h), w_h).narrow(1, w*(w_w), w_w).narrow(2, t*(w_t), w_t)
 					self.conv_a["a"+str(conv_layer)][h, w, t, f] = self.single_pool(x, pool_type)
 
 	def pad(self, a, pad_num = 1):
@@ -128,13 +136,13 @@ class CNN(object):
 		pass
 
 cnn = CNN(4, 4)
-cnn.conv_w["w1"] = torch.ones([4, 4, 1, 10])
+
 
 x = torch.ones(28, 28, 1)
 
 cnn.conv_forward(x)
 
-print(cnn.conv_a["a1"][0][0])
+print(cnn.conv_a["a1"].shape)
 
 
 
