@@ -4,7 +4,12 @@ from tqdm import tqdm
 
 class CNN(object):
 
-	# whats the best way to input network topology
+	# Make prediction loop
+	# sort out pooling
+	# make training loop
+	# make backpropogation method
+	# add bias updates
+	
 
 
 	def __init__(self, num_convs, num_dense, output_shape=1, input_shape = [28, 28, 1]):
@@ -48,7 +53,7 @@ class CNN(object):
 		
 		for i in range(2):
 			
-			self.conv_forward(self.conv_a["a" + str(i)], i+1, step=2)
+			self.conv_forward(self.conv_z["z" + str(i)], i+1, step=2)
 
 
 	def train(self, x, y, iterations=1, alpha=0.1):
@@ -67,7 +72,6 @@ class CNN(object):
 
 	def conv_forward(self, x, conv_layer=1, step=1, activation="tanh"):
 
-		
 
 		# height, width, thickness
 		w = "w" + str(conv_layer)
@@ -81,7 +85,7 @@ class CNN(object):
 		print(h_num, w_num, t_num, w_f)
 		print(w_h, w_w, w_t, w_f)
 
-		self.conv_a["a"+str(conv_layer)] = torch.ones(h_num, w_num, t_num, w_f)
+		self.conv_a["z"+str(conv_layer)] = torch.ones(h_num, w_num, t_num, w_f)
 
 		for h in range(h_num):
 			for w in range(w_num):
@@ -89,7 +93,7 @@ class CNN(object):
 					for f in range(w_f):
 
 						x_slice = x.narrow(0, h*step, w_h).narrow(1, w*step, w_w).narrow(2, t*step, w_t)
-						self.conv_a["a"+str(conv_layer)][h, w, t, f] = self.single_conv(x_slice, conv_layer=1)
+						self.conv_a["z"+str(conv_layer)][h, w, t, f] = self.single_conv(x_slice, conv_layer=1)
 						
 
 	def single_pool(self, x, pool_type="average"):
@@ -117,8 +121,9 @@ class CNN(object):
 		for h in range(h_num):
 			for w in range(w_num):
 				for t in range(t_num):
-					x_slice = x.narrow(0, h*(w_h), w_h).narrow(1, w*(w_w), w_w).narrow(2, t*(w_t), w_t)
-					self.conv_a["a"+str(conv_layer)][h, w, t, f] = self.single_pool(x, pool_type)
+					for f in range(x_f)
+						x_slice = x.narrow(0, h*step, w_h).narrow(1, w*step, w_w).narrow(2, t*step, w_t)
+						self.conv_a["a"+str(conv_layer)][h, w, t, f] = self.single_pool(x, pool_type)
 
 	def pad(self, a, pad_num = 1):
 		padding = [pad_num, pad_num, pad_num, pad_num]
