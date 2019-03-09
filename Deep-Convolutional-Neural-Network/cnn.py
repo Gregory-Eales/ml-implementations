@@ -139,6 +139,18 @@ class CNN(object):
 	def dense_forward(self, x):
 		pass
 
+	def sigmoid(self, z):
+		return torch.sigmoid(z)
+
+	def tanh(self, z):
+		return torch.tanh(z)
+
+	def sigmoid_prime(self, z):
+		return self.sigmoid(z) * ( 1 - self.sigmoid(z))
+
+	def tanh_prime(self, z):
+		return 1 - self.tanh(z)**2
+
 cnn = CNN(4, 4)
 
 
