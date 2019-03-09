@@ -1,6 +1,10 @@
 import numpy as np
 import torch
 from tqdm import tqdm
+import time
+
+torch.set_default_tensor_type(torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor)
+
 
 class CNN(object):
 
@@ -9,7 +13,7 @@ class CNN(object):
 	# make training loop
 	# make backpropogation method
 	# add bias updates
-	
+
 
 
 	def __init__(self, num_convs, num_dense, output_shape=1, input_shape = [28, 28, 1]):
@@ -27,6 +31,7 @@ class CNN(object):
 		self.conv_b  = {}
 		self.pool_a = {}
 		self.conv_a = {}
+		self.conv_z = {}
 		self.dense_a = {}
 
 		# initiate weights
@@ -49,11 +54,11 @@ class CNN(object):
 
 	def predict(self, x):
 
-		self.conv_a["a0"] = x
+		self.conv_z["z0"] = x
 		
-		for i in range(2):
+		for i in range(self.num_convs):
 			
-			self.conv_forward(self.conv_z["z" + str(i)], i+1, step=2)
+			self.conv_forward(self.conv_z["z" + str(i)], conv_layer=i+1, step=2)
 
 
 	def train(self, x, y, iterations=1, alpha=0.1):
@@ -82,10 +87,10 @@ class CNN(object):
 		w_num = self.calc_num_steps(step, x_w, w_w)
 		t_num = self.calc_num_steps(step, x_t, w_t)
 
-		print(h_num, w_num, t_num, w_f)
-		print(w_h, w_w, w_t, w_f)
+		#print(h_num, w_num, t_num, w_f)
+		#print(w_h, w_w, w_t, w_f)
 
-		self.conv_a["z"+str(conv_layer)] = torch.ones(h_num, w_num, t_num, w_f)
+		self.conv_z["z"+str(conv_layer)] = torch.rand(h_num, w_num, t_num, w_f)
 
 		for h in range(h_num):
 			for w in range(w_num):
@@ -93,7 +98,7 @@ class CNN(object):
 					for f in range(w_f):
 
 						x_slice = x.narrow(0, h*step, w_h).narrow(1, w*step, w_w).narrow(2, t*step, w_t)
-						self.conv_a["z"+str(conv_layer)][h, w, t, f] = self.single_conv(x_slice, conv_layer=1)
+						self.conv_z["z"+str(conv_layer)][h, w, t, f] = self.single_conv(x_slice, conv_layer=conv_layer)
 						
 
 	def single_pool(self, x, pool_type="average"):
@@ -121,7 +126,7 @@ class CNN(object):
 		for h in range(h_num):
 			for w in range(w_num):
 				for t in range(t_num):
-					for f in range(x_f)
+					for f in range(x_f):
 						x_slice = x.narrow(0, h*step, w_h).narrow(1, w*step, w_w).narrow(2, t*step, w_t)
 						self.conv_a["a"+str(conv_layer)][h, w, t, f] = self.single_pool(x, pool_type)
 
@@ -156,14 +161,17 @@ class CNN(object):
 	def tanh_prime(self, z):
 		return 1 - self.tanh(z)**2
 
-cnn = CNN(4, 4)
+cnn = CNN(2, 4)
 
 
-x = torch.ones(28, 28, 1)
-
+x = torch.rand(28, 28, 1)
+t = time.time()
 cnn.predict(x)
+print(time.time() - t)
 
-print(cnn.conv_a["a2"].shape)
+print(cnn.conv_z["z2"].shape)
+
+
 
 
 
