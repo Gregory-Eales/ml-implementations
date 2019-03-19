@@ -24,3 +24,8 @@ for i in uncleaned_y:
 
 # convert y to an array      
 y = np.array(y)
+
+def get_data():
+  pass
+
+
