@@ -145,7 +145,7 @@ class CNN(object):
         self.dense_a["a0"] = x
 
         for i in range(self.num_dense):
-            
+
             if i != self.num_dense-1:
                 self.dense_z["z" + str(i+1)] = torch.matmul(self.dense_a["a"+str(i)], self.dense_w["w"+str(i+1)]) + self.dense_b["b" + str(i+1)]
                 self.dense_a["a"+str(i+1)] = self.tanh(self.dense_z["z" + str(i+1)])
@@ -167,7 +167,15 @@ class CNN(object):
     def tanh_prime(self, z):
         return 1 - self.tanh(z) ** 2
 
+    def dense_backprop(self):
+        pass
 
+    def mean_square_error(self, y):
+        return 0.5*torch.pow((self.dense_a["a"+str(self.num_dense)] - y), 2)
+
+    def mean_square_prime(self, y):
+        return self.dense_a["a" + str(self.num_dense)] - y
+        
 cnn = CNN(2, 4)
 
 x = torch.rand(28, 28, 1)
