@@ -144,8 +144,16 @@ class CNN(object):
 
         self.dense_a["a0"] = x
 
-        for i in range(self.num_dense, )
-            self.dense
+        for i in range(self.num_dense):
+            
+            if i != self.num_dense-1:
+                self.dense_z["z" + str(i+1)] = torch.matmul(self.dense_a["a"+str(i)], self.dense_w["w"+str(i+1)]) + self.dense_b["b" + str(i+1)]
+                self.dense_a["a"+str(i+1)] = self.tanh(self.dense_z["z" + str(i+1)])
+
+            else:
+                self.dense_z["z" + str(i + 1)] = torch.matmul(self.dense_a["a" + str(i)], self.dense_w["w" + str(i + 1)]) + self.dense_b["b" + str(i + 1)]
+                self.dense_a["a" + str(i + 1)] = self.tanh(self.dense_z["z" + str(i + 1)])
+
 
     def sigmoid(self, z):
         return torch.sigmoid(z)
