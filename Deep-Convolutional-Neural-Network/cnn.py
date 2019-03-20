@@ -29,8 +29,10 @@ class CNN(object):
         self.conv_b = {}
         self.pool_a = {}
         self.conv_a = {}
-        self.conv_z = {}
         self.dense_a = {}
+        self.conv_z = {}
+        self.dense_z = {}
+
 
         # initiate weights
         self.initiate_weights()
@@ -94,7 +96,8 @@ class CNN(object):
                         self.conv_z["z" + str(conv_layer)][h, w, t, f] = self.single_conv(x_slice,
                                                                                           conv_layer=conv_layer)
 
-    def single_pool(self, x, pool_type="average"):
+    @staticmethod
+    def single_pool(x, pool_type="average"):
 
         if pool_type == "average":
             return torch.sum(x) / x.numel()
@@ -102,16 +105,15 @@ class CNN(object):
         if pool_type == "max":
             return x.max()
 
-    def pool_forward(self, x, pool_layer=1, output_shape=[1, 1, 1], step=1, pool_type="average"):
+    def pool_forward(self, x, pool_layer=1, pool_layer=1, output_shape=[1, 1, 1], step=1, pool_type="average"):
 
         # height, width, thickness
-        w = "w" + str(conv_layer)
         x_h, x_w, x_t, x_f = x.shape[0], x.shape[1], x.shape[2], x.shape[3]
         h_num, w_num, t_num = output_shape[0], output_shape[1], output_shape[2]
 
         w_h = self.calc_window_side(x_h, h_num)
         w_w = self.calc_window_side(x_w, w_num)
-        w_t = self.calc_window_side(w_t, t_num)
+        w_t = self.calc_window_side(x_t, t_num)
 
         self.pool_a["a" + str(pool_layer)] = torch.zeros(h_num, w_num, t_num, x_f)
 
@@ -120,7 +122,7 @@ class CNN(object):
                 for t in range(t_num):
                     for f in range(x_f):
                         x_slice = x.narrow(0, h * step, w_h).narrow(1, w * step, w_w).narrow(2, t * step, w_t)
-                        self.conv_a["a" + str(conv_layer)][h, w, t, f] = self.single_pool(x, pool_type)
+                        self.pool_a["a" + str(pool_layer)][h, w, t, f] = self.single_pool(x, pool_type)
 
     def pad(self, a, pad_num=1):
         padding = [pad_num, pad_num, pad_num, pad_num]
@@ -138,10 +140,12 @@ class CNN(object):
     def tanh_prime(self, z):
         return 1 - torch.pow(torch.tanh(z), 2)
 
-
-
     def dense_forward(self, x):
-        pass
+
+        self.dense_a["a0"] = x
+
+        for i in range(self.num_dense, )
+            self.dense
 
     def sigmoid(self, z):
         return torch.sigmoid(z)
