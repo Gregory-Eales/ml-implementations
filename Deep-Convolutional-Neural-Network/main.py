@@ -2,7 +2,10 @@ from cnn import CNN
 from data import get_data
 
 
+import pandas as pd
 
+
+df = pd.Series.get()
 x, y = get_data
 
 

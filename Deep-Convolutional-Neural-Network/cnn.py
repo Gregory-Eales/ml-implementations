@@ -105,7 +105,7 @@ class CNN(object):
         if pool_type == "max":
             return x.max()
 
-    def pool_forward(self, x, pool_layer=1, pool_layer=1, output_shape=[1, 1, 1], step=1, pool_type="average"):
+    def pool_forward(self, x, pool_layer=1, output_shape=[1, 1, 1], step=1, pool_type="average"):
 
         # height, width, thickness
         x_h, x_w, x_t, x_f = x.shape[0], x.shape[1], x.shape[2], x.shape[3]
@@ -168,14 +168,18 @@ class CNN(object):
         return 1 - self.tanh(z) ** 2
 
     def dense_backprop(self):
-        pass
+        
+        self.cost = None
+
+        for i in range(self.num_dense):
+            self.w = self.w - self.alpha*self.update
 
     def mean_square_error(self, y):
         return 0.5*torch.pow((self.dense_a["a"+str(self.num_dense)] - y), 2)
 
     def mean_square_prime(self, y):
         return self.dense_a["a" + str(self.num_dense)] - y
-        
+
 cnn = CNN(2, 4)
 
 x = torch.rand(28, 28, 1)
