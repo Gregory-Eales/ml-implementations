@@ -174,17 +174,35 @@ class CNN(object):
         for i in range(self.num_dense):
             self.w = self.w - self.alpha*self.update
 
+    def calc_dense_updates(self, cost):
+
+        self.dense_w_update['w' + str(self.num_dense)] = None
+
+        for i in reversed(range(self.num_dense)):
+            self.dense_w_update["w" + str(i)] = torch.matmul(self.dense_w_update["w" + str(i+1)])
+
     def mean_square_error(self, y):
         return 0.5*torch.pow((self.dense_a["a"+str(self.num_dense)] - y), 2)
 
     def mean_square_prime(self, y):
         return self.dense_a["a" + str(self.num_dense)] - y
 
+    def log_liklihood(self, y):
+        h = self.dense_a["a" + str(self.num_dense)]
+        return y*torch.log(h) + (1-y)*torch.log(1-h)
+
+    def log_liklihood_prime(self, y):
+        h = self.dense_a["a" + str(self.num_dense)]
+        return y/h + (1-y)/(1-h)
+
 cnn = CNN(2, 4)
 
 x = torch.rand(28, 28, 1)
 t = time.time()
-cnn.predict(x)
+
+for i in tqdm(range(500)):
+    cnn.predict(x)
+
 print(time.time() - t)
 
 print(cnn.conv_z["z2"].shape)
