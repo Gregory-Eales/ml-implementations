@@ -37,6 +37,7 @@ class CNN(object):
         # initiate weights
         self.initiate_weights()
 
+    # initiates dense and conv weights and bias
     def initiate_weights(self):
 
         # initiating dense weights
@@ -52,6 +53,7 @@ class CNN(object):
         self.conv_w["w3"] = torch.rand([4, 4, 1, 10])
         self.conv_w["w4"] = torch.rand([4, 4, 1, 10])
 
+    # make a prediction based on x
     def predict(self, x):
 
         self.conv_z["z0"] = x
@@ -59,18 +61,21 @@ class CNN(object):
         for i in range(self.num_convs):
             self.conv_forward(self.conv_z["z" + str(i)], conv_layer=i + 1, step=2)
 
+    # traing conv net model
     def train(self, x, y, iterations=1, alpha=0.1):
 
         print("    Training Convolutional Neural Network")
         for i in tqdm(range(iterations)):
             pass
 
+    # single convolution operation
     def single_conv(self, x, conv_layer=1):
 
         w = "w" + str(conv_layer)
         b = "b" + str(conv_layer)
         return torch.sum(x * self.conv_w[w])
 
+    # convolutional forward
     def conv_forward(self, x, conv_layer=1, step=1):
 
         # height, width, thickness
@@ -96,6 +101,7 @@ class CNN(object):
                         self.conv_z["z" + str(conv_layer)][h, w, t, f] = self.single_conv(x_slice,
                                                                                           conv_layer=conv_layer)
 
+    # single pool operation
     @staticmethod
     def single_pool(x, pool_type="average"):
 
@@ -105,6 +111,7 @@ class CNN(object):
         if pool_type == "max":
             return x.max()
 
+    # pooling forward
     def pool_forward(self, x, pool_layer=1, output_shape=[1, 1, 1], step=1, pool_type="average"):
 
         # height, width, thickness
@@ -124,22 +131,20 @@ class CNN(object):
                         x_slice = x.narrow(0, h * step, w_h).narrow(1, w * step, w_w).narrow(2, t * step, w_t)
                         self.pool_a["a" + str(pool_layer)][h, w, t, f] = self.single_pool(x, pool_type)
 
+    # pad torch tensor with number a
     def pad(self, a, pad_num=1):
         padding = [pad_num, pad_num, pad_num, pad_num]
         return torch.nn.functional.pad(a, pad=padding)
 
+    # calculate the number of conv stepts from the perameters
     def calc_num_steps(self, step, x, w):
         return int((x - w) / (step)) + 1
 
+    # calculate the length of window from perameters
     def calc_window_side(self, step, x, length):
         return int(x - ((length - 1) * step))
 
-    def sigmoid_prime(self, z):
-        return torch.sigmoid(z) * (1 - torch.sigmoid(z))
-
-    def tanh_prime(self, z):
-        return 1 - torch.pow(torch.tanh(z), 2)
-
+    # making dense prediction from convolutional layer
     def dense_forward(self, x):
 
         self.dense_a["a0"] = x
