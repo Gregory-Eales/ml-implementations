@@ -33,7 +33,6 @@ class CNN(object):
         self.conv_z = {}
         self.dense_z = {}
 
-
         # initiate weights
         self.initiate_weights()
 
@@ -147,7 +146,7 @@ class CNN(object):
     # making dense prediction from convolutional layer
     def dense_forward(self, x):
 
-        self.dense_a["a0"] = x
+        self.dense_a["a0"] = self.conv_a["a" + str(self.num_convs)]
 
         for i in range(self.num_dense):
 
