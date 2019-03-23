@@ -155,42 +155,52 @@ class CNN(object):
                 self.dense_a["a" + str(i + 1)] = self.tanh(self.dense_z["z" + str(i + 1)])
 
 
+    # sigmoid activation function
     def sigmoid(self, z):
         return torch.sigmoid(z)
 
+    # tanh activation funciton
     def tanh(self, z):
         return torch.tanh(z)
 
+    # derivative of sigmoid activation function
     def sigmoid_prime(self, z):
         return self.sigmoid(z) * (1 - self.sigmoid(z))
 
+    # derivative of tanh activation 
     def tanh_prime(self, z):
         return 1 - self.tanh(z) ** 2
 
+    # updating dense weights
     def dense_backprop(self):
         
-        self.cost = None
-
         for i in range(self.num_dense):
-            self.w = self.w - self.alpha*self.update
+            self.w = self.w - self.alpha*self.dense_w_update["w" + str(i)]
 
+    # updates for dense weights
     def calc_dense_updates(self, cost):
 
-        self.dense_w_update['w' + str(self.num_dense)] = None
+        # updates the first set of wait updates to get it started
+        self.dense_w_update['w' + str(self.num_dense)] = torch.matmul(self.dense_a["a" + str(self.num_dense)]*self.cost = self.mean_square_error(y))
 
+        # loop through all of the dense layers in reverse generating updates
         for i in reversed(range(self.num_dense)):
             self.dense_w_update["w" + str(i)] = torch.matmul(self.dense_w_update["w" + str(i+1)])
 
+    # mean squared error cost function
     def mean_square_error(self, y):
         return 0.5*torch.pow((self.dense_a["a"+str(self.num_dense)] - y), 2)
 
+    # derivative of mean squared error cost
     def mean_square_prime(self, y):
         return self.dense_a["a" + str(self.num_dense)] - y
 
+    # log liklihood cost function
     def log_liklihood(self, y):
         h = self.dense_a["a" + str(self.num_dense)]
         return y*torch.log(h) + (1-y)*torch.log(1-h)
 
+    # derivative of log liklihood cost funciton
     def log_liklihood_prime(self, y):
         h = self.dense_a["a" + str(self.num_dense)]
         return y/h + (1-y)/(1-h)
