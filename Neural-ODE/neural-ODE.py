@@ -6,7 +6,36 @@ from matplotlib import pyplot
 import seaborn as sns
 
 
+def ode_solver(z0, t0, t1, f):
+	pass
 
+class ODEF(torch.nn.Module):
+
+	def grad_forward(self):
+		pass
+
+	def flatter_params(self):
+		pass
+
+
+class AdjointODE(torch.autograd.Funtion):
+
+	def forward(self):
+		pass
+
+
+	def backward(self):
+		pass
+
+
+class NeuralODE(torch.nn.Module):
+
+	def __init__(self):
+		pass
+
+
+	def forward(self):
+		pass
 
 
 
