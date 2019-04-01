@@ -10,7 +10,6 @@ import seaborn as sns
 def ode_solver(z0, t0, t1, f):
 	pass
 
-
 # computes augmented dynamics
 class ODEF(torch.nn.Module):
 
@@ -22,7 +21,7 @@ class ODEF(torch.nn.Module):
 
 
 # main neural ODE class
-class AdjointODE(torch.autograd.Funtion):
+class AdjointODE(torch.autograd.Function):
 
 	def forward(self):
 		pass
