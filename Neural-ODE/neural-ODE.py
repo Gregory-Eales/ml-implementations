@@ -6,9 +6,12 @@ from matplotlib import pyplot
 import seaborn as sns
 
 
+# function for solving ODEs
 def ode_solver(z0, t0, t1, f):
 	pass
 
+
+# computes augmented dynamics
 class ODEF(torch.nn.Module):
 
 	def grad_forward(self):
@@ -18,6 +21,7 @@ class ODEF(torch.nn.Module):
 		pass
 
 
+# main neural ODE class
 class AdjointODE(torch.autograd.Funtion):
 
 	def forward(self):
@@ -27,7 +31,7 @@ class AdjointODE(torch.autograd.Funtion):
 	def backward(self):
 		pass
 
-
+# adjoint neural ODE wrapper
 class NeuralODE(torch.nn.Module):
 
 	def __init__(self):
