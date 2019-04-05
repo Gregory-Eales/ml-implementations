@@ -47,10 +47,10 @@ class CNN(object):
 
         # initiate convolutional weights
 
-        self.conv_w["w1"] = torch.rand([4, 4, 1, 10])
-        self.conv_w["w2"] = torch.rand([4, 4, 1, 10])
-        self.conv_w["w3"] = torch.rand([4, 4, 1, 10])
-        self.conv_w["w4"] = torch.rand([4, 4, 1, 10])
+        self.conv_w["w1"] = torch.rand([2, 2, 1, 10])
+        self.conv_w["w2"] = torch.rand([2, 2, 1, 10])
+        self.conv_w["w3"] = torch.rand([2, 2, 1, 10])
+        self.conv_w["w4"] = torch.rand([2, 2, 1, 10])
 
     # make a prediction based on x
     def predict(self, x):
@@ -99,6 +99,7 @@ class CNN(object):
                         x_slice = x.narrow(0, h * step, w_h).narrow(1, w * step, w_w).narrow(2, t * step, w_t)
                         self.conv_z["z" + str(conv_layer)][h, w, t, f] = self.single_conv(x_slice,
                                                                                           conv_layer=conv_layer)
+        self.conv_z["z" + str(conv_layer)] = self.pad(self.conv_z["z" + str(conv_layer)], pad_num=1)
 
     # single pool operation
     @staticmethod
@@ -132,7 +133,19 @@ class CNN(object):
 
     # pad torch tensor with number a
     def pad(self, a, pad_num=1):
-        padding = [pad_num, pad_num, pad_num, pad_num]
+
+        padding = [pad_num, pad_num]
+
+        if len(a.shape) == 4:
+            padding = [0, 0, 0, 0, pad_num, pad_num, pad_num, pad_num]
+
+        if len(a.shape) == 3:
+            padding = [0, 0, pad_num, pad_num, pad_num, pad_num]
+
+        if len(a.shape) == 2:
+            padding = [pad_num, pad_num, pad_num, pad_num]
+
+        
         return torch.nn.functional.pad(a, pad=padding)
 
     # calculate the number of conv stepts from the perameters
@@ -185,7 +198,7 @@ class CNN(object):
     def calc_dense_updates(self, cost):
 
         # updates the first set of wait updates to get it started
-        self.dense_w_update['w' + str(self.num_dense)] = torch.matmul(self.dense_a["a" + str(self.num_dense)]*self.cost = self.mean_square_error(y))
+        self.dense_w_update['w' + str(self.num_dense)] = torch.matmul(self.dense_a["a" + str(self.num_dense)]*self.cost - self.mean_square_error(y))
 
         # loop through all of the dense layers in reverse generating updates
         for i in reversed(range(self.num_dense)):
@@ -209,14 +222,4 @@ class CNN(object):
         h = self.dense_a["a" + str(self.num_dense)]
         return y/h + (1-y)/(1-h)
 
-cnn = CNN(2, 4)
 
-x = torch.rand(28, 28, 1)
-t = time.time()
-
-for i in tqdm(range(500)):
-    cnn.predict(x)
-
-print(time.time() - t)
-
-print(cnn.conv_z["z2"].shape)

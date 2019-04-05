@@ -1,24 +1,29 @@
 from cnn import CNN
-from data import get_data
+from data import get_MNIST_data
+import torch
+import time
+from tqdm import tqdm
 
 
-import pandas as pd
+# Get Data
+"""
+x, y = get_MNIST_data()
+
+x_sample = x[0]
+
+"""
+
+# Load Model
 
 
-df = pd.Series.get()
-x, y = get_data
+cnn = CNN(2, 4)
 
+x = torch.rand(8, 8, 1)
+t = time.time()
 
-cnn = CNN()
+for i in tqdm(range(500)):
+    cnn.predict(x)
 
-cnn.train(x, y, alpha = 0.1, iterations = 100)
+print(time.time() - t)
 
-cnn.predict(x_sample)
-
-
-import pandas as pd
-
-
-df = pd.DataFrame()
-
-df.dr
+print(cnn.conv_z["z2"].shape)
