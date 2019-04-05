@@ -7,7 +7,8 @@ def get_MNIST_data():
 	# load digit data set
 	x, uncleaned_y = datasets.load_digits(return_X_y=True)
 
-	x = x/x.max()
+	
+	#x = x/x.max()
 	# create a y for each classification: numbers 0-9 and stores it in 'answers'
 	answers = []
 	for i in range(10):
@@ -24,5 +25,8 @@ def get_MNIST_data():
 
 	# convert y to an array      
 	y = np.array(y)
+	
+	
+	
+	return x, uncleaned_y
 
-	return x, y

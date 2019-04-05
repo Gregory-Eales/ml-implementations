@@ -16,6 +16,9 @@ class CNN(object):
 
     def __init__(self, num_convs, num_dense, output_shape=1, input_shape=[28, 28, 1]):
 
+        self.historical_cost = []
+
+
         # define network topology
         self.num_convs = num_convs
         self.num_dense = num_dense
@@ -41,38 +44,53 @@ class CNN(object):
 
         # initiating dense weights
         for i in range(1, self.num_dense):
+
             self.dense_w["w" + str(i)] = torch.rand(self.output_shape + 1, self.output_shape + 1)
 
         self.dense_w["w" + str(self.num_dense)] = torch.rand(self.output_shape, self.output_shape + 1)
 
         # initiate convolutional weights
 
-        self.conv_w["w1"] = torch.rand([2, 2, 1, 10])
-        self.conv_w["w2"] = torch.rand([2, 2, 1, 10])
-        self.conv_w["w3"] = torch.rand([2, 2, 1, 10])
-        self.conv_w["w4"] = torch.rand([2, 2, 1, 10])
+        self.conv_w["w1"] = torch.rand([2, 2, 1, 1])
+        self.conv_w["w2"] = torch.rand([2, 2, 1, 1])
+        self.conv_w["w3"] = torch.rand([2, 2, 1, 1])
+        self.conv_w["w4"] = torch.rand([2, 2, 1, 1])
 
     # make a prediction based on x
     def predict(self, x):
 
-        self.conv_z["z0"] = x
+        self.conv_a["a0"] = x
 
-        for i in range(self.num_convs):
-            self.conv_forward(self.conv_z["z" + str(i)], conv_layer=i + 1, step=2)
+        for i in range(self.num_convs+1):
+            self.conv_forward(self.conv_a["a" + str(i)], conv_layer=i+1, step=2)
+            self.conv_a["a" + str(i+1)] = self.tanh(self.conv_z["z" + str(i+1)])
+            print("Calculated Convolution")
+
+
+        self.dense_forward()
+        print("Calculated Dense")
+
+        
 
     # traing conv net model
     def train(self, x, y, iterations=1, alpha=0.1):
 
         print("    Training Convolutional Neural Network")
         for i in tqdm(range(iterations)):
-            pass
+
+            self.predict(x)
+            cost = self.mean_square_error(y)
+            self.historical_cost.append(cost)
+            self.calc_dense_updates(cost)
+            self.dense_backprop()
 
     # single convolution operation
     def single_conv(self, x, conv_layer=1):
 
         w = "w" + str(conv_layer)
         b = "b" + str(conv_layer)
-        return torch.sum(x * self.conv_w[w])
+        n = (torch.tensor(x).type(torch.DoubleTensor) * self.conv_w[w].type(torch.DoubleTensor))
+        return torch.sum(n).type(torch.DoubleTensor)
 
     # convolutional forward
     def conv_forward(self, x, conv_layer=1, step=1):
@@ -157,18 +175,24 @@ class CNN(object):
         return int(x - ((length - 1) * step))
 
     # making dense prediction from convolutional layer
-    def dense_forward(self, x):
+    def dense_forward(self):
 
-        self.dense_a["a0"] = self.conv_a["a" + str(self.num_convs)]
+        self.dense_a["a0"] = self.conv_a["a" + str(self.num_convs)].reshape(self.conv_a["a" + str(self.num_convs)].numel())
+
+       
+
+
+        self.dense_w["w1"] = torch.rand(self.dense_a["a0"].shape[0] , self.output_shape + 1).t()
 
         for i in range(self.num_dense):
 
-            if i != self.num_dense-1:
-                self.dense_z["z" + str(i+1)] = torch.matmul(self.dense_a["a"+str(i)], self.dense_w["w"+str(i+1)]) + self.dense_b["b" + str(i+1)]
+
+            if i != self.num_dense-2:
+                self.dense_z["z" + str(i+1)] = torch.matmul(self.dense_a["a"+str(i)], self.dense_w["w"+str(i+1)].t()) #+ self.dense_b["b" + str(i+1)]
                 self.dense_a["a"+str(i+1)] = self.tanh(self.dense_z["z" + str(i+1)])
 
             else:
-                self.dense_z["z" + str(i + 1)] = torch.matmul(self.dense_a["a" + str(i)], self.dense_w["w" + str(i + 1)]) + self.dense_b["b" + str(i + 1)]
+                self.dense_z["z" + str(i + 1)] = torch.matmul(self.dense_a["a" + str(i)], self.dense_w["w" + str(i + 1)].t()) #+ self.dense_b["b" + str(i + 1)]
                 self.dense_a["a" + str(i + 1)] = self.tanh(self.dense_z["z" + str(i + 1)])
 
 

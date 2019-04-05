@@ -6,24 +6,22 @@ from tqdm import tqdm
 
 
 # Get Data
-"""
+
 x, y = get_MNIST_data()
 
-x_sample = x[0]
+x_sample = torch.tensor(x[0].reshape(8, 8, 1))
+y_sample = torch.tensor(y[0])
 
-"""
+
+
 
 # Load Model
 
-
-cnn = CNN(2, 4)
+cnn = CNN(2, 2)
 
 x = torch.rand(8, 8, 1)
 t = time.time()
 
-for i in tqdm(range(500)):
-    cnn.predict(x)
+cnn.train(x_sample, y_sample, iterations=1, alpha=0.01)
 
 print(time.time() - t)
-
-print(cnn.conv_z["z2"].shape)
