@@ -6,13 +6,14 @@ from tqdm import tqdm
 
 
 # Get Data
+"""
 
 x, y = get_MNIST_data()
 
 x_sample = torch.tensor(x[0].reshape(8, 8, 1))
 y_sample = torch.tensor(y[0])
 
-
+"""
 
 
 # Load Model
