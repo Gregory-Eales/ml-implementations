@@ -232,7 +232,7 @@ class CNN(object):
             self.dens_e["e" + str(i)] = torch.mutmul(self.e["e" + str(i-1)]*self.sigmoid_prime(self.dense_z["z" + str(i-1)]))
 
         # updates the first set of wait updates to get it started
-        self.dense_w_update['w' + str(self.num_dense)] = torch.matmul(self.dense_a["a" + str(self.num_dense)]*cost - self.mean_square_error(self.y))
+        self.dense_w_update['w' + str(self.num_dense)] = torch.matmul(self.dense_a["a" + str(self.num_dense)] - self.e["e" + str(i)])
 
         # loop through all of the dense layers in reverse generating updates
         for i in reversed(range(self.num_dense)):
