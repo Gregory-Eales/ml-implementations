@@ -75,6 +75,8 @@ class CNN(object):
     # traing conv net model
     def train(self, x, y, iterations=1, alpha=0.1):
 
+        self.y = y
+
         print("    Training Convolutional Neural Network")
         for i in tqdm(range(iterations)):
 
@@ -222,7 +224,7 @@ class CNN(object):
     def calc_dense_updates(self, cost):
 
         # updates the first set of wait updates to get it started
-        self.dense_w_update['w' + str(self.num_dense)] = torch.matmul(self.dense_a["a" + str(self.num_dense)]*self.cost - self.mean_square_error(y))
+        self.dense_w_update['w' + str(self.num_dense)] = torch.matmul(self.dense_a["a" + str(self.num_dense)]*cost - self.mean_square_error(self.y))
 
         # loop through all of the dense layers in reverse generating updates
         for i in reversed(range(self.num_dense)):
