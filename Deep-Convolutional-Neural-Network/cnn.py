@@ -35,6 +35,7 @@ class CNN(object):
         self.dense_a = {}
         self.conv_z = {}
         self.dense_z = {}
+        self.dense_e = {}
 
         # initiate weights
         self.initiate_weights()
@@ -222,6 +223,13 @@ class CNN(object):
 
     # updates for dense weights
     def calc_dense_updates(self, cost):
+
+        # create the first backprpop place holder
+        self.dense_e["e" + str(self.num_dense)] = torch.multiply(self.sigmoid_prime(self.z['z'+str(self.num_layers)]), self.mean_square_error(self.y))
+
+        # create the second loop through the next wave 
+        for i in reversed(range(self.num_dense)):
+            pass
 
         # updates the first set of wait updates to get it started
         self.dense_w_update['w' + str(self.num_dense)] = torch.matmul(self.dense_a["a" + str(self.num_dense)]*cost - self.mean_square_error(self.y))
