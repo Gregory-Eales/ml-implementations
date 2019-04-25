@@ -225,11 +225,11 @@ class CNN(object):
     def calc_dense_updates(self, cost):
 
         # create the first backprpop place holder
-        self.dense_e["e" + str(self.num_dense)] = torch.multiply(self.sigmoid_prime(self.z['z'+str(self.num_layers)]), self.mean_square_error(self.y))
+        self.dense_e["e" + str(self.num_dense)] = self.sigmoid_prime(self.z['z'+str(self.num_layers)]) * self.mean_square_error(self.y)
 
         # create the second loop through the next wave 
-        for i in reversed(range(self.num_dense)):
-            pass
+        for i in reversed(range(1, self.num_dense)):
+            self.dens_e["e" + str(i)] = torch.mutmul(self.e["e" + str(i-1)]*self.sigmoid_prime(self.dense_z["z" + str(i-1)]))
 
         # updates the first set of wait updates to get it started
         self.dense_w_update['w' + str(self.num_dense)] = torch.matmul(self.dense_a["a" + str(self.num_dense)]*cost - self.mean_square_error(self.y))
