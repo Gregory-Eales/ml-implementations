@@ -21,8 +21,10 @@ y_sample = torch.tensor(y[0])
 cnn = CNN(2, 2)
 
 x = torch.rand(8, 8, 1)
+y = torch.rand(1, 10)
+
 t = time.time()
 
-cnn.train(x_sample, y_sample, iterations=1, alpha=0.01)
+cnn.train(x, y, iterations=1, alpha=0.01)
 
 print(time.time() - t)
