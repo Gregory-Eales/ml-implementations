@@ -64,16 +64,19 @@ class CNN(object):
         self.initialize_conv_weights()
         self.initialize_dense_weights()
 
-    def single_conv(self, z, w, activation="tanh"):
+    def single_conv(self, x, w, activation="tanh", conv_layer=1):
         
         if activation == "tanh":
-            return torch.tanh(torch.sum(z*w))
+            self.conv_z["z"+str(conv_layer)] = torch.sum(x*w)
+            return torch.tanh(self.conv_z["z"+str(conv_layer)])
 
         if activation == "relu":
-            return torch.nn.functional.relu(torch.sum(z*w))
+            self.conv_z["z"+str(conv_layer)] = torch.sum(x*w)
+            return torch.nn.functional.relu(self.conv_z["z"+str(conv_layer)])
 
         if activation == "sigmoid":
-            return torch.sigmoid(torch.sum(z*w))
+            self.conv_z["z"+str(conv_layer)] = torch.sum(x*w)
+            return torch.sigmoid(self.conv_z["z"+str(conv_layer)])
 
     def single_avg_pool(self, z, kernal_size=3, activation="tanh"):
 
@@ -87,7 +90,18 @@ class CNN(object):
             return torch.sigmoid(torch.sum(z)/kernal_size**2)
         
     def conv_forward(self, conv_layer=1):
-        pass
+        
+        # get number of steps in each direction
+
+
+        # loop through each step and calculate conv a
+        x, y, z = 1, 1, 1
+        for i in range(x):
+            for j in range(y):
+                for k in range(z):
+                    pass
+
+
 
     def pool_forward(self, pool_layer=1):
         pass
