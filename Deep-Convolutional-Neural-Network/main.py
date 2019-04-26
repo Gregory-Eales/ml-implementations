@@ -5,6 +5,9 @@ import time
 from tqdm import tqdm
 
 
+print(torch.__version__)
+
+
 # Get Data
 """
 
@@ -18,10 +21,15 @@ y_sample = torch.tensor(y[0])
 
 # Load Model
 
+
+
 cnn = CNN(2, 2)
 
 x = torch.rand(8, 8, 1)
 y = torch.rand(1, 10)
+
+
+torch.matmul(x, y)
 
 t = time.time()
 
