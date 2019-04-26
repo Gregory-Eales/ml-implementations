@@ -41,6 +41,11 @@ class CNN(object):
         self.conv_a = {}
         self.pool_a = {}
 
+        # run intialization functions
+        self.initialize_conv_weights()
+        self.initialize_dense_weights()
+
+
     def initialize_dense_weights(self):
         
         # need output shape of last conv layer
@@ -57,7 +62,9 @@ class CNN(object):
                 self.dense["w"+str(i)] = tf.rand(y_shape[1]+1, y_shape[1])
 
     def initialize_conv_weights(self):
-        pass
+        
+        for i in range(self.conv_length):
+            self.conv_w["w" + str(i+1)] = torch.rand(64/(2**i), 3, 3)
 
     def initialize_weights(self):
         pass
