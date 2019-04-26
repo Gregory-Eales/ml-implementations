@@ -93,15 +93,13 @@ class CNN(object):
         
         # get number of steps in each direction
 
-
         # loop through each step and calculate conv a
         x, y, z = 1, 1, 1
         for i in range(x):
             for j in range(y):
                 for k in range(z):
-                    pass
-
-
+                    for l in range(w):
+                        pass
 
     def pool_forward(self, pool_layer=1):
         pass
