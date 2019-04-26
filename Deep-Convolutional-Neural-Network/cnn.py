@@ -72,16 +72,25 @@ class CNN(object):
     def single_conv(self, z, w, activation="tanh"):
         
         if activation == "tanh":
-            return tf.tanh(z*w)
+            return tf.tanh(tf.sum(z*w))
 
         if activation == "relu":
-            return tf.nn.functional.relu(z*w)
+            return tf.nn.functional.relu(tf.sum(z*w))
 
         if activation == "sigmoid":
-            return tf.sigmoid(z*w)
+            return tf.sigmoid(tf.sum(z*w))
 
-    def single_avg_pool(self):
-        pass
+    def single_avg_pool(self, z, kernal_size=3, activation="tanh"):
+
+        if activation == "tanh":
+            return tf.tanh(tf.sum(z)/kernal_size**2)
+
+        if activation == "relu":
+            return tf.nn.functional.relu(tf.sum(z)/kernal_size**2)
+
+        if activation == "sigmoid":
+            return tf.sigmoid(tf.sum(z)/kernal_size**2)
+        
 
     def conv_forward(self):
         pass
