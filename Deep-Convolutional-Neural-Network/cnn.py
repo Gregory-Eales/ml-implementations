@@ -1,13 +1,8 @@
-import torch as tf
+import torch
 
 class CNN(object):
 
     # TO DO:
-    # - initalize dense weights
-    # - initialize conv weights
-    # - initalize pool weights lol :)
-    # - single conv
-    # - single pool
     # - conv forward
     # - dense forward
     # - pool forward
@@ -50,20 +45,20 @@ class CNN(object):
         # need output shape of last conv layer
         output = self.conv_w["w" + str(self.conv_length)].numel()
 
-        self.dense_w["w1"] = tf.rand(output, y.shape[1] + 1)
+        self.dense_w["w1"] = torch.rand(output, y.shape[1] + 1)
 
         for i in range(2, self.dense_length+1):
             
             if i != self.dense_length:
-                self.dense["w"+str(i)] = tf.rand(y.shape[1]+1, y.shape[1]+1)
+                self.dense["w"+str(i)] = torch.rand(y.shape[1]+1, y.shape[1]+1)
 
             else:
-                self.dense["w"+str(i)] = tf.rand(y_shape[1]+1, y_shape[1])
+                self.dense["w"+str(i)] = torch.rand(y_shape[1]+1, y_shape[1])
 
     def initialize_conv_weights(self):
         
         for i in range(self.conv_length):
-            self.conv_w["w" + str(i+1)] = tf.rand(64/(2**i), 3, 3)
+            self.conv_w["w" + str(i+1)] = torch.rand(64/(2**i), 3, 3)
 
     def initialize_weights(self):
         self.initialize_conv_weights()
@@ -72,34 +67,45 @@ class CNN(object):
     def single_conv(self, z, w, activation="tanh"):
         
         if activation == "tanh":
-            return tf.tanh(tf.sum(z*w))
+            return torch.tanh(torch.sum(z*w))
 
         if activation == "relu":
-            return tf.nn.functional.relu(tf.sum(z*w))
+            return torch.nn.functional.relu(torch.sum(z*w))
 
         if activation == "sigmoid":
-            return tf.sigmoid(tf.sum(z*w))
+            return torch.sigmoid(torch.sum(z*w))
 
     def single_avg_pool(self, z, kernal_size=3, activation="tanh"):
 
         if activation == "tanh":
-            return tf.tanh(tf.sum(z)/kernal_size**2)
+            return torch.tanh(torch.sum(z)/kernal_size**2)
 
         if activation == "relu":
-            return tf.nn.functional.relu(tf.sum(z)/kernal_size**2)
+            return torch.nn.functional.relu(torch.sum(z)/kernal_size**2)
 
         if activation == "sigmoid":
-            return tf.sigmoid(tf.sum(z)/kernal_size**2)
+            return torch.sigmoid(torch.sum(z)/kernal_size**2)
         
-
-    def conv_forward(self):
+    def conv_forward(self, conv_layer=1):
         pass
 
-    def pool_forward(self):
+    def pool_forward(self, pool_layer=1):
         pass
 
     def dense_forward(self):
-        pass
+        
+        # flatten last conv activation 
+        self.dense_a["a0"] = self.conv_a["a"+str(self.conv_length)].view(-1, 1)
+
+        for i in range(self.dense_length):
+
+            if i+1 != self.dense_length:
+                self.dense_z["z"+str(i+1)] = torch.matself.dense_w["w"+str(i+1)]
+                self.dense_a["a"+str(i+1)] = torch.tanh(self.dense_z["z"+str(i+1)])
+
+            else:
+                self.dense_z["z"+str(i+1)] = torch.matself.dense_w["w"+str(i+1)]
+                self.dense_a["a"+str(i+1)] = torch.sigmoid(self.dense_z["z"+str(i+1)])
 
     def conv_backward(self):
         pass
