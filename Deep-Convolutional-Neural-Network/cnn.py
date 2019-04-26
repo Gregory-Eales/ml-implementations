@@ -42,8 +42,7 @@ class CNN(object):
         self.pool_a = {}
 
         # run intialization functions
-        self.initialize_conv_weights()
-        self.initialize_dense_weights()
+        self.initialize_weights()
 
 
     def initialize_dense_weights(self):
@@ -64,13 +63,22 @@ class CNN(object):
     def initialize_conv_weights(self):
         
         for i in range(self.conv_length):
-            self.conv_w["w" + str(i+1)] = torch.rand(64/(2**i), 3, 3)
+            self.conv_w["w" + str(i+1)] = tf.rand(64/(2**i), 3, 3)
 
     def initialize_weights(self):
-        pass
+        self.initialize_conv_weights()
+        self.initialize_dense_weights()
 
-    def single_conv(self):
-        pass
+    def single_conv(self, z, w, activation="tanh"):
+        
+        if activation == "tanh":
+            return tf.tanh(z*w)
+
+        if activation == "relu":
+            return tf.nn.functional.relu(z*w)
+
+        if activation == "sigmoid":
+            return tf.sigmoid(z*w)
 
     def single_avg_pool(self):
         pass
