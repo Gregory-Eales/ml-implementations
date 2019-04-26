@@ -125,11 +125,16 @@ class CNN(object):
     def dense_backward(self):
         pass
 
-    def sigmoid_prime(self):
-        pass
+    def sigmoid_prime(self, ):
+        a = torch.sigmoid(z)
+        return return a*(1-a)
 
-    def tanh_prime(self):
-        pass
+    def tanh_prime(self, z):
+        return 1 - torch.tanh(z)**2
 
     def relu_prime(self):
         pass
+
+
+
+
