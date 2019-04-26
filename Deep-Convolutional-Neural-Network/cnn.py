@@ -14,8 +14,19 @@ class CNN(object):
     # - conv backward
     # - dense backward
 
-    def __init__(self):
+    def __init__(self, dense_length, conv_length, x_shape, y_shape):
+
+        # conv_length = the number of convolutional layers
+        # dense_length = the number of dense layers
+        # x_shape = the shape of the input data
+        # y_shape = the shape of the output data
         
+        # init params
+        self.dense_length = dense_length
+        self.conv_length = conv_length
+        self.x_shape = x_shape
+        self.y_shape = y_shape
+
         # initalize weights
         self.dense_w = {}
         self.conv_w = {}
@@ -31,9 +42,19 @@ class CNN(object):
         self.pool_a = {}
 
     def initialize_dense_weights(self):
-        pass
+        
+        # need output shape of last conv layer
+        output = self.conv_w["w" + str(self.conv_length)].numel()
+
+        self.dense_w["w1"] = tf.rand(output, y.shape[1])
+
+        for i in range(2, self.dense_length+1):
+            self.dense
 
     def initialize_conv_weights(self):
+        pass
+
+    def initialize_weights(self):
         pass
 
     def single_conv(self):
