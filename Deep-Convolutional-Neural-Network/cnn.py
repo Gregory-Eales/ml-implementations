@@ -124,3 +124,12 @@ class CNN(object):
 
     def dense_backward(self):
         pass
+
+    def sigmoid_prime(self):
+        pass
+
+    def tanh_prime(self):
+        pass
+
+    def relu_prime(self):
+        pass
