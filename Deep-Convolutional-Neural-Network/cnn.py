@@ -37,7 +37,7 @@ class CNN(object):
         self.pool_a = {}
 
         # run intialization functions
-        self.initialize_weights()
+        #self.initialize_weights()
 
 
     def initialize_dense_weights(self):
@@ -127,13 +127,16 @@ class CNN(object):
 
     def sigmoid_prime(self, ):
         a = torch.sigmoid(z)
-        return return a*(1-a)
+        return a*(1-a)
 
     def tanh_prime(self, z):
         return 1 - torch.tanh(z)**2
 
-    def relu_prime(self):
-        pass
+    def relu_prime(self, z):
+         z[z>0] = 1
+         z[z<0] = 0
+         return z
+
 
 
 
