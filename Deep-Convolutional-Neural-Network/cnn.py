@@ -15,7 +15,20 @@ class CNN(object):
     # - dense backward
 
     def __init__(self):
-        pass
+        
+        # initalize weights
+        self.dense_w = {}
+        self.conv_w = {}
+
+        # initialize z
+        self.dense_z = {}
+        self.conv_z = {}
+        self.pool_z = {}
+
+        # initialize activations
+        self.dense_a = {}
+        self.conv_a = {}
+        self.pool_a = {}
 
     def initialize_dense_weights(self):
         pass
