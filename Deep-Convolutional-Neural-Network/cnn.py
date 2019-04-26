@@ -46,10 +46,15 @@ class CNN(object):
         # need output shape of last conv layer
         output = self.conv_w["w" + str(self.conv_length)].numel()
 
-        self.dense_w["w1"] = tf.rand(output, y.shape[1])
+        self.dense_w["w1"] = tf.rand(output, y.shape[1] + 1)
 
         for i in range(2, self.dense_length+1):
-            self.dense
+            
+            if i != self.dense_length:
+                self.dense["w"+str(i)] = tf.rand(y.shape[1]+1, y.shape[1]+1)
+
+            else:
+                self.dense["w"+str(i)] = tf.rand(y_shape[1]+1, y_shape[1])
 
     def initialize_conv_weights(self):
         pass
