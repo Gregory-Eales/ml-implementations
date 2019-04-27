@@ -152,6 +152,16 @@ class CNN(object):
         
         return l, w, h
 
+    def get_pool_wind_shape(self, x_shape, kernal_size=3, step=1):
+
+        x_l, x_w, x_h = x_shape[0], x_shape[1], x_shape[2]
+        p_l, p_w, p_h = kernal_size, kernal_size, kernal_size
+        l = (x_l - p_l)/step + 1
+        w = (x_w - p_w)/step + 1
+        h = (x_h - p_h)/step + 1
+        
+        return l, w, h
+
 
 
 
