@@ -56,9 +56,16 @@ class CNN(object):
                 self.dense["w"+str(i)] = torch.rand(y_shape[1]+1, y_shape[1])
 
     def initialize_conv_weights(self):
-        
+
+
         for i in range(self.conv_length):
-            self.conv_w["w" + str(i+1)] = torch.rand(64/(2**i), 3, 3)
+
+            if i == 0:
+                self.conv_w["w" + str(i+1)] = torch.rand(3, 3, 1, 64/(2**i))
+
+            else:
+                self.conv_w["w" + str(i+1)] = torch.rand(3, 3, 32/(2**i-1), 64/(2**i))
+
 
     def initialize_weights(self):
         self.initialize_conv_weights()
@@ -93,7 +100,8 @@ class CNN(object):
 
         x_shape = self.conv_a["a" + str(conv_layer-1)]
         w_shape = self.conv_w["w" + str(conv_layer)]
-        l, w, h, f = self.get_wind_shape(x_shape, w_shape)
+        l, w, h = self.get_wind_shape(x_shape, w_shape)
+        z = torch.zeros(l, w, h)
         
         # get number of steps in each direction
 
