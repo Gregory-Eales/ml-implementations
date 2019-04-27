@@ -100,7 +100,7 @@ class CNN(object):
 
         x_shape = self.conv_a["a" + str(conv_layer-1)]
         w_shape = self.conv_w["w" + str(conv_layer)]
-        l, w, h = self.get_wind_shape(x_shape, w_shape)
+        l, w, h, f = self.get_wind_shape(x_shape, w_shape)
         z = torch.zeros(l, w, h)
         
         # get number of steps in each direction
