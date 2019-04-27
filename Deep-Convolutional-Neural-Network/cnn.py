@@ -90,11 +90,15 @@ class CNN(object):
             return torch.sigmoid(torch.sum(z)/kernal_size**2)
         
     def conv_forward(self, conv_layer=1):
+
+        x_shape = self.conv_a["a" + str(conv_layer-1)]
+        w_shape = self.conv_w["w" + str(conv_layer)]
+        l, w, h, f = self.get_wind_shape(x_shape, w_shape)
         
         # get number of steps in each direction
 
         # loop through each step and calculate conv a
-        x, y, z = 1, 1, 1
+        
         for i in range(x):
             for j in range(y):
                 for k in range(z):
@@ -137,7 +141,7 @@ class CNN(object):
          z[z<0] = 0
          return z
 
-    def get_wind_shape(self, x_shape, w_shape, step):
+    def get_wind_shape(self, x_shape, w_shape, step=1):
 
         x_l, x_w, x_h = x_shape[0], x_shape[1], x_shape[2]
         w_l, w_w, w_h = w_shape[0], w_shape[1], w_shape[2]
@@ -145,7 +149,7 @@ class CNN(object):
         l = (x_l - w_l)/step + 1
         w = (x_w - w_w)/step + 1
         h = (x_h - w_h)/step + 1
-
+        
         return l, w, h
 
 
