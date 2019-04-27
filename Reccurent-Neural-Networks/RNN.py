@@ -44,7 +44,10 @@ class RNN(object):
     def tanh_prime(self, z):
         return 1 - (torch.tanh(z)**2)
 
-    
+    def relu_prime(self, z):
+        z[z>0] = 1
+        z[z<0] = 0
+        return z
 
 
 
