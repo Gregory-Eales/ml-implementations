@@ -107,11 +107,10 @@ class CNN(object):
 
         # loop through each step and calculate conv a
         
-        for i in range(x):
-            for j in range(y):
-                for k in range(z):
-                    for l in range(w):
-                        pass
+        for j in range(l):
+            for i in range(w):
+                for k in range(h):
+                    pass
 
     def pool_forward(self, pool_layer=1):
         pass
@@ -152,13 +151,15 @@ class CNN(object):
     def get_wind_shape(self, x_shape, w_shape, step=1):
 
         x_l, x_w, x_h = x_shape[0], x_shape[1], x_shape[2]
-        w_l, w_w, w_h = w_shape[0], w_shape[1], w_shape[2]
+        w_l, w_w, w_h, w_f = w_shape[0], w_shape[1], w_shape[2], w_shape[3]
 
         l = (x_l - w_l)/step + 1
         w = (x_w - w_w)/step + 1
-        h = (x_h - w_h)/step + 1
         
-        return l, w, h
+        # make sure the weights and next conv have same filter dimension
+        assert w_h == x_h
+        
+        return l, w, x_h, w_f
 
     def get_pool_wind_shape(self, x_shape, kernal_size=3, step=1):
 
