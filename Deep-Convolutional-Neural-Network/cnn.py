@@ -137,6 +137,18 @@ class CNN(object):
          z[z<0] = 0
          return z
 
+    def get_wind_shape(self, x_shape, w_shape, step):
+
+        x_l, x_w, x_h = x_shape[0], x_shape[1], x_shape[2]
+        w_l, w_w, w_h = w_shape[0], w_shape[1], w_shape[2]
+
+        l = (x_l - w_l)/step + 1
+        w = (x_w - w_w)/step + 1
+        h = (x_h - w_h)/step + 1
+
+        return l, w, h
+
+
 
 
 
