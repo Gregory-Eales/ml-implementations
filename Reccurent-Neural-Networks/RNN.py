@@ -36,3 +36,18 @@ class RNN(object):
 
     def reccurent_backward(self):
         pass
+
+    def sigmoid_prime(self, z):
+        a = torch.sigmoid(z)
+        return a*(a-1)
+
+    def tanh_prime(self, z):
+        return 1 - (torch.tanh(z)**2)
+
+    
+
+
+
+
+
+
