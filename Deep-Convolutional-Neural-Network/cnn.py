@@ -41,7 +41,6 @@ class CNN(object):
 
 
     def predict(self, x):
-        pass
 
 
     def initialize_dense_weights(self):
