@@ -4,6 +4,10 @@ class RNN(object):
 
     def __init__(self, x_shape, y_shape):
         
+        # store init variables
+        self.x_shape = x_shape
+        self.y_shape = y_shape
+
         # init dense params
         self.dense_w = {}
         self.dense_z = {}
@@ -17,7 +21,8 @@ class RNN(object):
         self.rec_a = {}
 
     def initialize_weights(self):
-        pass
+        self.init_reccurent_weights()
+        self.init_dense_weights()
 
     def init_reccurent_weights(self):
         pass

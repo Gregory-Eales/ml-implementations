@@ -101,16 +101,19 @@ class CNN(object):
         x_shape = self.conv_a["a" + str(conv_layer-1)]
         w_shape = self.conv_w["w" + str(conv_layer)]
         l, w, h, f = self.get_wind_shape(x_shape, w_shape)
-        z = torch.zeros(l, w, h)
+      
         
         # get number of steps in each direction
 
         # loop through each step and calculate conv a
+
+        self.conv_z["z" + str(conv_layer)] = torch.zeros(l, w, f)
         
         for j in range(l):
             for i in range(w):
-                for k in range(h):
-                    pass
+                for k in range(f):
+                    self.conv_z["z"+str(conv_layer)][j][i][k] =  self.single_conv(self.conv_a["a"+str(conv_layer-1)], self.conv_w["w"+str(conv_layer)], conv_layer=conv_layer)
+                    
 
     def pool_forward(self, pool_layer=1):
         pass
