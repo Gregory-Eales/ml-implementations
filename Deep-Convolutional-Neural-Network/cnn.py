@@ -42,6 +42,9 @@ class CNN(object):
 
     def predict(self, x):
 
+        self.conv_a["a0"] = x
+        for i in range(self.conv_length):
+            self.conv_forward(conv_layer=i)
 
     def initialize_dense_weights(self):
         
