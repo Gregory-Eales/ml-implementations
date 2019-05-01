@@ -45,6 +45,10 @@ class CNN(object):
         self.conv_a["a0"] = x
         for i in range(self.conv_length):
             self.conv_forward(conv_layer=i)
+            
+        self.dense_forward()
+
+        return self.denes_a["a" + str(self.dense_length)]
 
     def initialize_dense_weights(self):
         
