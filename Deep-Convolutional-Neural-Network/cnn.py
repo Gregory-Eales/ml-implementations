@@ -45,7 +45,7 @@ class CNN(object):
         self.conv_a["a0"] = x
         for i in range(self.conv_length):
             self.conv_forward(conv_layer=i)
-            
+
         self.dense_forward()
 
         return self.denes_a["a" + str(self.dense_length)]
@@ -122,7 +122,13 @@ class CNN(object):
         for j in range(l):
             for i in range(w):
                 for k in range(f):
-                    self.conv_z["z"+str(conv_layer)][j][i][k] =  self.single_conv(self.conv_a["a"+str(conv_layer-1)], self.conv_w["w"+str(conv_layer)], conv_layer=conv_layer)
+
+                    y = self.conv_w["w"+str(conv_layer)].shape[0]
+                    x = self.conv_w["w"+str(conv_layer)].shape[1]
+                    z = self.conv_w["w"+str(conv_layer)].shape[2]
+
+                    conv_a_slice = self.conv_a["a"+str(conv_layer-1)][j*y:j*(y+1)][i*x:i*(x+1)][k:]
+                    self.conv_z["z"+str(conv_layer)][j][i][0][k] =  self.single_conv(conv_a_slice, self.conv_w["w"+str(conv_layer)], conv_layer=conv_layer)
                     
 
     def pool_forward(self, pool_layer=1):
