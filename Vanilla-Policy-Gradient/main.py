@@ -1,11 +1,16 @@
 import gym
+from vanilla_policy_gradient import VPG
+
+vpg = VPG()
+
 env = gym.make('CartPole-v0')
-for i_episode in range(20):
+for i_episode in range(10):
     observation = env.reset()
-    for t in range(100):
+    for t in range(10):
         env.render()
         print(observation)
-        action = env.action_space.sample()
+        action = vpg.act()
+        print("This is an action: ", action)
         observation, reward, done, info = env.step(action)
         if done:
             print("Episode finished after {} timesteps".format(t+1))
