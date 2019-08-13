@@ -2,6 +2,8 @@ import numpy as np
 import torch
 import tqdm
 
+from numpy import tanh
+
 # neural network class
 class NeuralNetwork(object):
 
@@ -40,6 +42,10 @@ class NeuralNetwork(object):
 		# initialize z cache
 		self.initialize_z()
 
+	##########################
+	# Initialization Methods #
+	##########################
+
 	def initialize_weights(self):
 
 		self.w = {}
@@ -62,64 +68,58 @@ class NeuralNetwork(object):
 			if self.gpu == False:
 
 				if (self.num_layers-1) == i:
-					self.w["w" + str(i)] = np.random.random(self.input_shape+1, self.output_shape)
+					self.w["w" + str(i)] = np.random.random([self.input_shape+1, self.output_shape])
 					self.w["w" + str(i)] = self.w["w" + str(i)].astype('float16')
 
 				if (self.num_layers-1) != 1:
-					self.w["w" + str(i)] = np.random.random(self.input_shape, self.input_shape+1)
+					self.w["w" + str(i)] = np.random.random([self.input_shape, self.input_shape+1])
 					self.w["w" + str(i)] = self.w["w" + str(i)].astype('float16')
 
 				else:
-					self.w["w" + str(i)] = np.random.random(self.input_shape+1, self.input_shape+1)
+					self.w["w" + str(i)] = np.random.random([self.input_shape+1, self.input_shape+1])
 					self.w["w" + str(i)] = self.w["w" + str(i)].astype('float16')
-
-
 
 	def initialize_bias(self):
 
 		self.b = {}
 
-		# use pytorch if gpu is true
-		if self.gpu == True:
+		for i in range(1, self.num_layers):
 
-			if (self.num_layers-1) == i:
-				self.b["b" + str(i)] = torch.randn(self.output_shape, dtype=torch.float16)
+			# use pytorch if gpu is true
+			if self.gpu == True:
 
-			else:
-				self.b["b" + str(i)] = torch.randn(self.input_shape+1, dtype=torch.float16)
-				
-		# use numpy if gpu is false
-		if self.gpu == False:
+				if (self.num_layers-1) == i:
+					self.b["b" + str(i)] = torch.randn(self.output_shape, dtype=torch.float16)
 
-			if (self.num_layers-1) == i:
-				self.b["b" + str(i)] = np.random.random(self.input_shape+1, self.output_shape)
-				self.b["b" + str(i)] = self.b["b" + str(i)].astype('float16')
+				else:
+					self.b["b" + str(i)] = torch.randn(self.input_shape+1, dtype=torch.float16)
 
-			if (self.num_layers-1) != 1:
-				self.b["b" + str(i)] = np.random.random(self.input_shape, self.input_shape+1)
-				self.b["b" + str(i)] = self.b["b" + str(i)].astype('float16')
+			# use numpy if gpu is false
+			if self.gpu == False:
 
-			else:
-				self.b["b" + str(i)] = np.random.random(self.input_shape+1, self.input_shape+1)
-				self.b["b" + str(i)] = self.b["b" + str(i)].astype('float16')
+				if (self.num_layers-1) == i:
+					self.b["b" + str(i)] = np.random.random([1, self.output_shape])
+					self.b["b" + str(i)] = self.b["b" + str(i)].astype('float16')
 
 
+				else:
+					self.b["b" + str(i)] = np.random.random([1, self.input_shape+1])
+					self.b["b" + str(i)] = self.b["b" + str(i)].astype('float16')
 
 	def initialize_activations(self):
+
 		self.a = {}
 
 		for i in range(1, self.num_layers):
 
 			# use pytorch if gpu is true
 			if self.gpu == True:
-				self.a["a" + str(i)] = torch.randn(5, 7, dtype=torch.float16)
+				self.a["a" + str(i)] = torch.randn(None, dtype=torch.float16)
 
 
 			# use numpy if gpu is false
 			if self.gpu == False:
 				self.a["a" + str(i)] = np.random.random(size=None)
-
-
 
 	def initialize_z(self):
 
@@ -129,8 +129,25 @@ class NeuralNetwork(object):
 
 			# use pytorch if gpu is true
 			if self.gpu == True:
-				self.z["z" + str(i)] = torch.randn(5, 7, dtype=torch.float16)
+				self.z["z" + str(i)] = torch.randn(None, dtype=torch.float16)
 
 			# use numpy if gpu is false
 			if self.gpu == False:
 				self.w["w" + str(i)] = np.random.random(size=None)
+
+	######################
+	# Activation Methods #
+	######################
+
+	def sigmoid_np(self, z):
+		return 1/(1+np.exp(-z))
+
+	def sigmoid_prime_np(self, z):
+		sig = sigmoid_np(z)
+		return sig*(1-sig)
+
+	def tanh_np(self, z):
+		pass
+
+	def tanh_prime_np(self, z):
+		pass
