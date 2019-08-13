@@ -2,8 +2,6 @@ import numpy as np
 import torch
 import tqdm
 
-from numpy import tanh
-
 # neural network class
 class NeuralNetwork(object):
 
@@ -116,7 +114,6 @@ class NeuralNetwork(object):
 			if self.gpu == True:
 				self.a["a" + str(i)] = torch.randn(None, dtype=torch.float16)
 
-
 			# use numpy if gpu is false
 			if self.gpu == False:
 				self.a["a" + str(i)] = np.random.random(size=None)
@@ -139,6 +136,8 @@ class NeuralNetwork(object):
 	# Activation Methods #
 	######################
 
+	# numpy activation functions
+
 	def sigmoid_np(self, z):
 		return 1/(1+np.exp(-z))
 
@@ -147,7 +146,52 @@ class NeuralNetwork(object):
 		return sig*(1-sig)
 
 	def tanh_np(self, z):
-		pass
+		return np.tanh(z)
 
 	def tanh_prime_np(self, z):
-		pass
+		return 1-np.square(np.tanh(z))
+
+	# pytorch activation functions
+
+	def sigmoid_torch(self, z):
+		return torch.nn.Sigmoid(z)
+
+	def sigmoid_prime_torch(self, z):
+		sig = self.sigmoid_torch(z)
+		return sig*(1-sig)
+
+	def tanh_torch(self, z):
+		return torch.nn.Tanh(z)
+
+	def tanh_prime_torch(self, z):
+		t = self.tanh_torch(z)
+		return 1 - t**2
+
+	####################
+	# Learning Methods #
+	####################
+
+	def predict(self, x):
+
+		self.a["a0"] = x
+		last_layer = self.num_layers-1
+
+		if self.gpu == True:
+
+			for i in range(1, self.num_layers-1):
+				self.z["z" + str(i)] = torch.mm(self.a[a+str(i-1)], self.w[w+str(i)]) + self.b["b" + str(i)]
+				self.a["a" + str(i)] = self.tanh_torch(self.z["z" + str(i)])
+
+			self.z["z" + str(last_layer)] = torch.mm(self.a[a+str(last_layer-1)], self.w[w+str(last_layer)]) + self.b["b" + str(last_layer)]
+			self.a["a" + str(last_layer)] = self.sigmoid_torch(self.z["z" + str(last_layer)])
+
+		if self.gpu == False:
+
+			for i in range(self.num_layers):
+
+	def train(self, x, y, batch_size=10, alpha=0.1, iterations=10):
+
+		# loop
+		for iter in range(iterations):
+
+			# predict output
