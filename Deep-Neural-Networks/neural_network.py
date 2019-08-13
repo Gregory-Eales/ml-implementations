@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import tqdm
 
 # neural network class
 class NeuralNetwork(object):
@@ -61,14 +62,16 @@ class NeuralNetwork(object):
 			if self.gpu == False:
 
 				if (self.num_layers-1) == i:
-					self.w["w" + str(i)] = np.randn(self.input_shape+1, self.output_shape, dtype=torch.float16)
-					self.w["w" + str(i)] = self.w["w" + str(i)].astype('float64') 
+					self.w["w" + str(i)] = np.random.random(self.input_shape+1, self.output_shape)
+					self.w["w" + str(i)] = self.w["w" + str(i)].astype('float16')
 
 				if (self.num_layers-1) != 1:
-					self.w["w" + str(i)] = np.randn(self.input_shape, self.input_shape+1, dtype=torch.float16)
+					self.w["w" + str(i)] = np.random.random(self.input_shape, self.input_shape+1)
+					self.w["w" + str(i)] = self.w["w" + str(i)].astype('float16')
 
 				else:
-					self.w["w" + str(i)] = np.random.random(self.input_shape+1, self.input_shape+1, dtype=torch.float16)
+					self.w["w" + str(i)] = np.random.random(self.input_shape+1, self.input_shape+1)
+					self.w["w" + str(i)] = self.w["w" + str(i)].astype('float16')
 
 
 
@@ -76,16 +79,29 @@ class NeuralNetwork(object):
 
 		self.b = {}
 
-		for i in range(1, self.num_layers):
+		# use pytorch if gpu is true
+		if self.gpu == True:
 
-			# use pytorch if gpu is true
-			if self.gpu == True:
-				self.b["b" + str(i)] = torch.randn(5, 7, dtype=torch.float16)
+			if (self.num_layers-1) == i:
+				self.b["b" + str(i)] = torch.randn(self.output_shape, dtype=torch.float16)
 
+			else:
+				self.b["b" + str(i)] = torch.randn(self.input_shape+1, dtype=torch.float16)
+				
+		# use numpy if gpu is false
+		if self.gpu == False:
 
-			# use numpy if gpu is false
-			if self.gpu == False:
-				self.b["b" + str(i)] = np.random.random(size=None)
+			if (self.num_layers-1) == i:
+				self.b["b" + str(i)] = np.random.random(self.input_shape+1, self.output_shape)
+				self.b["b" + str(i)] = self.b["b" + str(i)].astype('float16')
+
+			if (self.num_layers-1) != 1:
+				self.b["b" + str(i)] = np.random.random(self.input_shape, self.input_shape+1)
+				self.b["b" + str(i)] = self.b["b" + str(i)].astype('float16')
+
+			else:
+				self.b["b" + str(i)] = np.random.random(self.input_shape+1, self.input_shape+1)
+				self.b["b" + str(i)] = self.b["b" + str(i)].astype('float16')
 
 
 
