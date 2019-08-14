@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-import tqdm
+from tqdm import tqdm
 
 # neural network class
 class NeuralNetwork(object):
@@ -30,6 +30,8 @@ class NeuralNetwork(object):
 		self.b = None
 		self.z = None
 		self.a = None
+
+		self.historical_cost = []
 
 		# initialize weight cache
 		self.initialize_weights()
@@ -194,16 +196,58 @@ class NeuralNetwork(object):
 			self.z["z" + str(last_layer)] = np.sum(self.a["a"+str(last_layer-1)] * self.w["w"+str(last_layer)], axis=1) + self.b["b" + str(last_layer)]
 			self.a["a" + str(last_layer)] = self.sigmoid_np(self.z["z" + str(last_layer)])
 
+	def cost(self, y_hat, y):
+		return 0.5*(y-y_hat)**2
+
+	def cost_prime(self, y_hat, y):
+		return (y-y_hat)
+
+	def update_weights(self):
+
+		if self.gpu == True:
+			for i in range(self.num_layers):
+
+				if i != (self.num_layers-1):
+					pass
+
+				else:
+					self.a["a"+str(i)] = None
+
+		if self.gpu == False:
+			for i in range(self.num_layers):
+
+				if i != (self.num_layers-1):
+					pass
+
+				else:
+					self.a["a"+str(i)] = None
+
 	def train(self, x, y, batch_size=10, alpha=0.1, iterations=10):
 
+		self.historical_cost = []
+
 		if self.gpu==True:
-			# loop
-			for iter in range(iterations):
-				# predict output
-				pass
+			for iter in tqdm(range(iterations)):
 
-	def cost(self):
-		pass
+				# make prediction
+				self.predict(x)
+				# calculate error
+				cost = self.cost(self.a["a"+str(self.num_layers-1)], y)
+				# record error
+				self.historical_cost.append(cost)
+				# calculate update
+				self.update_weights()
+				# update weights
 
-	def cost_prime(self):
-		pass
+
+
+		if self.gpu==False:
+			for iter in tqdm(range(iterations)):
+
+				# make prediction
+
+				# calculate error
+				self.historical_cost.append(self.cost())
+				# calculate update
+
+				# update weights
