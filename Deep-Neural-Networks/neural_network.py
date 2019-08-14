@@ -57,13 +57,13 @@ class NeuralNetwork(object):
 			if self.gpu == True:
 
 				if (self.num_layers-1) == i:
-					self.w["w" + str(i)] = torch.randn(self.input_shape+1, self.output_shape, dtype=torch.float16)
+					self.w["w" + str(i)] = torch.randn(self.input_shape+1, self.output_shape, dtype=torch.float32)
 
-				if (self.num_layers-1) != 1:
-					self.w["w" + str(i)] = torch.randn(self.input_shape, self.input_shape+1, dtype=torch.float16)
+				if i == 1:
+					self.w["w" + str(i)] = torch.randn(self.input_shape, self.input_shape+1, dtype=torch.float32)
 
 				else:
-					self.w["w" + str(i)] = torch.randn(self.input_shape+1, self.input_shape+1, dtype=torch.float16)
+					self.w["w" + str(i)] = torch.randn(self.input_shape+1, self.input_shape+1, dtype=torch.float32)
 
 			# use numpy if gpu is false
 			if self.gpu == False:
@@ -90,10 +90,10 @@ class NeuralNetwork(object):
 			if self.gpu == True:
 
 				if (self.num_layers-1) == i:
-					self.b["b" + str(i)] = torch.randn(self.output_shape, dtype=torch.float16)
+					self.b["b" + str(i)] = torch.randn(self.output_shape, dtype=torch.float32)
 
 				else:
-					self.b["b" + str(i)] = torch.randn(self.input_shape+1, dtype=torch.float16)
+					self.b["b" + str(i)] = torch.randn(self.input_shape+1, dtype=torch.float32)
 
 			# use numpy if gpu is false
 			if self.gpu == False:
@@ -115,7 +115,7 @@ class NeuralNetwork(object):
 
 			# use pytorch if gpu is true
 			if self.gpu == True:
-				self.a["a" + str(i)] = torch.randn(None, dtype=torch.float16)
+				self.a["a" + str(i)] = torch.randn(1, dtype=torch.float32)
 
 			# use numpy if gpu is false
 			if self.gpu == False:
@@ -129,7 +129,7 @@ class NeuralNetwork(object):
 
 			# use pytorch if gpu is true
 			if self.gpu == True:
-				self.z["z" + str(i)] = torch.randn(None, dtype=torch.float16)
+				self.z["z" + str(i)] = torch.randn(1, dtype=torch.float32)
 
 			# use numpy if gpu is false
 			if self.gpu == False:
@@ -157,14 +157,14 @@ class NeuralNetwork(object):
 	# pytorch activation functions
 
 	def sigmoid_torch(self, z):
-		return torch.nn.Sigmoid(z)
+		return torch.sigmoid(z)
 
 	def sigmoid_prime_torch(self, z):
 		sig = self.sigmoid_torch(z)
 		return sig*(1-sig)
 
 	def tanh_torch(self, z):
-		return torch.nn.Tanh(z)
+		return torch.tanh(z)
 
 	def tanh_prime_torch(self, z):
 		t = self.tanh_torch(z)
@@ -182,10 +182,14 @@ class NeuralNetwork(object):
 		if self.gpu == True:
 
 			for i in range(1, self.num_layers-1):
-				self.z["z" + str(i)] = torch.bmm(self.a["a"+str(i-1)], self.w["w"+str(i)]) + self.b["b" + str(i)]
+				self.z["z" + str(i)] = torch.mm(self.a["a"+str(i-1)], self.w["w"+str(i)]) + self.b["b" + str(i)]
 				self.a["a" + str(i)] = self.tanh_torch(self.z["z" + str(i)])
 
-			self.z["z" + str(last_layer)] = torch.bmm(self.a["a"+str(last_layer-1)], self.w["w"+str(last_layer)]) + self.b["b" + str(last_layer)]
+			print(self.a["a"+str(last_layer-1)].shape)
+			print("w: ", self.w["w"+str(self.num_layers-1)].shape)
+			print(self.b["b" + str(last_layer)].shape)
+
+			self.z["z" + str(last_layer)] = torch.mm(self.a["a"+str(last_layer-1)], self.w["w"+str(last_layer)]) + self.b["b" + str(last_layer)]
 			self.a["a" + str(last_layer)] = self.sigmoid_torch(self.z["z" + str(last_layer)])
 
 		if self.gpu == False:
