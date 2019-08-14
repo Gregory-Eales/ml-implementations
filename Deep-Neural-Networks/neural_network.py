@@ -182,10 +182,10 @@ class NeuralNetwork(object):
 		if self.gpu == True:
 
 			for i in range(1, self.num_layers-1):
-				self.z["z" + str(i)] = torch.mm(self.a["a"+str(i-1)], self.w["w"+str(i)]) + self.b["b" + str(i)]
+				self.z["z" + str(i)] = torch.bmm(self.a["a"+str(i-1)], self.w["w"+str(i)]) + self.b["b" + str(i)]
 				self.a["a" + str(i)] = self.tanh_torch(self.z["z" + str(i)])
 
-			self.z["z" + str(last_layer)] = torch.mm(self.a["a"+str(last_layer-1)], self.w["w"+str(last_layer)]) + self.b["b" + str(last_layer)]
+			self.z["z" + str(last_layer)] = torch.bmm(self.a["a"+str(last_layer-1)], self.w["w"+str(last_layer)]) + self.b["b" + str(last_layer)]
 			self.a["a" + str(last_layer)] = self.sigmoid_torch(self.z["z" + str(last_layer)])
 
 		if self.gpu == False:
@@ -203,17 +203,17 @@ class NeuralNetwork(object):
 	def cost_prime(self, y_hat, y):
 		return (y-y_hat)
 
-	def calculate_updates(self, cost, y):
-
+	def calculate_updates(self, y):
+		cost_prime = self.cost(self.a["a"+str(self.num_layers-1)], y)
 		if self.gpu == True:
 
 			for i in reversed(range(1, self.num_layers)):
 
 				if i != (self.num_layers-1):
-					self.updates["w"+str(i)] = None
+					self.updates["w"+str(i)] = torch.bmm(self.updates("w" + str(i+1)), self.w["w"+str(i+1)*self.tanh_prime_torch(self.z["z"+str(i)])])
 
 				else:
-					self.updates["w"+str(i)] = cost*self.sigmoid_prime_torch(self.z["z"+str(i)]) * self.a["a"+ str(i-1)]
+					self.updates["w"+str(i)] = cost_prime*self.sigmoid_prime_torch(self.z["z"+str(i)]) * self.a["a"+ str(i-1)]
 
 		if self.gpu == False:
 			for i in reversed(range(1, self.num_layers)):
@@ -245,7 +245,7 @@ class NeuralNetwork(object):
 				# record error
 				self.historical_cost.append(cost)
 				# calculate update
-				self.calculate_updates(cost, y)
+				self.calculate_updates(y)
 				# update weights
 				self.update_weights(alpha)
 
