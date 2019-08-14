@@ -179,19 +179,31 @@ class NeuralNetwork(object):
 		if self.gpu == True:
 
 			for i in range(1, self.num_layers-1):
-				self.z["z" + str(i)] = torch.mm(self.a[a+str(i-1)], self.w[w+str(i)]) + self.b["b" + str(i)]
+				self.z["z" + str(i)] = torch.mm(self.a["a"+str(i-1)], self.w["w"+str(i)]) + self.b["b" + str(i)]
 				self.a["a" + str(i)] = self.tanh_torch(self.z["z" + str(i)])
 
-			self.z["z" + str(last_layer)] = torch.mm(self.a[a+str(last_layer-1)], self.w[w+str(last_layer)]) + self.b["b" + str(last_layer)]
+			self.z["z" + str(last_layer)] = torch.mm(self.a["a"+str(last_layer-1)], self.w["w"+str(last_layer)]) + self.b["b" + str(last_layer)]
 			self.a["a" + str(last_layer)] = self.sigmoid_torch(self.z["z" + str(last_layer)])
 
 		if self.gpu == False:
 
-			for i in range(self.num_layers):
+			for i in range(1, self.num_layers-1):
+				self.z["z" + str(i)] = np.sum(self.a["a"+str(i-1)] * self.w["w"+str(i)], axis=1) + self.b["b" + str(i)]
+				self.a["a" + str(i)] = self.tanh_np(self.z["z" + str(i)])
+
+			self.z["z" + str(last_layer)] = np.sum(self.a["a"+str(last_layer-1)] * self.w["w"+str(last_layer)], axis=1) + self.b["b" + str(last_layer)]
+			self.a["a" + str(last_layer)] = self.sigmoid_np(self.z["z" + str(last_layer)])
 
 	def train(self, x, y, batch_size=10, alpha=0.1, iterations=10):
 
-		# loop
-		for iter in range(iterations):
+		if self.gpu==True:
+			# loop
+			for iter in range(iterations):
+				# predict output
+				pass
 
-			# predict output
+	def cost(self):
+		pass
+
+	def cost_prime(self):
+		pass
