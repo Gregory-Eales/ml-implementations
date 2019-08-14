@@ -30,6 +30,7 @@ class NeuralNetwork(object):
 		self.b = None
 		self.z = None
 		self.a = None
+		self.updates = {}
 
 		self.historical_cost = []
 
@@ -202,25 +203,33 @@ class NeuralNetwork(object):
 	def cost_prime(self, y_hat, y):
 		return (y-y_hat)
 
-	def update_weights(self):
+	def calculate_updates(self, cost, y):
 
 		if self.gpu == True:
-			for i in range(self.num_layers):
+
+			for i in reversed(range(1, self.num_layers)):
 
 				if i != (self.num_layers-1):
-					pass
+					self.updates["w"+str(i)] = None
 
 				else:
-					self.a["a"+str(i)] = None
+					self.updates["w"+str(i)] = cost*self.sigmoid_prime_torch(self.z["z"+str(i)]) * self.a["a"+ str(i-1)]
 
 		if self.gpu == False:
-			for i in range(self.num_layers):
+			for i in reversed(range(1, self.num_layers)):
 
 				if i != (self.num_layers-1):
 					pass
 
 				else:
 					self.a["a"+str(i)] = None
+
+	def update_weights(self, alpha):
+
+		for i in range(self.num_layers):
+			self.w["w" + str(i)] -= alpha*self.updates["w" + str(i)]
+
+
 
 	def train(self, x, y, batch_size=10, alpha=0.1, iterations=10):
 
@@ -236,9 +245,9 @@ class NeuralNetwork(object):
 				# record error
 				self.historical_cost.append(cost)
 				# calculate update
-				self.update_weights()
+				self.calculate_updates(cost, y)
 				# update weights
-
+				self.update_weights(alpha)
 
 
 		if self.gpu==False:
