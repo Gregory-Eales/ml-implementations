@@ -59,7 +59,7 @@ class NeuralNetwork(object):
 				if (self.num_layers-1) == i:
 					self.w["w" + str(i)] = torch.randn(self.input_shape+1, self.output_shape, dtype=torch.float32)
 
-				if i == 1:
+				elif i == 1:
 					self.w["w" + str(i)] = torch.randn(self.input_shape, self.input_shape+1, dtype=torch.float32)
 
 				else:
@@ -72,7 +72,7 @@ class NeuralNetwork(object):
 					self.w["w" + str(i)] = np.random.random([self.input_shape+1, self.output_shape])
 					self.w["w" + str(i)] = self.w["w" + str(i)].astype('float16')
 
-				if (self.num_layers-1) != 1:
+				elif (self.num_layers-1) != 1:
 					self.w["w" + str(i)] = np.random.random([self.input_shape, self.input_shape+1])
 					self.w["w" + str(i)] = self.w["w" + str(i)].astype('float16')
 
@@ -96,7 +96,7 @@ class NeuralNetwork(object):
 					self.b["b" + str(i)] = torch.randn(self.input_shape+1, dtype=torch.float32)
 
 			# use numpy if gpu is false
-			if self.gpu == False:
+			elif self.gpu == False:
 
 				if (self.num_layers-1) == i:
 					self.b["b" + str(i)] = np.random.random([1, self.output_shape])
@@ -185,9 +185,9 @@ class NeuralNetwork(object):
 				self.z["z" + str(i)] = torch.mm(self.a["a"+str(i-1)], self.w["w"+str(i)]) + self.b["b" + str(i)]
 				self.a["a" + str(i)] = self.tanh_torch(self.z["z" + str(i)])
 
-			print(self.a["a"+str(last_layer-1)].shape)
-			print("w: ", self.w["w"+str(self.num_layers-1)].shape)
-			print(self.b["b" + str(last_layer)].shape)
+			print("a: ", self.a["a"+str(last_layer-1)].shape)
+			print("w: ", self.w["w"+str(last_layer)].shape)
+			print("b: ", self.b["b" + str(last_layer)].shape)
 
 			self.z["z" + str(last_layer)] = torch.mm(self.a["a"+str(last_layer-1)], self.w["w"+str(last_layer)]) + self.b["b" + str(last_layer)]
 			self.a["a" + str(last_layer)] = self.sigmoid_torch(self.z["z" + str(last_layer)])
@@ -264,3 +264,17 @@ class NeuralNetwork(object):
 				# calculate update
 
 				# update weights
+
+def main():
+
+	# create data
+	x = torch.randn(100, 5)
+	y = torch.randn(100, 2)
+
+	# make prediction
+	NN = NeuralNetwork(5, 2, 4, gpu=True)
+	NN.predict(x)
+	print(NN.a["a" + str(NN.num_layers-1)].shape)
+
+if __name__ == "__main__":
+	main()
