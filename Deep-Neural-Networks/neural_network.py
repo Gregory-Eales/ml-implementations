@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 from tqdm import tqdm
+from matplotlib import pyplot as plt
 
 # neural network class
 class NeuralNetwork(object):
@@ -214,10 +215,30 @@ class NeuralNetwork(object):
 			for i in reversed(range(1, self.num_layers)):
 
 				if i != (self.num_layers-1):
-					self.updates["w"+str(i)] = torch.bmm(self.updates("w" + str(i+1)), self.w["w"+str(i+1)*self.tanh_prime_torch(self.z["z"+str(i)])])
+					w_curr = self.w["w"+str(i)]
+					w_prev = self.w["w"+str(i+1)]
+					a_prime = torch.reshape(torch.sum( self.tanh_prime_torch(self.z["z"+str(i)]), dim=0), [-1, 1])
+					a_ahead = torch.reshape(torch.sum(self.a["a"+str(i-1)], dim=0), [-1, 1])
+					#a_ahead = self.a["a"+str(i-1)]
+					prev_update = self.updates["w" + str(i+1)]
+					if True:
+						print("This is it boys")
+						print("####################")
+						print("prev update: ", prev_update.shape)
+						print("a prime: ", a_prime.shape)
+						print("a ahead: ", a_ahead.shape)
+						print("w prev: ", w_prev.shape)
+						print("w current: ", w_curr.shape)
+						print("#####################")
+
+
+					self.updates["w"+str(i)] = torch.mm(prev_update, torch.t(w_prev))*a_prime
 
 				else:
-					self.updates["w"+str(i)] = cost_prime*self.sigmoid_prime_torch(self.z["z"+str(i)]) * self.a["a"+ str(i-1)]
+					self.updates["w"+str(i)] = torch.mm(torch.t(self.a["a"+ str(i-1)]), (cost_prime * self.sigmoid_prime_torch(self.z["z"+str(i)])))
+
+			for i in reversed(range(1, self.num_layers)):
+				self.updates["w"+str(i)] = torch.mm(prev_update, self.updates["w"+str(i)])
 
 		if self.gpu == False:
 			for i in reversed(range(1, self.num_layers)):
@@ -230,7 +251,12 @@ class NeuralNetwork(object):
 
 	def update_weights(self, alpha):
 
-		for i in range(self.num_layers):
+		for i in range(1, self.num_layers):
+			print("#########################")
+			print("layer: ", i)
+			print(self.w["w" + str(i)].shape)
+			print(self.updates["w" + str(i)].shape)
+			print("#########################")
 			self.w["w" + str(i)] -= alpha*self.updates["w" + str(i)]
 
 
@@ -273,8 +299,7 @@ def main():
 
 	# make prediction
 	NN = NeuralNetwork(5, 2, 4, gpu=True)
-	NN.predict(x)
-	print(NN.a["a" + str(NN.num_layers-1)].shape)
+	NN.train(x, y)
 
 if __name__ == "__main__":
 	main()
