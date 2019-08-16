@@ -180,6 +180,13 @@ class NeuralNetwork(object):
 					a_ahead = self.a["a"+str(i-1)]
 					prev_update = self.updates["w" + str(i+1)]
 
+					print("#############################")
+					print("a ahead: ", a_ahead.shape)
+					print("a_prime: ", a_prime.shape)
+					print("prev update: ", prev_update.shape)
+					print("w prev: ", w_prev.shape)
+					print("w curr: ", w_curr.shape)
+					print("#############################")
 
 					self.updates["w"+str(i)] = torch.mm(torch.t(a_ahead), torch.mm(a_prime, torch.mm(prev_update, torch.t(w_prev))))
 
@@ -187,18 +194,18 @@ class NeuralNetwork(object):
 					self.updates["w"+str(i)] = torch.mm(torch.t(self.a["a"+ str(i-1)]), (cost_prime * self.sigmoid_prime_torch(self.z["z"+str(i)])))
 
 			for i in reversed(range(1, self.num_layers)):
-				a_ahead = torch.reshape(torch.sum(self.a["a"+str(i-1)], dim=0), [-1, 1])
-				#a_ahead = self.a["a"+str(i-1)]
+				#a_ahead = torch.reshape(torch.sum(self.a["a"+str(i-1)], dim=0), [-1, 1])
+				a_ahead = self.a["a"+str(i-1)]
 				print("a ahead: ", a_ahead.shape)
-				print("bla", self.updates["w"+str(i)].shape)
-				self.updates["w"+str(i)] = self.updates["w"+str(i)])
+				print("updates: ", self.updates["w"+str(i)].shape)
+				self.updates["w"+str(i)] = self.updates["w"+str(i)]*a_ahead
 
 
 
 	def update_weights(self, alpha):
 
 		for i in range(1, self.num_layers):
-			self.w["w" + str(i)] -= alpha*self.updates["w" + str(i)]
+			self.w["w" + str(i)] -= alpha*self.updates["w" + str(i)]/self.a["a0"].shape[0]
 
 
 
@@ -226,8 +233,8 @@ class NeuralNetwork(object):
 def main():
 
 	# create data
-	x = torch.ones(1, 5)/2
-	y = torch.ones(1, 2)/2
+	x = torch.ones(100, 5)/2
+	y = torch.ones(100, 2)/2
 
 	# make prediction
 	NN = NeuralNetwork(5, 2, 8, gpu=True)
