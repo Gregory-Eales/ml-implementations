@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 # neural network class
 class NeuralNetwork(object):
 
-	def __init__(self, input_shape=1, output_shape=1, num_layers=3):
+	def __init__(self, input_shape=1, output_shape=1, num_layers=3, hidden_addition=1):
 
 		# check for correct input types and values
 		assert type(input_shape) == int, "input shape needs to be an integer"
@@ -24,6 +24,8 @@ class NeuralNetwork(object):
 		self.input_shape = input_shape
 		self.output_shape = output_shape
 		self.num_layers = num_layers
+		self.hidden_addition = hidden_addition
+
 
 		# create variables
 		self.w = None
@@ -54,13 +56,13 @@ class NeuralNetwork(object):
 		for i in range(1, self.num_layers):
 
 			if (self.num_layers-1) == i:
-				self.w["w" + str(i)] = torch.randn(self.input_shape+1, self.output_shape, dtype=torch.float32).cuda()
+				self.w["w" + str(i)] = torch.randn(self.input_shape+self.hidden_addition, self.output_shape, dtype=torch.float32).cuda()
 
 			elif i == 1:
-				self.w["w" + str(i)] = torch.randn(self.input_shape, self.input_shape+1, dtype=torch.float32).cuda()
+				self.w["w" + str(i)] = torch.randn(self.input_shape, self.input_shape+self.hidden_addition, dtype=torch.float32).cuda()
 
 			else:
-				self.w["w" + str(i)] = torch.randn(self.input_shape+1, self.input_shape+1, dtype=torch.float32).cuda()
+				self.w["w" + str(i)] = torch.randn(self.input_shape+self.hidden_addition, self.input_shape+self.hidden_addition, dtype=torch.float32).cuda()
 
 
 	def initialize_bias(self):
@@ -73,7 +75,7 @@ class NeuralNetwork(object):
 				self.b["b" + str(i)] = torch.randn(self.output_shape, dtype=torch.float32).cuda()
 
 			else:
-				self.b["b" + str(i)] = torch.randn(self.input_shape+1, dtype=torch.float32).cuda()
+				self.b["b" + str(i)] = torch.randn(self.input_shape+self.hidden_addition, dtype=torch.float32).cuda()
 
 
 
@@ -126,7 +128,6 @@ class NeuralNetwork(object):
 		return torch.sum((y.cuda() - self.a["a"+str(self.num_layers-1)])**2)
 
 	def cost_prime(self, y_hat, y):
-		#return (y/self.a['a' + str(self.num_layers-1)] - (1-y)/(1-self.a['a' + str(self.num_layers-1)]))
 		return y_hat - y.cuda()
 
 	def calculate_updates(self, y, alpha):

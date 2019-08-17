@@ -8,21 +8,24 @@ def get_data():
     data = []
     dataY = []
     for i in range(1, len(raw_data)-1):
-      data.append(raw_data[i].split(",")[2:])
+      data.append(raw_data[i].split(",")[0:9])
+      dataY.append(float(raw_data[i].split(",")[9]))
 
+      """
       if raw_data[i].split(",")[1] == 'I':
-        dataY.append([1, 0, 0])
+        dataY.append([1, 0])
 
       if raw_data[i].split(",")[1] == 'F':
-        dataY.append([0, 0, 1])
+        dataY.append([0, 1])
 
       if raw_data[i].split(",")[1] == 'M':
-        dataY.append([0, 1, 0])
-
-
+        dataY.append([0, 1])
+      """
+        
 
     data = np.array(data)
     Y = np.array(dataY)
+    Y = Y/np.max(Y)
     data[data == 'M'] = '1'
     data[data == 'F'] = '1'
     data[data == 'I'] = '1'
