@@ -77,10 +77,10 @@ class NeuralNetwork(object):
 			if self.gpu == True:
 
 				if (self.num_layers-1) == i:
-					self.b["b" + str(i)] = torch.zeros(self.output_shape, dtype=torch.float32)
+					self.b["b" + str(i)] = torch.randn(self.output_shape, dtype=torch.float32)
 
 				else:
-					self.b["b" + str(i)] = torch.zeros(self.input_shape+1, dtype=torch.float32)
+					self.b["b" + str(i)] = torch.randn(self.input_shape+1, dtype=torch.float32)
 
 
 
@@ -135,11 +135,11 @@ class NeuralNetwork(object):
 		return sig*(1-sig)
 
 	def tanh_torch(self, z):
-		return torch.tanh(z)
+		return 2*torch.tanh(z)
 
 	def tanh_prime_torch(self, z):
 		t = self.tanh_torch(z)
-		return 1 - t**2
+		return 2*(1 - t**2)
 
 	####################
 	# Learning Methods #
@@ -160,14 +160,17 @@ class NeuralNetwork(object):
 			self.z["z" + str(last_layer)] = torch.mm(self.a["a"+str(last_layer-1)], self.w["w"+str(last_layer)]) + self.b["b" + str(last_layer)]
 			self.a["a" + str(last_layer)] = self.sigmoid_torch(self.z["z" + str(last_layer)])
 
-	def cost(self, y_hat, y):
-		return torch.sum(0.5*(y_hat - y)**2)
+		return self.a["a" + str(last_layer)]
+
+	def cost(self, y):
+		return torch.sum((y - self.a["a"+str(self.num_layers-1)])**2)
 
 	def cost_prime(self, y_hat, y):
-		return (y_hat - y)
+		#return (y/self.a['a' + str(self.num_layers-1)] - (1-y)/(1-self.a['a' + str(self.num_layers-1)]))
+		return y_hat - y
 
-	def calculate_updates(self, y):
-		cost_prime = self.cost(self.a["a"+str(self.num_layers-1)], y)
+	def calculate_updates(self, y, alpha):
+		cost_prime = self.cost_prime(self.a["a"+str(self.num_layers-1)], y)
 		if self.gpu == True:
 
 			for i in reversed(range(1, self.num_layers)):
@@ -175,30 +178,52 @@ class NeuralNetwork(object):
 				if i != (self.num_layers-1):
 					w_curr = self.w["w"+str(i)]
 					w_prev = self.w["w"+str(i+1)]
-					#a_prime = torch.reshape(torch.sum( self.tanh_prime_torch(self.z["z"+str(i)]), dim=0), [-1, 1])
 					a_prime = self.tanh_prime_torch(self.z["z"+str(i)])
 					a_ahead = self.a["a"+str(i-1)]
 					prev_update = self.updates["w" + str(i+1)]
 
+
+					"""
 					print("#############################")
 					print("a ahead: ", a_ahead.shape)
+
 					print("a_prime: ", a_prime.shape)
 					print("prev update: ", prev_update.shape)
 					print("w prev: ", w_prev.shape)
+
 					print("w curr: ", w_curr.shape)
 					print("#############################")
-
-					self.updates["w"+str(i)] = torch.mm(torch.t(a_ahead), torch.mm(a_prime, torch.mm(prev_update, torch.t(w_prev))))
+					"""
+					# Attempt 1
+					# self.updates["w"+str(i)] = torch.mm(prev_update, torch.t(w_prev))*a_prime
+					# Attempt 2
+					self.updates["w"+str(i)] = torch.mm(prev_update, torch.t(w_prev)) * a_prime
+					self.b["b"+ str(i)] -= self.updates["w"+str(i)].sum(0)*alpha/self.a["a0"].shape[0]
 
 				else:
-					self.updates["w"+str(i)] = torch.mm(torch.t(self.a["a"+ str(i-1)]), (cost_prime * self.sigmoid_prime_torch(self.z["z"+str(i)])))
+
+					# Attempt 1
+					# self.updates["w"+str(i)] = cost_prime * self.sigmoid_prime_torch(self.z["z"+str(i)])
+					# Attempt 2
+
+					self.updates["w"+str(i)] = (cost_prime * self.sigmoid_prime_torch(self.z["z"+str(i)]))
+					self.b["b"+ str(i)] -= self.updates["w"+str(i)].sum(0)*alpha/self.a["a0"].shape[0]
+
+
 
 			for i in reversed(range(1, self.num_layers)):
-				#a_ahead = torch.reshape(torch.sum(self.a["a"+str(i-1)], dim=0), [-1, 1])
+
 				a_ahead = self.a["a"+str(i-1)]
+
+				"""
 				print("a ahead: ", a_ahead.shape)
 				print("updates: ", self.updates["w"+str(i)].shape)
-				self.updates["w"+str(i)] = self.updates["w"+str(i)]*a_ahead
+				print("w curr: ", self.w["w"+str(i)].shape)
+				"""
+				# Attempt 1
+				# self.updates["w"+str(i)] = torch.mm(torch.t(a_ahead), self.updates["w"+str(i)])
+				# Attempt 2
+				self.updates["w"+str(i)] = torch.mm(torch.t(a_ahead), self.updates["w"+str(i)])
 
 
 
@@ -209,21 +234,20 @@ class NeuralNetwork(object):
 
 
 
-	def train(self, x, y, batch_size=10, alpha=0.01, iterations=10):
+	def train(self, x, y, batch_size=10, alpha=0.000001, iterations=10):
 
 		self.historical_cost = []
 
 		if self.gpu==True:
 			for iter in tqdm(range(iterations)):
-
 				# make prediction
 				self.predict(x)
 				# calculate error
-				cost = self.cost(self.a["a"+str(self.num_layers-1)], y)
+				cost = self.cost(y)/self.a["a"+str(self.num_layers-1)].shape[0]
 				# record error
 				self.historical_cost.append(cost)
 				# calculate update
-				self.calculate_updates(y)
+				self.calculate_updates(y, alpha)
 				# update weights
 				self.update_weights(alpha)
 
@@ -233,12 +257,12 @@ class NeuralNetwork(object):
 def main():
 
 	# create data
-	x = torch.ones(100, 5)/2
-	y = torch.ones(100, 2)/2
+	x = torch.ones(10, 5)
+	y = torch.ones(10, 2)
 
 	# make prediction
 	NN = NeuralNetwork(5, 2, 8, gpu=True)
-	NN.train(x, y, iterations=1000, alpha=0.001)
+	NN.train(x, y, iterations=100, alpha=0.01)
 	plt.plot(NN.historical_cost)
 	plt.show()
 
