@@ -111,11 +111,11 @@ class NeuralNetwork(object):
 		last_layer = self.num_layers-1
 		
 		for i in range(1, self.num_layers-1):
-			self.z["z" + str(i)] = torch.mm(self.a["a"+str(i-1)], self.w["w"+str(i)]) + self.b["b" + str(i)]
+			self.z["z" + str(i)] = torch.mm(self.a["a"+str(i-1)], self.w["w"+str(i)])# + self.b["b" + str(i)]
 			self.a["a" + str(i)] = self.tanh(self.z["z" + str(i)])
 
 
-		self.z["z" + str(last_layer)] = torch.mm(self.a["a"+str(last_layer-1)], self.w["w"+str(last_layer)]) + self.b["b" + str(last_layer)]
+		self.z["z" + str(last_layer)] = torch.mm(self.a["a"+str(last_layer-1)], self.w["w"+str(last_layer)]) #+ self.b["b" + str(last_layer)]
 		self.a["a" + str(last_layer)] = self.sigmoid(self.z["z" + str(last_layer)])
 
 
