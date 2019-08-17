@@ -54,13 +54,13 @@ class NeuralNetwork(object):
 		for i in range(1, self.num_layers):
 
 			if (self.num_layers-1) == i:
-				self.w["w" + str(i)] = torch.randn(self.input_shape+1, self.output_shape, dtype=torch.float32)
+				self.w["w" + str(i)] = torch.randn(self.input_shape+1, self.output_shape, dtype=torch.float32).cuda()
 
 			elif i == 1:
-				self.w["w" + str(i)] = torch.randn(self.input_shape, self.input_shape+1, dtype=torch.float32)
+				self.w["w" + str(i)] = torch.randn(self.input_shape, self.input_shape+1, dtype=torch.float32).cuda()
 
 			else:
-				self.w["w" + str(i)] = torch.randn(self.input_shape+1, self.input_shape+1, dtype=torch.float32)
+				self.w["w" + str(i)] = torch.randn(self.input_shape+1, self.input_shape+1, dtype=torch.float32).cuda()
 
 
 	def initialize_bias(self):
@@ -70,10 +70,10 @@ class NeuralNetwork(object):
 		for i in range(1, self.num_layers):
 
 			if (self.num_layers-1) == i:
-				self.b["b" + str(i)] = torch.randn(self.output_shape, dtype=torch.float32)
+				self.b["b" + str(i)] = torch.randn(self.output_shape, dtype=torch.float32).cuda()
 
 			else:
-				self.b["b" + str(i)] = torch.randn(self.input_shape+1, dtype=torch.float32)
+				self.b["b" + str(i)] = torch.randn(self.input_shape+1, dtype=torch.float32).cuda()
 
 
 
@@ -107,7 +107,7 @@ class NeuralNetwork(object):
 
 	def predict(self, x):
 
-		self.a["a0"] = x
+		self.a["a0"] = x.cuda()
 		last_layer = self.num_layers-1
 		
 		for i in range(1, self.num_layers-1):
@@ -123,11 +123,11 @@ class NeuralNetwork(object):
 		return self.a["a" + str(last_layer)]
 
 	def cost(self, y):
-		return torch.sum((y - self.a["a"+str(self.num_layers-1)])**2)
+		return torch.sum((y.cuda() - self.a["a"+str(self.num_layers-1)])**2)
 
 	def cost_prime(self, y_hat, y):
 		#return (y/self.a['a' + str(self.num_layers-1)] - (1-y)/(1-self.a['a' + str(self.num_layers-1)]))
-		return y_hat - y
+		return y_hat - y.cuda()
 
 	def calculate_updates(self, y, alpha):
 		cost_prime = self.cost_prime(self.a["a"+str(self.num_layers-1)], y)
