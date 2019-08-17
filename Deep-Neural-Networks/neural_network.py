@@ -92,14 +92,14 @@ class NeuralNetwork(object):
 		return torch.sigmoid(z)
 
 	def sigmoid_prime(self, z):
-		sig = self.sigmoid_torch(z)
+		sig = torch.sigmoid(z)
 		return sig*(1-sig)
 
 	def tanh(self, z):
 		return 2*torch.tanh(z)
 
 	def tanh_prime(self, z):
-		t = self.tanh_torch(z)
+		t = torch.tanh(z)
 		return 2*(1 - t**2)
 
 	####################
@@ -110,16 +110,16 @@ class NeuralNetwork(object):
 
 		self.a["a0"] = x
 		last_layer = self.num_layers-1
-
-		if self.gpu == True:
-
-			for i in range(1, self.num_layers-1):
-				self.z["z" + str(i)] = torch.mm(self.a["a"+str(i-1)], self.w["w"+str(i)]) + self.b["b" + str(i)]
-				self.a["a" + str(i)] = self.tanh(self.z["z" + str(i)])
+		
+		for i in range(1, self.num_layers-1):
+			self.z["z" + str(i)] = torch.mm(self.a["a"+str(i-1)], self.w["w"+str(i)]) + self.b["b" + str(i)]
+			self.a["a" + str(i)] = self.tanh(self.z["z" + str(i)])
 
 
-			self.z["z" + str(last_layer)] = torch.mm(self.a["a"+str(last_layer-1)], self.w["w"+str(last_layer)]) + self.b["b" + str(last_layer)]
-			self.a["a" + str(last_layer)] = self.sigmoid(self.z["z" + str(last_layer)])
+		self.z["z" + str(last_layer)] = torch.mm(self.a["a"+str(last_layer-1)], self.w["w"+str(last_layer)]) + self.b["b" + str(last_layer)]
+		self.a["a" + str(last_layer)] = self.sigmoid(self.z["z" + str(last_layer)])
+
+
 
 		return self.a["a" + str(last_layer)]
 
@@ -145,7 +145,7 @@ class NeuralNetwork(object):
 				self.b["b"+ str(i)] -= self.updates["w"+str(i)].sum(0)*alpha/self.a["a0"].shape[0]
 
 			else:
-				self.updates["w"+str(i)] = (cost_prime * self.sigmoid_prime_torch(self.z["z"+str(i)]))
+				self.updates["w"+str(i)] = (cost_prime * self.sigmoid_prime(self.z["z"+str(i)]))
 				self.b["b"+ str(i)] -= self.updates["w"+str(i)].sum(0)*alpha/self.a["a0"].shape[0]
 
 		for i in reversed(range(1, self.num_layers)):
@@ -156,9 +156,7 @@ class NeuralNetwork(object):
 		for i in range(1, self.num_layers):
 			self.w["w" + str(i)] -= alpha*self.updates["w" + str(i)]/self.a["a0"].shape[0]
 
-
-
-	def train(self, x, y, batch_size=10, alpha=0.000001, iterations=10):
+	def train(self, x, y, batch_size=10, alpha=0.1, iterations=10):
 		self.historical_cost = []
 		for iter in tqdm(range(iterations)):
 			# make prediction
