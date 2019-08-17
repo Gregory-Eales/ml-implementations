@@ -11,6 +11,7 @@ reimplementing machine learning algorithms from scratch
   * Deep Convolutional Neural Network: implmentation of deep convolutional neural network with pytorch gpu acceleration
   
  ### RL:
+  * Vanilla Policy Gradient: using VPG on OpenAI gym env
   
 ## To Do:
  ### ML:
