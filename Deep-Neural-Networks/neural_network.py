@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 # neural network class
 class NeuralNetwork(object):
 
-	def __init__(self, input_shape=1, output_shape=1, num_layers=3, gpu=True):
+	def __init__(self, input_shape=1, output_shape=1, num_layers=3):
 
 		# check for correct input types and values
 		assert type(input_shape) == int, "input shape needs to be an integer"
@@ -18,10 +18,9 @@ class NeuralNetwork(object):
 		assert type(num_layers) == int, "number of layers needs to be an integer"
 		assert num_layers >= 3, "number of layers needs to be 3 or larger"
 
-		assert type(gpu) == bool, "type of gpu needs to be bool"
+		
 
 		# internalize network parameters
-		self.gpu = gpu
 		self.input_shape = input_shape
 		self.output_shape = output_shape
 		self.num_layers = num_layers
@@ -178,7 +177,7 @@ def main():
 	y = torch.ones(10, 2)
 
 	# make prediction
-	NN = NeuralNetwork(5, 2, 8, gpu=True)
+	NN = NeuralNetwork(5, 2, 8)
 	NN.train(x, y, iterations=100, alpha=0.01)
 	plt.plot(NN.historical_cost)
 	plt.show()

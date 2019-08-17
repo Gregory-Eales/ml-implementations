@@ -12,7 +12,7 @@ print(x[1:3])
 
 print(y[1:3])
 
-NN = NeuralNetwork(8, 3, 5, gpu=True)
+NN = NeuralNetwork(8, 3, 5)
 
 NN.train(x, y, iterations=100000, alpha=0.05)
 
