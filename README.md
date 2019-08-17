@@ -33,7 +33,7 @@ reimplementing machine learning algorithms from scratch
   * Generative Adversarial Neural Networks
   
  ### RL:
- `* Trust Region Policy Optimizatoin
+  * Trust Region Policy Optimizatoin
   * Proximal Policy Optimization
   * Deep Determanistic Policy Gradient
   * Twin Delayed DDPG
