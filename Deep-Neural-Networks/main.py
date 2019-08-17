@@ -14,7 +14,7 @@ print(y[1:3])
 
 NN = NeuralNetwork(8, 3, 5, gpu=True)
 
-NN.train(x, y, iterations=100000, alpha=0.05)
+NN.train(x, y, iterations=100, alpha=0.05)
 
 plt.plot(NN.historical_cost)
 plt.show()
