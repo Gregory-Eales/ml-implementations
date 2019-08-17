@@ -8,15 +8,17 @@ import numpy as np
 
 x, y = get_data()
 
+print(x.shape)
+
 print(x[1:3])
 
 print(y[1:3])
 
 
-NN = NeuralNetwork(9, 1, 4, hidden_addition=3)
+NN = NeuralNetwork(5, 3, 5, hidden_addition=1)
 
 
-NN.train(x[0:3000], y[0:3000], iterations=5000, alpha=0.01)
+NN.train(x, y, iterations=50000, alpha=0.001)
 
 plt.plot(NN.historical_cost)
 
@@ -24,8 +26,8 @@ plt.show()
 
 
 
-predictions = NN.predict(x[3000:4000]).cpu().detach().numpy()
-answers = y[3000:4000].numpy()
+predictions = NN.predict(x).cpu().detach().numpy()
+answers = y.numpy()
 
 p = np.zeros_like(predictions)
 p[np.arange(len(predictions)), predictions.argmax(1)] = 1

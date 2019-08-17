@@ -113,11 +113,11 @@ class NeuralNetwork(object):
 		last_layer = self.num_layers-1
 		
 		for i in range(1, self.num_layers-1):
-			self.z["z" + str(i)] = torch.mm(self.a["a"+str(i-1)], self.w["w"+str(i)])# + self.b["b" + str(i)]
+			self.z["z" + str(i)] = torch.mm(self.a["a"+str(i-1)], self.w["w"+str(i)]) + self.b["b" + str(i)]
 			self.a["a" + str(i)] = self.tanh(self.z["z" + str(i)])
 
 
-		self.z["z" + str(last_layer)] = torch.mm(self.a["a"+str(last_layer-1)], self.w["w"+str(last_layer)]) #+ self.b["b" + str(last_layer)]
+		self.z["z" + str(last_layer)] = torch.mm(self.a["a"+str(last_layer-1)], self.w["w"+str(last_layer)]) + self.b["b" + str(last_layer)]
 		self.a["a" + str(last_layer)] = self.sigmoid(self.z["z" + str(last_layer)])
 
 
@@ -126,9 +126,13 @@ class NeuralNetwork(object):
 
 	def cost(self, y):
 		return torch.sum((y.cuda() - self.a["a"+str(self.num_layers-1)])**2)
+		#y = y.cuda()
+		#return torch.sum(y*torch.log(self.a["a"+str(self.num_layers-1)]) + (1-y)*torch.log(1-self.a["a"+str(self.num_layers-1)]))/self.a["a0"].shape[0]
 
 	def cost_prime(self, y_hat, y):
 		return y_hat - y.cuda()
+		#y = y.cuda()
+		#return (y/self.a['a' + str(self.num_layers-1)] - (1-y)/(1-self.a['a' + str(self.num_layers-1)]))
 
 	def calculate_updates(self, y, alpha):
 		cost_prime = self.cost_prime(self.a["a"+str(self.num_layers-1)], y)
