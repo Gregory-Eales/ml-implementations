@@ -95,11 +95,11 @@ class NeuralNetwork(object):
 		return sig*(1-sig)
 
 	def tanh(self, z):
-		return 2*torch.tanh(z)
+		return torch.tanh(z)
 
 	def tanh_prime(self, z):
 		t = torch.tanh(z)
-		return 2*(1 - t**2)
+		return (1 - t**2)
 
 	####################
 	# Learning Methods #
