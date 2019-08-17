@@ -1,7 +1,7 @@
 # ML-Reimplementations
 reimplementing machine learning algorithms from scratch
 
-## Content:
+## Complete:
 
  ### ML:
   * Template-Folder: contains the template for reimplementation format
