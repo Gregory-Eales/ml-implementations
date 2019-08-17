@@ -14,6 +14,7 @@ reimplementing machine learning algorithms from scratch
   * Vanilla Policy Gradient: using VPG on OpenAI gym env
   
 ## To Do:
+
  ### ML:
   * Linear Regression: implementation of linear regression 
   * Decision Tree
@@ -30,8 +31,16 @@ reimplementing machine learning algorithms from scratch
   * Recursive Neural Networks
   * NN Autoencoders
   * Generative Adversarial Neural Networks
+  
  ### RL:
+ `* Trust Region Policy Optimizatoin
+  * Proximal Policy Optimization
+  * Deep Determanistic Policy Gradient
+  * Twin Delayed DDPG
+  * Soft Actor-Critic
   
 ## Sources:
  * Template-Folder: Examples Source
+ * OpenAI: https://spinningup.openai.com/en/latest/spinningup/spinningup.html
+
 
