@@ -4,7 +4,7 @@ from vanilla_policy_gradient import VPG
 vpg = VPG()
 
 env = gym.make('CartPole-v0')
-for i_episode in range(10):
+for i_episode in range(1000):
     observation = env.reset()
     for t in range(10):
         env.render()
