@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 # neural network class
 class NeuralNetwork(object):
 
-	def __init__(self, input_shape=1, output_shape=1, num_layers=3, gpu=True):
+	def __init__(self, input_shape=1, output_shape=1, num_layers=3, hidden_addition=1):
 
 		# check for correct input types and values
 		assert type(input_shape) == int, "input shape needs to be an integer"
@@ -18,13 +18,14 @@ class NeuralNetwork(object):
 		assert type(num_layers) == int, "number of layers needs to be an integer"
 		assert num_layers >= 3, "number of layers needs to be 3 or larger"
 
-		assert type(gpu) == bool, "type of gpu needs to be bool"
+		
 
 		# internalize network parameters
-		self.gpu = gpu
 		self.input_shape = input_shape
 		self.output_shape = output_shape
 		self.num_layers = num_layers
+		self.hidden_addition = hidden_addition
+
 
 		# create variables
 		self.w = None
@@ -55,13 +56,13 @@ class NeuralNetwork(object):
 		for i in range(1, self.num_layers):
 
 			if (self.num_layers-1) == i:
-				self.w["w" + str(i)] = torch.randn(self.input_shape+1, self.output_shape, dtype=torch.float32)
+				self.w["w" + str(i)] = torch.randn(self.input_shape+self.hidden_addition, self.output_shape, dtype=torch.float32).cuda()
 
 			elif i == 1:
-				self.w["w" + str(i)] = torch.randn(self.input_shape, self.input_shape+1, dtype=torch.float32)
+				self.w["w" + str(i)] = torch.randn(self.input_shape, self.input_shape+self.hidden_addition, dtype=torch.float32).cuda()
 
 			else:
-				self.w["w" + str(i)] = torch.randn(self.input_shape+1, self.input_shape+1, dtype=torch.float32)
+				self.w["w" + str(i)] = torch.randn(self.input_shape+self.hidden_addition, self.input_shape+self.hidden_addition, dtype=torch.float32).cuda()
 
 
 	def initialize_bias(self):
@@ -71,10 +72,10 @@ class NeuralNetwork(object):
 		for i in range(1, self.num_layers):
 
 			if (self.num_layers-1) == i:
-				self.b["b" + str(i)] = torch.randn(self.output_shape, dtype=torch.float32)
+				self.b["b" + str(i)] = torch.randn(self.output_shape, dtype=torch.float32).cuda()
 
 			else:
-				self.b["b" + str(i)] = torch.randn(self.input_shape+1, dtype=torch.float32)
+				self.b["b" + str(i)] = torch.randn(self.input_shape+self.hidden_addition, dtype=torch.float32).cuda()
 
 
 
@@ -96,11 +97,11 @@ class NeuralNetwork(object):
 		return sig*(1-sig)
 
 	def tanh(self, z):
-		return 2*torch.tanh(z)
+		return torch.tanh(z)
 
 	def tanh_prime(self, z):
 		t = torch.tanh(z)
-		return 2*(1 - t**2)
+		return (1 - t**2)
 
 	####################
 	# Learning Methods #
@@ -108,7 +109,7 @@ class NeuralNetwork(object):
 
 	def predict(self, x):
 
-		self.a["a0"] = x
+		self.a["a0"] = x.cuda()
 		last_layer = self.num_layers-1
 		
 		for i in range(1, self.num_layers-1):
@@ -124,11 +125,14 @@ class NeuralNetwork(object):
 		return self.a["a" + str(last_layer)]
 
 	def cost(self, y):
-		return torch.sum((y - self.a["a"+str(self.num_layers-1)])**2)
+		return torch.sum((y.cuda() - self.a["a"+str(self.num_layers-1)])**2)
+		#y = y.cuda()
+		#return torch.sum(y*torch.log(self.a["a"+str(self.num_layers-1)]) + (1-y)*torch.log(1-self.a["a"+str(self.num_layers-1)]))/self.a["a0"].shape[0]
 
 	def cost_prime(self, y_hat, y):
+		return y_hat - y.cuda()
+		#y = y.cuda()
 		#return (y/self.a['a' + str(self.num_layers-1)] - (1-y)/(1-self.a['a' + str(self.num_layers-1)]))
-		return y_hat - y
 
 	def calculate_updates(self, y, alpha):
 		cost_prime = self.cost_prime(self.a["a"+str(self.num_layers-1)], y)
@@ -178,7 +182,7 @@ def main():
 	y = torch.ones(10, 2)
 
 	# make prediction
-	NN = NeuralNetwork(5, 2, 8, gpu=True)
+	NN = NeuralNetwork(5, 2, 8)
 	NN.train(x, y, iterations=100, alpha=0.01)
 	plt.plot(NN.historical_cost)
 	plt.show()
