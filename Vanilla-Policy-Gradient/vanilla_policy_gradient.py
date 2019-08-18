@@ -34,3 +34,9 @@ class VPG(object):
 
 	def store_trajectory(self, observation, action, reward, value, logp):
 		pass
+
+	def finish_path(self, last_val=0):
+		pass
+
+	def get_buffer_data(self):
+		pass
