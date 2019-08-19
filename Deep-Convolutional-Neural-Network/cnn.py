@@ -53,14 +53,20 @@ class CNN(object):
     def initialize_conv_bias(self):
 
         # init dict
-        self.conv_b["b"+str(i)] = {}
+        self.conv_b = {}
 
         # loop through layers and initialize conv bias
         for i in range(1, self.num_conv):
-            pass
+            self.conv_b["b"+str(i)]
 
     def initialize_dense_bias(self):
-        pass
+
+        # init dict
+        self.dense_b = {}
+
+        # loop through layers and initialize conv bias
+        for i in range(1, self.num_dense):
+            self.dense_b["b"+str(i)]
 
     def single_conv(self):
         pass
