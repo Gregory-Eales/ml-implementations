@@ -1,6 +1,5 @@
 import torch
 
-
 class CNN(object):
 
     def __init__(self, input_shape=10, output_size=1, num_conv=5, num_dense=1):
@@ -28,11 +27,11 @@ class CNN(object):
     def initialize_conv_weights(self):
 
         # init dict
-        self.con_w = {}
+        self.conv_w = {}
 
         # loop through layers and initialize network weights
         for i in range(1, self.num_layers):
-            self.conv_w["w"+str(i)]
+            self.conv_w["w"+str(i)] = torch.randn(self.conv_w, self.conv_w)
 
     def initialize_dense_weights(self):
         pass
