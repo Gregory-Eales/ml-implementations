@@ -106,22 +106,30 @@ class CNN(object):
     def pool_forward(self):
         pass
 
+    def predict(self, x):
+        pass
+
     ################################
     # Backward Propogation Methods #
     ################################
 
-    def conv_backward(self):
+    def cost(self):
         pass
 
-    def dense_backward(self):
+    def cost_prime(self):
         pass
 
-    def backward_propogation(self):
+    def calc_conv_updates(self):
         pass
 
-    ############
-    #
-    #################
+    def calc_dense_updates(self):
+        pass
+
+    def calc_updates(self):
+        pass
+
+    def update_weights(self):
+        pass
 
     def train(self):
         pass
