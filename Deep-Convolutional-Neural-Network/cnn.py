@@ -94,6 +94,9 @@ class CNN(object):
     # Forward Propogation Methods #
     ###############################
 
+    def pad(self, z, padding, value):
+        return torch.nn.ConstantPad2d(padding, value)
+
     def single_conv(self):
         pass
 
