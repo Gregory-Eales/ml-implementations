@@ -9,6 +9,7 @@ class CNN(object):
         self.output_size = output_size
         self.num_conv = num_conv + 1
         self.num_dense = num_dense + 1
+        self.cuda = None
 
 
         # initialize weights and bias
@@ -22,6 +23,14 @@ class CNN(object):
         self.initialize_conv_bias()
         self.initialize_dense_weights()
         self.initialize_dense_bias()
+
+    def initialize_cuda(self):
+
+        if torch.cuda.is_available():
+            self.cuda = True
+
+        else:
+            self.cuda = False
 
 
     def initialize_conv_weights(self):
