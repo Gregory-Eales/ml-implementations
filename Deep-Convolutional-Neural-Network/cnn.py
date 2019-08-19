@@ -27,6 +27,12 @@ class CNN(object):
         self.initialize_dense_weights()
         self.initialize_dense_bias()
 
+
+    ##########################
+    # Initialization Methods #
+    ##########################
+
+
     def initialize_cuda_state(self):
 
         if torch.cuda.is_available():
@@ -72,6 +78,10 @@ class CNN(object):
         for i in range(1, self.num_dense):
             self.dense_b["b"+str(i)]
 
+    ######################
+    # Activation Methods #
+    ######################
+
     def sigmoid_prime(self, z):
         sig = torch.sigmoid(z)
         return sig*(1-sig)
@@ -80,8 +90,25 @@ class CNN(object):
         tan = torch.tanh(z)
         return 1 - (tan)**2
 
+    ###############################
+    # Forward Propogation Methods #
+    ###############################
+
     def single_conv(self):
         pass
 
     def single_pool(self):
+        pass
+
+    def conv_forward(self):
+        pass
+
+    def pool_forward(self):
+        pass
+
+    #
+    #
+    #
+
+    def train(self):
         pass
