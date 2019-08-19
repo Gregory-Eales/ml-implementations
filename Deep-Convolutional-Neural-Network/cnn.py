@@ -106,9 +106,22 @@ class CNN(object):
     def pool_forward(self):
         pass
 
+    ################################
+    # Backward Propogation Methods #
+    ################################
+
+    def conv_backward(self):
+        pass
+
+    def dense_backward(self):
+        pass
+
+    def backward_propogation(self):
+        pass
+
+    ############
     #
-    #
-    #
+    #################
 
     def train(self):
         pass
