@@ -68,6 +68,12 @@ class CNN(object):
         for i in range(1, self.num_dense):
             self.dense_b["b"+str(i)]
 
+    def sigmoid_prime(self):
+        pass
+
+    def tanh_prime(self):
+        pass
+
     def single_conv(self):
         pass
 
