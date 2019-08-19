@@ -34,7 +34,13 @@ class CNN(object):
             self.conv_w["w"+str(i)] = torch.randn(self.conv_w, self.conv_w)
 
     def initialize_dense_weights(self):
-        pass
+
+        # init dict
+        self.dense_w = {}
+
+        # loop thorugh layers and initialize dense
+        for i in reverse(range(1, self.num_dense)):
+            pass
 
     def initialize_conv_bias(self):
         pass
