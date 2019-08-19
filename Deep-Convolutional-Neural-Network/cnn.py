@@ -68,11 +68,13 @@ class CNN(object):
         for i in range(1, self.num_dense):
             self.dense_b["b"+str(i)]
 
-    def sigmoid_prime(self):
-        pass
+    def sigmoid_prime(self, z):
+        sig = torch.sigmoid(z)
+        return sig*(1-sig)
 
     def tanh_prime(self):
-        pass
+        tan = torch.tanh(z)
+        return 1 - (tan)**2
 
     def single_conv(self):
         pass
