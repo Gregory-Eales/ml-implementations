@@ -1,4 +1,5 @@
 import torch
+import tqdm
 
 class CNN(object):
 
@@ -17,13 +18,16 @@ class CNN(object):
         self.conv_b = None
         self.dense_b = None
 
+        # check if cuda is available
+        self.initialize_cuda_state()
+
         # populate weights and bias
         self.initialize_conv_weights()
         self.initialize_conv_bias()
         self.initialize_dense_weights()
         self.initialize_dense_bias()
 
-    def initialize_cuda(self):
+    def initialize_cuda_state(self):
 
         if torch.cuda.is_available():
             self.cuda = True
