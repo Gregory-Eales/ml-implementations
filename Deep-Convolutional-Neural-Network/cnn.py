@@ -11,7 +11,6 @@ class CNN(object):
         self.num_dense = num_dense + 1
         self.cuda = None
 
-
         # initialize weights and bias
         self.conv_w = None
         self.dense_w = None
