@@ -98,11 +98,13 @@ class CNN(object):
         return torch.nn.functional.pad(z, [pad, pad, pad, pad], mode='constant', value=0)
 
     def single_conv(self, z, b, activation):
-        m = z.shape[0]**2
-        return torch.sum(activation(z + b), dim=[1, 2])/m
+        return torch.sum(activation(z + b), dim=[1, 2]) / z.shape[0]**2
 
-    def single_pool(self):
+    def single_max_pool(self):
         pass
+
+    def single_avg_pool(self, z):
+        return torch.sum(z, dim=[1, 2]) / z.shape[0]**2
 
     def conv_forward(self):
         pass
@@ -139,7 +141,7 @@ class CNN(object):
         pass
 
 def main():
-    x = torch.randn(10, 8, 8)
+    x = torch.randn(10, 80, 80)
     y = torch.randn(10, 1)
     cnn = CNN()
     a = cnn.single_conv(x, 10, torch.sigmoid)
