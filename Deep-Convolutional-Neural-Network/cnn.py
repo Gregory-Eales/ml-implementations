@@ -6,7 +6,7 @@ class CNN(object):
     def __init__(self, input_shape=10, output_size=1, num_conv=5, num_dense=1):
 
         # initialize network parameters
-        self.inpute_shape = input_shape
+        self.input_shape = input_shape
         self.output_size = output_size
         self.num_conv = num_conv + 1
         self.num_dense = num_dense + 1
@@ -48,8 +48,8 @@ class CNN(object):
         self.conv_w = {}
 
         # loop through layers and initialize network weights
-        for i in range(1, self.num_layers):
-            self.conv_w["w"+str(i)] = torch.randn(self.conv_w, self.conv_w)
+        for i in range(1, self.num_conv):
+            self.conv_w["w"+str(i)] = torch.randn(self.input_shape, self.input_shape)
 
     def initialize_dense_weights(self):
 
@@ -67,7 +67,7 @@ class CNN(object):
 
         # loop through layers and initialize conv bias
         for i in range(1, self.num_conv):
-            self.conv_b["b"+str(i)]
+            self.conv_b["b"+str(i)] = 0
 
     def initialize_dense_bias(self):
 
@@ -76,7 +76,7 @@ class CNN(object):
 
         # loop through layers and initialize conv bias
         for i in range(1, self.num_dense):
-            self.dense_b["b"+str(i)]
+            self.dense_b["b"+str(i)] = 0
 
     ######################
     # Activation Methods #
@@ -97,8 +97,9 @@ class CNN(object):
     def pad(self, z, pad, value):
         return torch.nn.functional.pad(z, [pad, pad, pad, pad], mode='constant', value=0)
 
-    def single_conv(self):
-        pass
+    def single_conv(self, z, b, activation):
+        m = z.shape[0]**2
+        return torch.sum(activation(z + b), dim=[1, 2])/m
 
     def single_pool(self):
         pass
@@ -138,11 +139,11 @@ class CNN(object):
         pass
 
 def main():
-
     x = torch.randn(10, 8, 8)
     y = torch.randn(10, 1)
     cnn = CNN()
-    cnn.predict(x)
+    a = cnn.single_conv(x, 10, torch.sigmoid)
+    print(a.shape)
 
 
 if __name__ == "__main__":
