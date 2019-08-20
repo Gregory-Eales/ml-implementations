@@ -106,8 +106,20 @@ class CNN(object):
     def single_avg_pool(self, z):
         return torch.sum(z, dim=[1, 2]) / z.shape[0]**2
 
-    def conv_forward(self):
-        pass
+    def conv_forward(self, num_layer):
+
+        # get input dimensions
+        width, height = self.conv_a["a" + str(num_layer)].shape[2], self.conv_a["a" + str(num_layer)].shape[1]
+
+        # get weight dimensions
+        w_w, h_w = self.w["w" + str()]
+
+        # calculate the number of convolutional steps needed to take
+
+        for x_l in range(width):
+            for y_l in range(height):
+                pass
+
 
     def pool_forward(self):
         pass
