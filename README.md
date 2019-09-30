@@ -2,7 +2,7 @@
 reimplementing machine learning algorithms from scratch
 
 <p align="center">
-  <img src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Images/machinelearning.png" width="800"/>
+  <img src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Images/machinelearning.png" width="700"/>
 </p>
 
 ## About
