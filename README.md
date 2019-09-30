@@ -8,7 +8,7 @@ reimplementing machine learning algorithms from scratch
   - [x] Perceptron: a reimplementation of Rosenblat's original perceptron algorithm
   - [x] Logistic Regression: simple reimplementation of logistic regression
   - [x] Deep Neural Network: implementation of a feed forward neural network with pytorch for gpu acceleration
-  - [x] Deep Convolutional Neural Network: implmentation of deep convolutional neural network with pytorch gpu acceleration
+  - [ ] Deep Convolutional Neural Network: implmentation of deep convolutional neural network with pytorch gpu acceleration
   - [ ] Linear Regression: implementation of linear regression 
   - [ ] Decision Tree
   - [ ] SVM
