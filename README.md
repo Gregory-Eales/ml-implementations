@@ -1,6 +1,10 @@
 # ML-Reimplementations
 reimplementing machine learning algorithms from scratch
 
+<p align="center">
+  <img src="https://github.com/Gregory-Eales/Teeny-Go/blob/master/utils/assets/images/go_sample.png" width="500"/>
+</p>
+
 ## About
 This repository contains machine learning reimplementations done from scratch using either numpy or pytorch/tensorflow (cuda). Each implementation has a readme with sources and a short explanation about the implementations as well as additional notes.
 
