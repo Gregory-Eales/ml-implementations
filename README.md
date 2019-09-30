@@ -10,8 +10,13 @@ Link: https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/TO-DO.md
   
 ## Sources
 
+ ### Papers
+
  ### Data Sets
  
+ ### Videos
+ 
+ ### Code
  
  ### Articles
  
