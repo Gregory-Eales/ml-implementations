@@ -2,7 +2,7 @@
 reimplementing machine learning algorithms from scratch
 
 <p align="center">
-  <img src="https://github.com/Gregory-Eales/Teeny-Go/blob/master/utils/assets/images/go_sample.png" width="300"/>
+  <img src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Images/machinelearning.png" width="300"/>
 </p>
 
 ## About
