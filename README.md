@@ -2,24 +2,15 @@
 reimplementing machine learning algorithms from scratch
 
 ## About
+This repository contains machine learning reimplementations done from scratch using either numpy or pytorch/tensorflow (cuda). Each implementation has a readme with sources and a short explanation about the implementations as well as additional notes.
 
 ## To Do
 Link: https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/TO-DO.md
 
-  
-  
-## Sources
+## Meta
 
- ### Papers
+Gregory Eales – [@GregoryHamE](https://twitter.com/GregoryHamE) – gregory.hamilton.e@gmail.com
 
- ### Data Sets
- 
- ### Videos
- 
- ### Code
- 
- ### Articles
- 
- * OpenAI (https://spinningup.openai.com/en/latest/spinningup/spinningup.html)
+Distributed under the MIT license. See ``LICENSE`` for more information.
 
-
+[https://github.com/Gregory-Eales](https://github.com/Gregory-Eales)
