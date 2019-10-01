@@ -11,9 +11,6 @@ OpenAI Gym: <br/>
 
 ## Model
 
-<p align="center">
-  <img src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/vpg-outline.svg" width="500"/>
-</p>
 
 
 
