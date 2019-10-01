@@ -27,4 +27,9 @@ Show end result accuracy with prediction plot.
 
 ## Sources:
 
+### Articles
 * OpenAI SpinningUp (https://spinningup.openai.com/en/latest/algorithms/vpg.html)
+
+### Papers
+* Policy Gradient Methods for Reinforcement Learning with Function Approximation <br/>
+  (https://papers.nips.cc/paper/1713-policy-gradient-methods-for-reinforcement-learning-with-function-approximation.pdf)
