@@ -1,12 +1,5 @@
 import torch
 
-class ValueNetwork(torch.nn.Module):
-
-	def __init__(self, alpha, input_dims, output_dims):
-
-		# inherit from nn module class
-		super(ValueNetwork, self)__init__()
-
 class PolicyNetwork(torch.nn.Module):
 
 	def __init__(self, alpha, input_dims, output_dims):
@@ -35,16 +28,4 @@ class PolicyNetwork(torch.nn.Module):
 
 	# training loop
 	def train(self, x, y, iter):
-		pass
-
-class VPG(object):
-
-	def __init__(self, alpha, input_dims, output_dims):
-
-		# initialize policy network
-		self.policy_network = PolicyNetwork(alpha, input_dims, output_dims)
-
-		self.value_network = ValueNetwork(alpha, input_dims, output_dims)
-
-	def act(self):
 		pass
