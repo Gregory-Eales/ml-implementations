@@ -27,4 +27,4 @@ Show end result accuracy with prediction plot.
 
 ## Sources:
 
-* sources
+* OpenAI SpinningUp (https://spinningup.openai.com/en/latest/algorithms/vpg.html)

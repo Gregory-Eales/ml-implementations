@@ -4,8 +4,6 @@ class VPG(object):
 
 	def __init__(self, observation_size, action_size, size, gamma=0.99, lam=0.95):
 
-		
-
 		# buffer of observation inputs
 		self.observation_buffer = torch.zeros(observation_size)
 
