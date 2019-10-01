@@ -1,5 +1,5 @@
 import gym
-from vanilla_policy_gradient import VPG
+from vpg import VPG
 
 vpg = VPG()
 
