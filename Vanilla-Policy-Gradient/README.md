@@ -1,7 +1,7 @@
 # Vanilla-Policy-Gradient
 
 ## About:
-reimplementation of vanilla policy gradients <br/>
+reimplementation of vanilla policy gradient applied to the CartPole-v0 environment from the OpenAI gym<br/>
 
 ## Requirements:
 
