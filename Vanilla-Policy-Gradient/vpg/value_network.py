@@ -6,3 +6,9 @@ class ValueNetwork(torch.nn.Module):
 
 		# inherit from nn module class
 		super(ValueNetwork, self)__init__()
+
+        # define optimizer
+        self.optimizer = torch.optim.SGD(lr=alpha)
+
+        # define loss
+        self.loss = torch.nn.MSELoss()

@@ -10,6 +10,12 @@ class PolicyNetwork(torch.nn.Module):
 		# initialize network
 		self.initialize_network()
 
+        # define optimizer
+        self.optimizer = torch.optim.SGD(lr=alpha)
+
+        # define loss
+        self.loss = torch.nn.CrossEntropyLoss()
+
 	# initialize network
 	def initialize_network(self):
 
