@@ -29,7 +29,8 @@ class VPG(object):
 		self.gamma, self.lam = gamma, lam
 
 	def store_trajectory(self, observation, action, reward, value, logp):
-		pass
+
+		# store trajectory
 
 	def finish_path(self, last_val=0):
 		pass
