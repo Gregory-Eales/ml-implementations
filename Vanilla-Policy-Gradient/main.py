@@ -2,14 +2,8 @@
 import gym
 from matplotlib import pyplot as plt
 
-def train(agent, env):
-    pass
-
-def playthrough(agent, env):
-    pass
-
 # import vpg algorithm
-from vpg import VPG
+from vpg.vpg import VPG
 
 # initialize vpg algorithm object
 vpg = VPG()
