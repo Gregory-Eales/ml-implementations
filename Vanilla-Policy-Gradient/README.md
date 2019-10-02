@@ -6,13 +6,17 @@ reimplementation of vanilla policy gradient applied to the CartPole-v0 environme
 
 ## Requirements
 
-Pytorch: <br/>
+Pytorch <br/>
 
-OpenAI Gym: <br/>
+OpenAI Gym <br/>
+
+Matplotlib <br/>
+
+TQDM <br/>
 
 ## Model
 
-Explain what model was used and include a diagram
+The vanilla policy gradient algorithm is a very straight forward rl process that increases the probability of getting higher rewards and decreasing the probability of getting lower rewards...
 
 ## Environment
 
@@ -20,15 +24,15 @@ Explain what model was used and include a diagram
   <img width="460" height="300" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/CartPole-v1.gif">
 </p>
 
-Explain the data used and short analysis with graphs.
+The enviroment used in this implementation is the CartPole-V1 enviroment provided by OpenAI gym. This environment provides a simple...
 
 ## Training
 
-Explain training methods, and plot accuracy and loss through training.
+By training the model over...
 
 ## Results
 
-Show end result accuracy with prediction plot.
+Given the performance...
 
 ## Sources
 
