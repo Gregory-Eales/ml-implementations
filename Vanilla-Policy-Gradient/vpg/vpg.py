@@ -20,7 +20,12 @@ class VPG(object):
 		self.vpg_buffer = Buffer()
 
 	def act(self, s):
-		return self.policy_network(s)
+
+		# get policy prob distrobution
+		prediction = self.policy_network(s)
+
+		# randomly select move based on distrobution
+
 
 	def update(self, iterations):
 		pass
