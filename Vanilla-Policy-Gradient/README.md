@@ -3,6 +3,8 @@
 ## About
 reimplementation of vanilla policy gradient applied to the CartPole-v0 environment from the OpenAI gym<br/>
 
+![screenshot](https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.gif)
+
 ## Requirements
 
 Pytorch: <br/>
