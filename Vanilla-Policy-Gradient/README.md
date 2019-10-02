@@ -3,12 +3,6 @@
 ## About
 reimplementation of vanilla policy gradient applied to the CartPole-v0 environment from the OpenAI gym<br/>
 
-<p align="center">
-  <img width="460" height="300" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/CartPole-v1.gif">
-</p>
-
-
-
 ## Requirements
 
 Pytorch: <br/>
@@ -17,13 +11,13 @@ OpenAI Gym: <br/>
 
 ## Model
 
-
-
-
-
 Explain what model was used and include a diagram
 
 ## Environment
+
+<p align="center">
+  <img width="460" height="300" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/CartPole-v1.gif">
+</p>
 
 Explain the data used and short analysis with graphs.
 
