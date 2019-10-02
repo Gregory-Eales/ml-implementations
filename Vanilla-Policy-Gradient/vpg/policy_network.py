@@ -28,10 +28,28 @@ class PolicyNetwork(torch.nn.Module):
 		out = self.batch_norm(x)
 		out = self.fc1(out)
 
-	# define loss function
-	def loss(self):
-		pass
-
 	# training loop
-	def train(self, x, y, iter):
-		pass
+	def update(self, x, y, iter):
+
+        for i in range(iter):
+
+            # zero the parameter gradients
+            optimizer.zero_grad()
+
+            # make prediction
+            prediction = self.predict(x)
+
+            # calculate loss
+            loss = self.loss(prediction, y)
+
+            # optimize
+            loss.backward()
+            self.optimizer.step()
+
+
+
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
