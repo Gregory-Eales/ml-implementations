@@ -18,7 +18,7 @@ The enviroment used in this implementation is the CartPole-V1 enviroment provide
 
 
 <p align="center">
-  <img width="500" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/CartPoleTable.png">
+  <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/CartPoleTable.png">
 </p>
 
 
