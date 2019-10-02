@@ -5,7 +5,7 @@ reimplementation of vanilla policy gradient applied to the CartPole-v0 environme
 
 <p align="center">
 <center>
-![screenshot](https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/CartPole-v1.gif)
+[screenshot](https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/CartPole-v1.gif)
 </center>
 
 
