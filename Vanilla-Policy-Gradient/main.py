@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 
 # import vpg algorithm
 from vpg.vpg import VPG
+from utils import plathrough
 
 # initialize vpg algorithm object
 vpg = VPG()
