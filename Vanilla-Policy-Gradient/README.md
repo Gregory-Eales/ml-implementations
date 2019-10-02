@@ -3,6 +3,8 @@
 ## About
 reimplementation of vanilla policy gradient applied to the CartPole-v0 environment from the OpenAI gym<br/>
 
+![screenshot](https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.gif)
+
 ## Requirements
 
 Pytorch: <br/>
@@ -37,3 +39,11 @@ Show end result accuracy with prediction plot.
 ### Papers
 * Policy Gradient Methods for Reinforcement Learning with Function Approximation <br/>
   (https://papers.nips.cc/paper/1713-policy-gradient-methods-for-reinforcement-learning-with-function-approximation.pdf)
+
+## Meta
+
+Gregory Eales – [@GregoryHamE](https://twitter.com/GregoryHamE) – gregory.hamilton.e@gmail.com
+
+Distributed under the MIT license. See ``LICENSE`` for more information.
+
+[https://github.com/Gregory-Eales](https://github.com/Gregory-Eales)
