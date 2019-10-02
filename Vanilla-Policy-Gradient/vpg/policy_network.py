@@ -56,8 +56,7 @@ class PolicyNetwork(torch.nn.Module):
             print("Loss: {}".format(loss))
 
             # optimize
-            if i == 0: loss.backward(retain_graph=True)
-            else: loss.backward(retain_graph=True)
+            loss.backward(retain_graph=True)
             self.optimizer.step()
 
 
