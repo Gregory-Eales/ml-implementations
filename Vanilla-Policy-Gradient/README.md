@@ -26,6 +26,26 @@ The vanilla policy gradient algorithm is a very straight forward rl process that
 
 The enviroment used in this implementation is the CartPole-V1 enviroment provided by OpenAI gym. This environment provides a simple...
 
+<table>
+<tr><th> Observations </th><th> Actions </th></tr>
+<tr><td>
+
+Num | Observation | Min | Max
+---|---|---|---
+0 | Cart Position | -2.4 | 2.4
+1 | Cart Velocity | -Inf | Inf
+2 | Pole Angle | ~ -41.8&deg; | ~ 41.8&deg;
+3 | Pole Velocity At Tip | -Inf | Inf
+
+</td><td>
+
+Num | Action
+--- | ---
+0 | Push cart to the left
+1 | Push cart to the right
+
+</td></tr> </table>
+
 ## Training
 
 By training the model over...
