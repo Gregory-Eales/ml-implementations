@@ -1,18 +1,8 @@
 # Vanilla-Policy-Gradient
-implementation of vpg algorithm
+implementation of vpg
 
 ## About
 reimplementation of vanilla policy gradient applied to the CartPole-v0 environment from the OpenAI gym<br/>
-
-## Requirements
-
-Pytorch <br/>
-
-OpenAI Gym <br/>
-
-Matplotlib <br/>
-
-TQDM <br/>
 
 ## Model
 
