@@ -4,16 +4,6 @@ implementation of vpg algorithm
 ## About
 reimplementation of vanilla policy gradient applied to the CartPole-v0 environment from the OpenAI gym<br/>
 
-## Requirements
-
-Pytorch <br/>
-
-OpenAI Gym <br/>
-
-Matplotlib <br/>
-
-TQDM <br/>
-
 ## Model
 
 The vanilla policy gradient algorithm is a very straight forward rl process that increases the probability of getting higher rewards and decreasing the probability of getting lower rewards...
