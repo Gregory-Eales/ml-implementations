@@ -25,7 +25,28 @@ class VPG(object):
 	def update(self, iterations):
 		pass
 
-	def playthrough(self, env):
+	def playthrough(self, env, n_steps, n_actions, n_observations, render=False):
+
+		# create episode buffers
+		reward_buffer = torch.zeros(1, n_steps, 1)
+		action_buffer = torch.zeros(1, n_steps, n_actions)
+		observation_buffer = torch.zeros(1, n_steps, n_observations)
+
+		for t in range(n_steps):
+			# render env screen
+	        if render: env.render()
+
+	        # get action
+	        action = self.act()
+
+	        # get state + reward
+	        observation, reward, done, info = env.step(action)
+
+	        # check if episode is terminal
+	        if done:
+	            print("Episode finished after {} timesteps".format(t+1))
+	            break
+
 		pass
 
 	def train(self, num_episodes, env):
@@ -33,16 +54,17 @@ class VPG(object):
 		# for each iteration:
 		for episode in range(num_episodes):
 
-		# playthrough an episode to obtain trajectories T
+			# playthrough an episode to obtain trajectories T
 			self.playthrough(env)
 
-		# compute "rewards-to-go"
+			# compute "rewards-to-go"
+			# ???????????????????
 
-		# compute advantage estimates
+			# compute advantage estimates
 
-		# estimate policy gradient
+			# estimate policy gradient
 
-		# compute policy gradient
+			# compute policy gradient
 
-		# update policy
+			# update policy
 		pass
