@@ -3,7 +3,7 @@
 ## About
 reimplementation of vanilla policy gradient applied to the CartPole-v0 environment from the OpenAI gym<br/>
 
-<p align="center">
+
 <center>
 [screenshot](https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/CartPole-v1.gif)
 </center>
