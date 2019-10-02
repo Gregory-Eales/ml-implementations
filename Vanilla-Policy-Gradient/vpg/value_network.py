@@ -31,8 +31,7 @@ class ValueNetwork(torch.nn.Module):
         self.relu2 = torch.nn.ReLU()
 
     def predict(self, x):
-        out = self.batch_norm1(x)
-        out = self.fc1(out)
+        out = self.fc1(x)
         out = self.relu1(out)
         out = self.fc2(out)
         out = self.relu1(out)
