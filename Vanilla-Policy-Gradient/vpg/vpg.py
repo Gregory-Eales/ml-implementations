@@ -52,8 +52,6 @@ class VPG(object):
 	            print("Episode finished after {} timesteps".format(t+1))
 	            break
 
-		pass
-
 	def train(self, num_episodes, env):
 
 		# for each iteration:
