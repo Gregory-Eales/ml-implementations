@@ -1,6 +1,7 @@
 import logging
 
 import torch
+import numpy as np
 
 from buffer import Buffer
 from value_network import ValueNetwork
@@ -9,6 +10,11 @@ from policy_network import PolicyNetwork
 class VPG(object):
 
 	def __init__(self, alpha, input_dims, output_dims):
+
+		# store parameters
+		self.alpha = alpha
+		self.input_dims = input_dims
+		self.output_dims = output_dims
 
 		# initialize policy network
 		self.policy_network = PolicyNetwork(alpha, input_dims, output_dims)
@@ -21,10 +27,14 @@ class VPG(object):
 
 	def act(self, s):
 
-		# get policy prob distrobution
+		# get policy prob distrabution
 		prediction = self.policy_network(s)
 
-		# randomly select move based on distrobution
+		# convert to numpy array
+		prediction = prediction.numpy()
+
+		# randomly select move based on distrabution
+		np.random.choice(list(range(2)), p=predictions)
 
 
 	def update(self, iterations):
