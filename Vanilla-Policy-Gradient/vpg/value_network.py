@@ -30,7 +30,7 @@ class ValueNetwork(torch.nn.Module):
         self.relu1 = torch.nn.ReLU()
         self.relu2 = torch.nn.ReLU()
 
-    def predict(self, x):
+    def forward(self, x):
         out = self.fc1(x)
         out = self.relu1(out)
         out = self.fc2(out)
@@ -45,7 +45,7 @@ class ValueNetwork(torch.nn.Module):
             self.optimizer.zero_grad()
 
             # make prediction
-            prediction = self.predict(x)
+            prediction = self.forward(x)
 
             # calculate loss
             loss = self.loss(prediction, y)
