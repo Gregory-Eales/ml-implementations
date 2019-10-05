@@ -30,7 +30,7 @@ class PolicyNetwork(torch.nn.Module):
 		# compute policy gradient
 
         # calculate advantage value
-        loss = -torch.log(actions.double())*rewards.double()
+        loss = -torch.log(actions.double())*((rewards.double())**2)/10000.0
         loss = torch.sum(loss)/loss.shape[0]
         return loss
 
@@ -47,7 +47,7 @@ class PolicyNetwork(torch.nn.Module):
         out = self.fc1(x)
         out = self.relu(out)
         out = self.fc2(out)
-        out = self.sigmoid(out)
+        out = self.relu(out)
         return out
 
     def update(self, actions, observations, rewards, iter):
