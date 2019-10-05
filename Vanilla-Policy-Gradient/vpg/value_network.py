@@ -14,7 +14,7 @@ class ValueNetwork(torch.nn.Module):
         self.initialize_network()
 
         # define optimizer
-        self.optimizer = torch.optim.SGD(lr=alpha, params=self.parameters())
+        self.optimizer = torch.optim.Adam(lr=alpha, params=self.parameters())
 
         # define loss
         self.loss = torch.nn.MSELoss()
