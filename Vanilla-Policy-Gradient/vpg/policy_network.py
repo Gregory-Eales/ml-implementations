@@ -19,10 +19,18 @@ class PolicyNetwork(torch.nn.Module):
         # define loss
         #self.loss = torch.nn.NLLLoss()
 
-    def loss(self, prediction, y):
+    def loss(self, actions, observations, rewards):
+
+
+
+		# compute advantage estimates
+
+		# estimate policy gradient
+
+		# compute policy gradient
 
         # calculate advantage value
-        loss = -prediction*torch.log(y)
+        loss = -torch.log(actions.double())*rewards.double()
         loss = torch.sum(loss)/loss.shape[0]
         return loss
 
@@ -42,20 +50,17 @@ class PolicyNetwork(torch.nn.Module):
         out = self.sigmoid(out)
         return out
 
-    def update(self, x, y, iter):
+    def update(self, actions, observations, rewards, iter):
 
         for i in range(iter):
 
             # zero the parameter gradients
             self.optimizer.zero_grad()
 
-            # make prediction
-            prediction = self.forward(x)
-
             # calculate loss
-            loss = self.loss(prediction, y)
-            print("Iteration: {}".format(i))
-            print("Loss: {}".format(loss))
+            loss = self.loss(actions, observations, rewards)
+            #print("Iteration: {}".format(i))
+            #print("Loss: {}".format(loss))
 
             # optimize
             loss.backward(retain_graph=True)
@@ -63,7 +68,6 @@ class PolicyNetwork(torch.nn.Module):
 
 
 def main():
-
 
     x = torch.ones(100, 2, requires_grad=True)
     y = torch.ones(100, 1, requires_grad=True)/10
