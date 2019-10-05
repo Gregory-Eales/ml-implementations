@@ -37,7 +37,7 @@ class ValueNetwork(torch.nn.Module):
         out = self.relu1(out)
         return out
 
-    def update(self, x, y, iter):
+    def update(self, observations, rewards, iter):
 
         for i in range(iter):
 
@@ -45,15 +45,15 @@ class ValueNetwork(torch.nn.Module):
             self.optimizer.zero_grad()
 
             # make prediction
-            prediction = self.forward(x)
+            prediction = self.forward(observations)
 
             # calculate loss
-            loss = self.loss(prediction, y)
-            print("Iteration: {}".format(i))
-            print("Loss: {}".format(loss))
+            loss = self.loss(prediction, rewards)
+            #print("Iteration: {}".format(i))
+            #print("Loss: {}".format(loss))
 
             # optimize
-            loss.backward()
+            loss.backward(retain_graph=True)
             self.optimizer.step()
 
 
