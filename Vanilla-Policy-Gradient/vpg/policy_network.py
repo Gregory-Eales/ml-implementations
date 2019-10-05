@@ -14,12 +14,14 @@ class PolicyNetwork(torch.nn.Module):
         self.initialize_network()
 
         # define optimizer
-        self.optimizer = torch.optim.SGD(lr=alpha, params=self.parameters())
+        self.optimizer = torch.optim.Adam(lr=alpha, params=self.parameters())
 
         # define loss
         #self.loss = torch.nn.NLLLoss()
 
     def loss(self, prediction, y):
+
+        # calculate advantage value
         loss = -prediction*torch.log(y)
         loss = torch.sum(loss)/loss.shape[0]
         return loss
