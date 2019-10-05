@@ -75,7 +75,7 @@ class VPG(object):
 
 	        # check if episode is terminal
 			if done:
-
+				reward_buffer[-1][0]=0
 				# print time step
 				#print("Episode finished after {} timesteps".format(t+1))
 
@@ -110,30 +110,67 @@ class VPG(object):
 				self.store_data(reward_buffer, action_buffer, observation_buffer)
 
 				# update networks
-			self.update(1)
+			self.update(3)
 
 		env.close()
 
-	def calculate_advantages(self):
-		pass
+	def calculate_advantages(self, observations):
 
-	def update(self, iterations):
+		# compute state values
+		v = self.value_network.predict(observations)
 
-		# get data for training
-		rewards = torch.clone(torch.cat(self.vpg_buffer.reward_buffer[-990:-1]))
-		observations = torch.clone(torch.cat(self.vpg_buffer.observation_buffer[-990:-1]))
-		actions = torch.cat(self.vpg_buffer.action_buffer[-990:-1])
+		# compute action function values
+		q = self.act
 
-		print(rewards.shape, observations.shape, actions.shape)
+		return
+
+	def update(self, ):
+
+
+		# calulcate rewards to go
+		rtg = self.calculate_rtg()
 
 		# calculate advantages
-		# v_predictions = self.value_network.forward(observations.float())
+		advantages = self.calculate_advantages(observations)
 
 		# update policy
 		self.policy_network.update(actions, observations, rewards, iter=iterations)
 
 		# update value network
 		self.value_network.update(observations.float(), rewards.float(), iter=iterations)
+
+	def main(self, env, n_episodes, n_steps, render=False):
+
+		# for n episodes or terminal state:
+		for episode in range(n_episodes):
+
+			# reset environment
+			observation = env.reset()
+
+			for t in range(n_steps):
+
+				# render env screen
+				if render: env.render()
+
+		        # get action, and network policy prediction
+				action, prediction = self.act(observation)
+
+		        # get state + reward
+				observation, reward, done, info = env.step(action)
+
+				# update model
+				self.update(prediction, observation, reward)
+
+		        # check if episode is terminal
+				if done:
+					reward_buffer[-1][0]=0
+					# print time step
+					#print("Episode finished after {} timesteps".format(t+1))
+
+					# return values
+					return reward_buffer, torch.cat(prediction_buffer), observation_buffer
+
+
 
 def main():
 
@@ -142,7 +179,7 @@ def main():
 	# initialize environment
 	env = gym.make('CartPole-v0')
 
-	vpg = VPG(alpha=0.001, input_dims=4, output_dims=2)
+	vpg = VPG(alpha=0.01, input_dims=4, output_dims=2)
 
 	vpg.train(env, num_episodes=1000, n_steps=100, render=False)
 
