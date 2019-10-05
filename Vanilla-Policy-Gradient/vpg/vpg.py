@@ -80,7 +80,7 @@ class VPG(object):
 				#print("Episode finished after {} timesteps".format(t+1))
 
 				# return values
-				return reward_buffer, prediction_buffer, observation_buffer
+				return reward_buffer, torch.cat(prediction_buffer), observation_buffer
 
 	def store_data(self, rewards, actions, observations):
 
@@ -92,20 +92,20 @@ class VPG(object):
 		observations = torch.from_numpy(observations)
 
 		self.vpg_buffer.reward_buffer.append(rewards)
-		self.vpg_buffer.action_buffer += actions
+		self.vpg_buffer.action_buffer.append(actions)
 		self.vpg_buffer.observation_buffer.append(observations)
 
 		return rewards, actions, observations
 
-	def train(self, env, num_episodes, n_steps, render=False):
+	def train(self, env, num_episodes, n_steps=10, render=False):
 
-		for i in range(5):
+		for i in range(100):
 			# for each iteration:
 			for episode in range(num_episodes):
 
 				# playthrough an episode to obtain trajectories T
-				reward_buffer, action_buffer, observation_buffer = self.playthrough(env, n_steps=n_steps, render=render)
-
+				try:reward_buffer, action_buffer, observation_buffer = self.playthrough(env, n_steps=n_steps, render=render)
+				except: pass
 				# store data
 				self.store_data(reward_buffer, action_buffer, observation_buffer)
 
@@ -114,15 +114,20 @@ class VPG(object):
 
 		env.close()
 
+	def calculate_advantages(self):
+		pass
+
 	def update(self, iterations):
 
 		# get data for training
-		rewards = torch.clone(torch.cat(self.vpg_buffer.reward_buffer))
-		observations = torch.clone(torch.cat(self.vpg_buffer.observation_buffer))
-		actions = torch.cat(self.vpg_buffer.action_buffer)
+		rewards = torch.clone(torch.cat(self.vpg_buffer.reward_buffer[-990:-1]))
+		observations = torch.clone(torch.cat(self.vpg_buffer.observation_buffer[-990:-1]))
+		actions = torch.cat(self.vpg_buffer.action_buffer[-990:-1])
+
+		print(rewards.shape, observations.shape, actions.shape)
 
 		# calculate advantages
-		v_predictions = self.value_network.forward(observations.float())
+		# v_predictions = self.value_network.forward(observations.float())
 
 		# update policy
 		self.policy_network.update(actions, observations, rewards, iter=iterations)
@@ -137,9 +142,11 @@ def main():
 	# initialize environment
 	env = gym.make('CartPole-v0')
 
-	vpg = VPG(alpha=0.01, input_dims=4, output_dims=2)
+	vpg = VPG(alpha=0.001, input_dims=4, output_dims=2)
 
-	vpg.train(env, num_episodes=10, n_steps=100, render=True)
+	vpg.train(env, num_episodes=1000, n_steps=100, render=False)
+
+	vpg.train(env, num_episodes=1, n_steps=100, render=True)
 
 if __name__ == "__main__":
 	main()
