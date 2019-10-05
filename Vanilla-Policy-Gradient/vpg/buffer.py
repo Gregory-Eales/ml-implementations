@@ -9,7 +9,7 @@ class Buffer(object):
         self.action_buffer = []
 
         # store state
-        self.state_buffer = []
+        self.observation_buffer = []
 
         # store reward
         self.reward_buffer = []
