@@ -66,8 +66,6 @@ class VPG(object):
 		# initial reset of environment
 		observation = env.reset()
 
-		self.buffer.store_obs(observation)
-
 		# for n episodes or terminal state:
 		for episode in range(n_episodes):
 
@@ -80,14 +78,23 @@ class VPG(object):
 		        # get action, and network policy prediction
 				action, prediction = self.act(observation)
 
+				# store action
+				self.buffer.store_action(prediction)
+
 		        # get state + reward
 				observation, reward, done, info = env.step(action)
+
+				# store observation
+				self.buffer.store_observation(observation)
+
+				# store rewards
+				self.buffer.store_reward(reward)
 
 				# calculate advantage
 				a = self.calculate_advantages()
 
-				# store data
-				self.buffer.store_obs(observation)
+				# store advantage
+				self.buffer.store_advantage(a)
 
 		        # check if episode is terminal
 				if done:
