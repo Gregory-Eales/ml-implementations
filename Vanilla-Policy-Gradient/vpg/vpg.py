@@ -23,7 +23,7 @@ class VPG(object):
 		self.value_network = ValueNetwork(alpha, input_dims, output_dims)
 
 		# initialize vpg buffer
-		self.vpg_buffer = Buffer()
+		self.buffer = Buffer()
 
 	def act(self, s):
 
@@ -40,98 +40,20 @@ class VPG(object):
 		action = np.random.choice(list(range(2)), p=action/np.sum(action))
 		return action, torch.clone(prediction)
 
-
-	def playthrough(self, env, n_steps, render=False):
-
-		# create episode buffers
-		reward_buffer = []
-		prediction_buffer = []
-		observation_buffer = []
-
-		# reset environment
-		observation = env.reset()
-
-		for t in range(n_steps):
-			# render env screen
-			if render: env.render()
-
-	        # get action, and network policy prediction
-			action, prediction = self.act(observation)
-
-			# save prediction
-			prediction_buffer.append(prediction)
-
-	        # get state + reward
-			observation, reward, done, info = env.step(action)
-
-			# save observation
-			observation_buffer.append(observation)
-
-			# update cumulative reward
-			cum_reward = t+1
-
-			# save reward
-			reward_buffer.append([cum_reward])
-
-	        # check if episode is terminal
-			if done:
-				reward_buffer[-1][0]=0
-				# print time step
-				#print("Episode finished after {} timesteps".format(t+1))
-
-				# return values
-				return reward_buffer, torch.cat(prediction_buffer), observation_buffer
-
-	def store_data(self, rewards, actions, observations):
-
-
-		observations = np.array(observations)
-		rewards = np.array(rewards)
-
-		rewards = torch.from_numpy(rewards)
-		observations = torch.from_numpy(observations)
-
-		self.vpg_buffer.reward_buffer.append(rewards)
-		self.vpg_buffer.action_buffer.append(actions)
-		self.vpg_buffer.observation_buffer.append(observations)
-
-		return rewards, actions, observations
-
-	def train(self, env, num_episodes, n_steps=10, render=False):
-
-		for i in range(100):
-			# for each iteration:
-			for episode in range(num_episodes):
-
-				# playthrough an episode to obtain trajectories T
-				try:reward_buffer, action_buffer, observation_buffer = self.playthrough(env, n_steps=n_steps, render=render)
-				except: pass
-				# store data
-				self.store_data(reward_buffer, action_buffer, observation_buffer)
-
-				# update networks
-			self.update(3)
-
-		env.close()
-
-	def calculate_advantages(self, observations):
+	def calculate_advantages(self, observation, prev_observation):
 
 		# compute state values
-		v = self.value_network.predict(observations)
+		v = self.value_network.predict(prev_observation)
 
 		# compute action function values
-		q = self.act
+		q = self.value_network.predict(observation)
 
-		return
+		# calculate advantage
+		a = q-v
 
-	def update(self, ):
+		return a
 
-
-		# calulcate rewards to go
-		rtg = self.calculate_rtg()
-
-		# calculate advantages
-		advantages = self.calculate_advantages(observations)
+	def update(self, observation, action, reward):
 
 		# update policy
 		self.policy_network.update(actions, observations, rewards, iter=iterations)
@@ -139,14 +61,17 @@ class VPG(object):
 		# update value network
 		self.value_network.update(observations.float(), rewards.float(), iter=iterations)
 
-	def main(self, env, n_episodes, n_steps, render=False):
+	def train(self, env, n_episodes, n_steps, render=False):
+
+		# initial reset of environment
+		observation = env.reset()
+
+		self.buffer.store_obs(observation)
 
 		# for n episodes or terminal state:
 		for episode in range(n_episodes):
 
-			# reset environment
-			observation = env.reset()
-
+			# for t steps:
 			for t in range(n_steps):
 
 				# render env screen
@@ -158,17 +83,24 @@ class VPG(object):
 		        # get state + reward
 				observation, reward, done, info = env.step(action)
 
-				# update model
-				self.update(prediction, observation, reward)
+				# calculate advantage
+				a = self.calculate_advantages()
+
+				# store data
+				self.buffer.store_obs(observation)
 
 		        # check if episode is terminal
 				if done:
 					reward_buffer[-1][0]=0
-					# print time step
-					#print("Episode finished after {} timesteps".format(t+1))
 
-					# return values
-					return reward_buffer, torch.cat(prediction_buffer), observation_buffer
+					# print time step
+					print("Episode finished after {} timesteps".format(t+1))
+
+					# reset environment
+					observation = env.reset()
+
+			# update model
+			self.update()
 
 
 
@@ -181,7 +113,7 @@ def main():
 
 	vpg = VPG(alpha=0.01, input_dims=4, output_dims=2)
 
-	vpg.train(env, num_episodes=1000, n_steps=100, render=False)
+	vpg.train(env, num_episodes=1000, n_steps=1000, render=False)
 
 	vpg.train(env, num_episodes=1, n_steps=100, render=True)
 
