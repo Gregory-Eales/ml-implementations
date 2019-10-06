@@ -17,13 +17,16 @@ class VPG(object):
 		self.output_dims = output_dims
 
 		# initialize policy network
-		self.policy_network = PolicyNetwork(alpha, input_dims, output_dims)
+		self.policy_network = PolicyNetwork(0.001, input_dims, output_dims)
 
 		# initialize value network
-		self.value_network = ValueNetwork(alpha, input_dims, output_dims)
+		self.value_network = ValueNetwork(0.001, input_dims, output_dims)
 
 		# initialize vpg buffer
 		self.buffer = Buffer()
+
+		# historical episode length
+		self.hist_length = []
 
 	def act(self, s):
 
@@ -42,35 +45,54 @@ class VPG(object):
 
 	def calculate_advantages(self, observation, prev_observation):
 
+		observation = torch.from_numpy(observation).float()
+		prev_observation = torch.from_numpy(prev_observation).float()
+
 		# compute state values
-		v = self.value_network.predict(prev_observation)
+		v = self.value_network.forward(prev_observation)
 
 		# compute action function values
-		q = self.value_network.predict(observation)
+		q = self.value_network.forward(observation)
 
 		# calculate advantage
 		a = q-v
 
-		return a
+		return a.detach().numpy()
 
-	def update(self, observation, action, reward):
+	def update(self, iter=1):
+
+		# returns buffer values as pytorch tensors
+		observations, actions, rewards, advantages = self.buffer.get_tensors()
 
 		# update policy
-		self.policy_network.update(actions, observations, rewards, iter=iterations)
+		self.policy_network.update(actions, advantages, iter=iter)
 
 		# update value network
-		self.value_network.update(observations.float(), rewards.float(), iter=iterations)
+		self.value_network.update(observations, rewards, iter=iter)
 
-	def train(self, env, n_episodes, n_steps, render=False):
 
-		# initial reset of environment
-		observation = env.reset()
+	def train(self, env, n_epoch, n_steps, render=False, verbos=True):
+
+		# initialize step variable
+		step = 0
+
+		# historical episode length
+		episode_lengths = []
 
 		# for n episodes or terminal state:
-		for episode in range(n_episodes):
+		for epoch in range(n_epoch):
+
+			# initial reset of environment
+			observation = env.reset()
+
+			# store observation
+			self.buffer.store_observation(observation)
 
 			# for t steps:
 			for t in range(n_steps):
+
+				# increment step
+				step += 1
 
 				# render env screen
 				if render: env.render()
@@ -88,41 +110,52 @@ class VPG(object):
 				self.buffer.store_observation(observation)
 
 				# store rewards
-				self.buffer.store_reward(reward)
+				self.buffer.store_reward(step/200)
 
 				# calculate advantage
-				a = self.calculate_advantages()
+				a = self.calculate_advantages(self.buffer.observation_buffer[-1], self.buffer.observation_buffer[-2])
 
 				# store advantage
 				self.buffer.store_advantage(a)
 
 		        # check if episode is terminal
 				if done:
-					reward_buffer[-1][0]=0
+
+					# change terminal reward to zero
+					self.buffer.reward_buffer[-1] = 0
 
 					# print time step
-					print("Episode finished after {} timesteps".format(t+1))
+					if verbos:
+						print("Episode finished after {} timesteps".format(step+1))
+
+					episode_lengths.append(step)
+
+					# reset step counter
+					step = 0
 
 					# reset environment
 					observation = env.reset()
 
 			# update model
-			self.update()
+			self.update(iter=3)
+			self.buffer.clear_buffer()
+			print("Average Episode Length: {}".format(np.sum(episode_lengths)/len(episode_lengths)))
 
 
 
 def main():
 
+	# import gym
 	import gym
 
 	# initialize environment
 	env = gym.make('CartPole-v0')
 
-	vpg = VPG(alpha=0.01, input_dims=4, output_dims=2)
+	vpg = VPG(alpha=0.08, input_dims=4, output_dims=2)
 
-	vpg.train(env, num_episodes=1000, n_steps=1000, render=False)
+	vpg.train(env, n_epoch=25, n_steps=1000, render=False, verbos=False)
 
-	vpg.train(env, num_episodes=1, n_steps=100, render=True)
+	#vpg.train(env, n_epoch=1, n_steps=195, render=True, verbos=True)
 
 if __name__ == "__main__":
 	main()
