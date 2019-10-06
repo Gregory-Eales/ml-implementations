@@ -14,11 +14,17 @@ class Buffer(object):
         # store reward
         self.reward_buffer = []
 
-    def store_obs(self, obs):
+        # store advantage
+        self.advantage_buffer = []
+
+    def store_observation(self, obs):
         self.observation_buffer.append(obs)
 
-    def store_reward(self, reward):
-        self.reward_buffer.append(reward)
+    def store_reward(self, rwrd):
+        self.reward_buffer.append(rwrd)
 
-    def store_actions(self, action):
-        self.action_buffer.append(action)
+    def store_action(self, act):
+        self.action_buffer.append(act)
+
+    def store_advantage(self, adv):
+        self.advantage_buffer.append(adv)
