@@ -24,17 +24,20 @@ class ValueNetwork(torch.nn.Module):
     def initialize_network(self):
 
 		# define network components
-        self.batch_norm1 = torch.nn.BatchNorm1d(self.input_dims)
-        self.fc1 = torch.nn.Linear(self.input_dims, 3)
-        self.fc2 = torch.nn.Linear(3, self.output_dims)
-        self.relu1 = torch.nn.ReLU()
-        self.relu2 = torch.nn.ReLU()
+        self.fc1 = torch.nn.Linear(self.input_dims, 5)
+        self.fc2 = torch.nn.Linear(5, 5)
+        self.fc3 = torch.nn.Linear(5, self.output_dims)
+        self.relu = torch.nn.ReLU()
+        self.sigmoid = torch.nn.Sigmoid()
+        self.tanh = torch.nn.Tanh()
 
     def forward(self, x):
         out = self.fc1(x)
-        out = self.relu1(out)
+        out = self.tanh(out)
         out = self.fc2(out)
-        out = self.relu1(out)
+        out = self.tanh(out)
+        out = self.fc3(out)
+        out = self.sigmoid(out)
         return out
 
     def update(self, observations, rewards, iter):
@@ -49,8 +52,6 @@ class ValueNetwork(torch.nn.Module):
 
             # calculate loss
             loss = self.loss(prediction, rewards)
-            #print("Iteration: {}".format(i))
-            #print("Loss: {}".format(loss))
 
             # optimize
             loss.backward(retain_graph=True)
