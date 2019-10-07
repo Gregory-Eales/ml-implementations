@@ -14,7 +14,7 @@ class PolicyNetwork(torch.nn.Module):
         self.initialize_network()
 
         # define optimizer
-        self.optimizer = torch.optim.SGD(lr=alpha, params=self.parameters())
+        self.optimizer = torch.optim.Adam(lr=alpha, params=self.parameters())
 
         # define loss
         #self.loss = torch.nn.NLLLoss()
@@ -29,9 +29,9 @@ class PolicyNetwork(torch.nn.Module):
     def initialize_network(self):
 
 		# define network components
-        self.fc1 = torch.nn.Linear(self.input_dims, 5)
-        self.fc2 = torch.nn.Linear(5, 5)
-        self.fc3 = torch.nn.Linear(5, self.output_dims)
+        self.fc1 = torch.nn.Linear(self.input_dims, 3)
+        self.fc2 = torch.nn.Linear(3, 3)
+        self.fc3 = torch.nn.Linear(3, self.output_dims)
         self.relu = torch.nn.ReLU()
         self.sigmoid = torch.nn.Sigmoid()
         self.tanh = torch.nn.Tanh()
