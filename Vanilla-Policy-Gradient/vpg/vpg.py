@@ -11,16 +11,19 @@ class VPG(object):
 
 	def __init__(self, alpha, input_dims, output_dims):
 
+		torch.manual_seed(1)
+		np.random.seed(1)
+
 		# store parameters
 		self.alpha = alpha
 		self.input_dims = input_dims
 		self.output_dims = output_dims
 
 		# initialize policy network
-		self.policy_network = PolicyNetwork(0.001, input_dims, output_dims)
+		self.policy_network = PolicyNetwork(0.01, input_dims, output_dims)
 
 		# initialize value network
-		self.value_network = ValueNetwork(0.001, input_dims, output_dims)
+		self.value_network = ValueNetwork(0.1, input_dims, output_dims)
 
 		# initialize vpg buffer
 		self.buffer = Buffer()
@@ -48,11 +51,12 @@ class VPG(object):
 		observation = torch.from_numpy(observation).float()
 		prev_observation = torch.from_numpy(prev_observation).float()
 
-		# compute state values
+		# compute state value
 		v = self.value_network.forward(prev_observation)
 
-		# compute action function values
-		q = self.value_network.forward(observation)
+		# compute action function value
+		#q = self.value_network.forward(observation)
+		q = self.buffer.reward_buffer[-1]
 
 		# calculate advantage
 		a = q-v
@@ -77,7 +81,7 @@ class VPG(object):
 		step = 0
 
 		# historical episode length
-		episode_lengths = []
+		episode_lengths = [1]
 
 		# for n episodes or terminal state:
 		for epoch in range(n_epoch):
@@ -110,7 +114,7 @@ class VPG(object):
 				self.buffer.store_observation(observation)
 
 				# store rewards
-				self.buffer.store_reward(step/200)
+				self.buffer.store_reward((step/episode_lengths[-1])**2)
 
 				# calculate advantage
 				a = self.calculate_advantages(self.buffer.observation_buffer[-1], self.buffer.observation_buffer[-2])
@@ -137,7 +141,7 @@ class VPG(object):
 					observation = env.reset()
 
 			# update model
-			self.update(iter=3)
+			self.update(iter=1)
 			self.buffer.clear_buffer()
 			print("Average Episode Length: {}".format(np.sum(episode_lengths)/len(episode_lengths)))
 
@@ -153,9 +157,9 @@ def main():
 
 	vpg = VPG(alpha=0.08, input_dims=4, output_dims=2)
 
-	vpg.train(env, n_epoch=25, n_steps=1000, render=False, verbos=False)
+	vpg.train(env, n_epoch=50, n_steps=1000, render=False, verbos=False)
 
-	#vpg.train(env, n_epoch=1, n_steps=195, render=True, verbos=True)
+	#vpg.train(env, n_epoch=1, n_steps=80, render=True, verbos=True)
 
 if __name__ == "__main__":
 	main()
