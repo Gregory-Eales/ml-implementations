@@ -55,8 +55,7 @@ class VPG(object):
 		v = self.value_network.forward(prev_observation)
 
 		# compute action function value
-		#q = self.value_network.forward(observation)
-		q = self.buffer.reward_buffer[-1]
+		q = self.value_network.forward(observation)
 
 		# calculate advantage
 		a = q-v
@@ -69,7 +68,7 @@ class VPG(object):
 		observations, actions, rewards, advantages = self.buffer.get_tensors()
 
 		# update policy
-		self.policy_network.update(actions, advantages, iter=iter)
+		self.policy_network.update(actions, rewards, iter=iter)
 
 		# update value network
 		self.value_network.update(observations, rewards, iter=iter)
@@ -92,6 +91,7 @@ class VPG(object):
 			# store observation
 			self.buffer.store_observation(observation)
 
+			episode_lengths = [1]
 			# for t steps:
 			for t in range(n_steps):
 
@@ -114,7 +114,7 @@ class VPG(object):
 				self.buffer.store_observation(observation)
 
 				# store rewards
-				self.buffer.store_reward((step/episode_lengths[-1])**2)
+				self.buffer.store_reward(step)
 
 				# calculate advantage
 				a = self.calculate_advantages(self.buffer.observation_buffer[-1], self.buffer.observation_buffer[-2])
@@ -124,6 +124,11 @@ class VPG(object):
 
 		        # check if episode is terminal
 				if done:
+
+					for s in range(1, step+1):
+						discount = 0.99**s
+						reward = self.buffer.reward_buffer[-s]
+						self.buffer.reward_buffer[-s] = step/200+discount
 
 					# change terminal reward to zero
 					self.buffer.reward_buffer[-1] = 0
@@ -141,7 +146,9 @@ class VPG(object):
 					observation = env.reset()
 
 			# update model
-			self.update(iter=1)
+			self.update(iter=10)
+			step=0
+			#print(self.buffer.reward_buffer)
 			self.buffer.clear_buffer()
 			print("Average Episode Length: {}".format(np.sum(episode_lengths)/len(episode_lengths)))
 
