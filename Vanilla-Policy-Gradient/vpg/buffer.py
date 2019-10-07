@@ -44,7 +44,7 @@ class Buffer(object):
 
     def get_tensors(self):
 
-        observations = torch.Tensor(self.observation_buffer[0:-1])
+        observations = torch.Tensor(self.observation_buffer[1:])/100
         actions = torch.cat(self.action_buffer)
         rewards = torch.Tensor(self.reward_buffer).reshape(-1, 1)
         advantages = torch.Tensor(self.advantage_buffer)
