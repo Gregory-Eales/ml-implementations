@@ -11,8 +11,8 @@ class VPG(object):
 
 	def __init__(self, alpha, input_dims, output_dims):
 
-		torch.manual_seed(1)
-		np.random.seed(1)
+		#torch.manual_seed(1)
+		#np.random.seed(1)
 
 		# store parameters
 		self.alpha = alpha
@@ -23,7 +23,7 @@ class VPG(object):
 		self.policy_network = PolicyNetwork(0.01, input_dims, output_dims)
 
 		# initialize value network
-		self.value_network = ValueNetwork(0.1, input_dims, output_dims)
+		self.value_network = ValueNetwork(0.001, input_dims, output_dims)
 
 		# initialize vpg buffer
 		self.buffer = Buffer()
@@ -114,7 +114,7 @@ class VPG(object):
 				self.buffer.store_observation(observation)
 
 				# store rewards
-				self.buffer.store_reward(step)
+				self.buffer.store_reward(reward)
 
 				# calculate advantage
 				a = self.calculate_advantages(self.buffer.observation_buffer[-1], self.buffer.observation_buffer[-2])
@@ -125,10 +125,15 @@ class VPG(object):
 		        # check if episode is terminal
 				if done:
 
-					for s in range(1, step+1):
-						discount = 0.99**s
-						reward = self.buffer.reward_buffer[-s]
-						self.buffer.reward_buffer[-s] = step/200+discount
+					for s in reversed(range(1, step+1)):
+
+						update = 0
+
+						for k in reversed(range(1, s+1)):
+							update += self.buffer.reward_buffer[-k]*(0.99**k)
+
+						self.buffer.reward_buffer[-s] += update/200
+
 
 					# change terminal reward to zero
 					self.buffer.reward_buffer[-1] = 0
@@ -146,7 +151,7 @@ class VPG(object):
 					observation = env.reset()
 
 			# update model
-			self.update(iter=10)
+			self.update(iter=3)
 			step=0
 			#print(self.buffer.reward_buffer)
 			self.buffer.clear_buffer()
@@ -164,7 +169,7 @@ def main():
 
 	vpg = VPG(alpha=0.08, input_dims=4, output_dims=2)
 
-	vpg.train(env, n_epoch=50, n_steps=1000, render=False, verbos=False)
+	vpg.train(env, n_epoch=100, n_steps=1000, render=False, verbos=False)
 
 	#vpg.train(env, n_epoch=1, n_steps=80, render=True, verbos=True)
 
