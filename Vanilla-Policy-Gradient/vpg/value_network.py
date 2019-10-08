@@ -33,10 +33,8 @@ class ValueNetwork(torch.nn.Module):
 
     def forward(self, x):
         out = self.fc1(x)
-        out = self.tanh(out)
+        out = self.relu(out)
         out = self.fc2(out)
-        out = self.tanh(out)
-        out = self.fc3(out)
         out = self.sigmoid(out)
         return out
 
