@@ -30,19 +30,17 @@ class PolicyNetwork(torch.nn.Module):
 
 		# define network components
         self.fc1 = torch.nn.Linear(self.input_dims, 3)
-        self.fc2 = torch.nn.Linear(3, 3)
-        self.fc3 = torch.nn.Linear(3, self.output_dims)
+        self.fc2 = torch.nn.Linear(3, self.output_dims)
         self.relu = torch.nn.ReLU()
         self.sigmoid = torch.nn.Sigmoid()
         self.tanh = torch.nn.Tanh()
+        self.softmax = torch.nn.Softmax()
 
     def forward(self, x):
         out = self.fc1(x)
-        out = self.tanh(out)
+        out = self.relu(out)
         out = self.fc2(out)
-        out = self.tanh(out)
-        out = self.fc3(out)
-        out = self.sigmoid(out)
+        out = self.softmax(out)
         return out
 
     def update(self, actions, advantages, iter):
