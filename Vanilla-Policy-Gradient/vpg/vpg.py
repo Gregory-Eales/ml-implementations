@@ -40,7 +40,7 @@ class VPG(object):
 		prediction = self.policy_network.forward(s)
 
 		# convert to numpy array
-		action = prediction.detach().numpy()[0]
+		action = np.log(prediction.detach().numpy()[0])
 
 		# randomly select move based on distribution
 		action = np.random.choice(list(range(2)), p=action/np.sum(action))
@@ -151,12 +151,12 @@ class VPG(object):
 					observation = env.reset()
 
 			# update model
-			self.update(iter=3)
+			self.update(iter=80)
 			step=0
 			#print(self.buffer.reward_buffer)
 			self.buffer.clear_buffer()
 			print("Average Episode Length: {}".format(np.sum(episode_lengths)/len(episode_lengths)))
-
+			print("Largest Episode Length: {}".format(max(episode_lengths)))
 
 
 def main():
@@ -169,7 +169,7 @@ def main():
 
 	vpg = VPG(alpha=0.08, input_dims=4, output_dims=2)
 
-	vpg.train(env, n_epoch=100, n_steps=1000, render=False, verbos=False)
+	vpg.train(env, n_epoch=100, n_steps=400, render=False, verbos=False)
 
 	#vpg.train(env, n_epoch=1, n_steps=80, render=True, verbos=True)
 
