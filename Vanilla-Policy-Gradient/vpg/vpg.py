@@ -20,10 +20,10 @@ class VPG(object):
 		self.output_dims = output_dims
 
 		# initialize policy network
-		self.policy_network = PolicyNetwork(0.01, input_dims, output_dims)
+		self.policy_network = PolicyNetwork(0.0001, input_dims, output_dims)
 
 		# initialize value network
-		self.value_network = ValueNetwork(0.001, input_dims, output_dims)
+		self.value_network = ValueNetwork(0.0001, input_dims, output_dims)
 
 		# initialize vpg buffer
 		self.buffer = Buffer()
@@ -71,7 +71,7 @@ class VPG(object):
 		self.policy_network.update(actions, rewards, iter=iter)
 
 		# update value network
-		self.value_network.update(observations, rewards, iter=iter)
+		#self.value_network.update(observations, rewards, iter=iter)
 
 
 	def train(self, env, n_epoch, n_steps, render=False, verbos=True):
@@ -169,7 +169,7 @@ def main():
 
 	vpg = VPG(alpha=0.08, input_dims=4, output_dims=2)
 
-	vpg.train(env, n_epoch=100, n_steps=400, render=False, verbos=False)
+	vpg.train(env, n_epoch=100, n_steps=2000, render=False, verbos=False)
 
 	#vpg.train(env, n_epoch=1, n_steps=80, render=True, verbos=True)
 
