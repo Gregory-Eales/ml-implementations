@@ -16,8 +16,9 @@ class PolicyNetwork(torch.nn.Module):
         # define optimizer
         self.optimizer = torch.optim.Adam(lr=alpha, params=self.parameters())
 
-        # define loss
-        #self.loss = torch.nn.NLLLoss()
+        # get device
+        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu:0')
+        self.to(self.device)
 
     def loss(self, actions, advantages):
 
@@ -37,6 +38,7 @@ class PolicyNetwork(torch.nn.Module):
         self.softmax = torch.nn.Softmax()
 
     def forward(self, x):
+        x = torch.Tensor(x).to(self.device)
         out = self.fc1(x)
         out = self.relu(out)
         out = self.fc2(out)
@@ -44,6 +46,9 @@ class PolicyNetwork(torch.nn.Module):
         return out
 
     def update(self, actions, advantages, iter):
+
+        actions = torch.Tensor(actions).to(self.device)
+        advantages = torch.Tensor(advantages).to(self.device)
 
         for i in range(iter):
 
