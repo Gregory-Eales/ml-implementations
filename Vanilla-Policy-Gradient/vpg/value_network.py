@@ -19,6 +19,10 @@ class ValueNetwork(torch.nn.Module):
         # define loss
         self.loss = torch.nn.MSELoss()
 
+        # get device
+        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu:0')
+        self.to(self.device)
+
 
     # initialize network
     def initialize_network(self):
@@ -32,13 +36,17 @@ class ValueNetwork(torch.nn.Module):
         self.tanh = torch.nn.Tanh()
 
     def forward(self, x):
+        x = torch.Tensor(x).to(self.device)
         out = self.fc1(x)
         out = self.relu(out)
-        out = self.fc2(out)
+        out = self.fc3(out)
         out = self.sigmoid(out)
         return out
 
     def update(self, observations, rewards, iter):
+
+        observations = torch.Tensor(observations).to(self.device)
+        rewards = torch.Tensor(rewards).to(self.device)
 
         for i in range(iter):
 
