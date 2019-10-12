@@ -22,10 +22,10 @@ class VPG(object):
 		self.output_dims = output_dims
 
 		# initialize policy network
-		self.policy_network = PolicyNetwork(0.01, input_dims, output_dims)
+		self.policy_network = PolicyNetwork(alpha, input_dims, output_dims)
 
 		# initialize value network
-		self.value_network = ValueNetwork(0.01, input_dims, output_dims)
+		self.value_network = ValueNetwork(alpha, input_dims, output_dims)
 
 		# initialize vpg buffer
 		self.buffer = Buffer()
@@ -49,9 +49,7 @@ class VPG(object):
 
 		log_prob = action_probabilities.log_prob(action)
 
-		action = action.detach().numpy()[0]
-
-		return action, log_prob
+		return action.item(), log_prob
 
 	def calculate_advantages(self, observation, prev_observation):
 
@@ -75,10 +73,10 @@ class VPG(object):
 		observations, actions, rewards, advantages = self.buffer.get_tensors()
 
 		# update policy
-		self.policy_network.update(actions, rewards, iter=iter)
+		self.policy_network.update(actions, advantages, iter=iter)
 
 		# update value network
-		#self.value_network.update(observations, rewards, iter=iter)
+		self.value_network.update(observations, rewards, iter=iter)
 
 
 	def train(self, env, n_epoch, n_steps, render=False, verbos=True):
@@ -115,10 +113,10 @@ class VPG(object):
 				if render: env.render()
 
 		        # get action, and network policy prediction
-				action, prediction = self.act(observation)
+				action, log_prob = self.act(observation)
 
 				# store action
-				self.buffer.store_action(prediction)
+				self.buffer.store_action(log_prob)
 
 		        # get state + reward
 				observation, reward, done, info = env.step(action)
@@ -136,7 +134,7 @@ class VPG(object):
 				self.buffer.store_advantage(a)
 
 		        # check if episode is terminal
-				if done:
+				if done or t == n_steps-1:
 
 					for s in reversed(range(1, step+1)):
 
@@ -145,8 +143,7 @@ class VPG(object):
 						for k in reversed(range(1, s+1)):
 							update += self.buffer.reward_buffer[-k]*(0.99**k)
 
-						self.buffer.reward_buffer[-s] += update/200
-
+						self.buffer.reward_buffer[-s] += update
 
 					# change terminal reward to zero
 					self.buffer.reward_buffer[-1] = 0
@@ -165,9 +162,8 @@ class VPG(object):
 					observation = env.reset()
 
 			# update model
-			self.update(iter=80)
+			self.update(iter=20)
 			step=0
-			#print(self.buffer.reward_buffer)
 			self.buffer.clear_buffer()
 			#print("Average Episode Length: {}".format(np.sum(episode_lengths)/len(episode_lengths)))
 			#print("Largest Episode Length: {}".format(max(episode_lengths)))
@@ -197,7 +193,7 @@ def main():
 
 	vpg = VPG(alpha=0.08, input_dims=4, output_dims=2)
 
-	vpg.train(env, n_epoch=100, n_steps=4000, render=False, verbos=False)
+	vpg.train(env, n_epoch=10, n_steps=1000, render=False, verbos=False)
 
 	#vpg.train(env, n_epoch=1, n_steps=80, render=True, verbos=True)
 
