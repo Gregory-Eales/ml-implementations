@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 
 class ValueNetwork(torch.nn.Module):
 
@@ -28,9 +29,9 @@ class ValueNetwork(torch.nn.Module):
     def initialize_network(self):
 
 		# define network components
-        self.fc1 = torch.nn.Linear(self.input_dims, 5)
-        self.fc2 = torch.nn.Linear(5, 5)
-        self.fc3 = torch.nn.Linear(5, self.output_dims)
+        self.fc1 = torch.nn.Linear(self.input_dims, 64)
+        self.fc2 = torch.nn.Linear(64, 64)
+        self.fc3 = torch.nn.Linear(64, self.output_dims)
         self.relu = torch.nn.ReLU()
         self.sigmoid = torch.nn.Sigmoid()
         self.tanh = torch.nn.Tanh()
@@ -38,12 +39,24 @@ class ValueNetwork(torch.nn.Module):
     def forward(self, x):
         x = torch.Tensor(x).to(self.device)
         out = self.fc1(x)
-        out = self.relu(out)
+        out = self.tanh(out)
+        out = self.fc2(out)
+        out = self.tanh(out)
         out = self.fc3(out)
         out = self.sigmoid(out)
         return out.to(torch.device('cpu:0'))
 
     def update(self, observations, rewards, iter):
+
+        rewards = np.array(rewards)
+        reward_mean = np.mean(rewards)
+        reward_std = np.std(rewards) if np.std(rewards) > 0 else 1
+        rewards = (rewards-reward_mean)/reward_std
+
+        observations = np.array(observations)
+        observation_mean = np.mean(observations)
+        observation_std = np.std(observations) if np.std(observations) > 0 else 1
+        observations = (observations-observation_mean)/observation_std
 
         observations = torch.Tensor(observations).to(self.device)
         rewards = torch.Tensor(rewards).to(self.device)
