@@ -41,7 +41,7 @@ class ValueNetwork(torch.nn.Module):
         out = self.relu(out)
         out = self.fc3(out)
         out = self.sigmoid(out)
-        return out
+        return out.to(torch.device('cpu:0'))
 
     def update(self, observations, rewards, iter):
 

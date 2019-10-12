@@ -2,6 +2,8 @@ import logging
 
 import torch
 import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 from buffer import Buffer
 from value_network import ValueNetwork
@@ -20,10 +22,10 @@ class VPG(object):
 		self.output_dims = output_dims
 
 		# initialize policy network
-		self.policy_network = PolicyNetwork(0.0001, input_dims, output_dims)
+		self.policy_network = PolicyNetwork(0.01, input_dims, output_dims)
 
 		# initialize value network
-		self.value_network = ValueNetwork(0.0001, input_dims, output_dims)
+		self.value_network = ValueNetwork(0.01, input_dims, output_dims)
 
 		# initialize vpg buffer
 		self.buffer = Buffer()
@@ -42,8 +44,11 @@ class VPG(object):
 		# convert to numpy array
 		action = np.log(prediction.detach().numpy()[0])
 
+
 		# randomly select move based on distribution
-		action = np.random.choice(list(range(2)), p=action/np.sum(action))
+		try:action = np.random.choice(list(range(2)), p=action/np.sum(action))
+		except:action = np.random.choice(list(range(2)), p=[0.5, 0.5])
+
 		return action, torch.clone(prediction)
 
 	def calculate_advantages(self, observation, prev_observation):
@@ -82,6 +87,10 @@ class VPG(object):
 		# historical episode length
 		episode_lengths = [1]
 
+		plt.ion()
+		average_rewards = []
+		highest_rewards = []
+
 		# for n episodes or terminal state:
 		for epoch in range(n_epoch):
 
@@ -92,8 +101,10 @@ class VPG(object):
 			self.buffer.store_observation(observation)
 
 			episode_lengths = [1]
+
+			print("Epoch: {}".format(epoch))
 			# for t steps:
-			for t in range(n_steps):
+			for t in tqdm(range(n_steps)):
 
 				# increment step
 				step += 1
@@ -140,7 +151,8 @@ class VPG(object):
 
 					# print time step
 					if verbos:
-						print("Episode finished after {} timesteps".format(step+1))
+						#print("Episode finished after {} timesteps".format(step+1))
+						pass
 
 					episode_lengths.append(step)
 
@@ -155,8 +167,22 @@ class VPG(object):
 			step=0
 			#print(self.buffer.reward_buffer)
 			self.buffer.clear_buffer()
-			print("Average Episode Length: {}".format(np.sum(episode_lengths)/len(episode_lengths)))
-			print("Largest Episode Length: {}".format(max(episode_lengths)))
+			#print("Average Episode Length: {}".format(np.sum(episode_lengths)/len(episode_lengths)))
+			#print("Largest Episode Length: {}".format(max(episode_lengths)))
+
+
+			# plot
+			average_rewards.append(np.sum(episode_lengths)/len(episode_lengths))
+			highest_rewards.append(max(episode_lengths))
+			plt.title("Reward per Epoch")
+			plt.xlabel("Epoch")
+			plt.ylabel("Reward")
+			plt.plot(np.array(average_rewards), label="average reward")
+			plt.plot(highest_rewards, label="highest reward")
+			plt.legend(loc="upper left")
+			plt.draw()
+			plt.pause(0.0001)
+			plt.clf()
 
 
 def main():
@@ -169,7 +195,7 @@ def main():
 
 	vpg = VPG(alpha=0.08, input_dims=4, output_dims=2)
 
-	vpg.train(env, n_epoch=100, n_steps=2000, render=False, verbos=False)
+	vpg.train(env, n_epoch=100, n_steps=4000, render=False, verbos=False)
 
 	#vpg.train(env, n_epoch=1, n_steps=80, render=True, verbos=True)
 

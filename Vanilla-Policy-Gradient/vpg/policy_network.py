@@ -22,7 +22,7 @@ class PolicyNetwork(torch.nn.Module):
 
     def loss(self, actions, advantages):
 
-        loss = -torch.log(actions)*(advantages)
+        loss = -torch.log(actions+0.0001)*(advantages)
         loss = torch.sum(loss)
         return loss
 
@@ -30,10 +30,10 @@ class PolicyNetwork(torch.nn.Module):
     def initialize_network(self):
 
 		# define network components
-        self.fc1 = torch.nn.Linear(self.input_dims, 5)
-        self.fc2 = torch.nn.Linear(5, 5)
-        self.fc3 = torch.nn.Linear(5, self.output_dims)
-        self.relu = torch.nn.ReLU()
+        self.fc1 = torch.nn.Linear(self.input_dims, 64)
+        self.fc2 = torch.nn.Linear(64, 64)
+        self.fc3 = torch.nn.Linear(64, self.output_dims)
+        self.relu = torch.nn.LeakyReLU()
         self.sigmoid = torch.nn.Sigmoid()
         self.tanh = torch.nn.Tanh()
         self.softmax = torch.nn.Softmax()
@@ -45,21 +45,21 @@ class PolicyNetwork(torch.nn.Module):
         out = self.fc2(out)
         out = self.tanh(out)
         out = self.fc3(out)
-        out = self.softmax(out)
-        return out
+        out = self.sigmoid(out)
+        return out.to(torch.device('cpu:0'))
 
     def update(self, actions, advantages, iter):
 
         actions = torch.Tensor(actions).to(self.device)
         advantages = torch.Tensor(advantages).to(self.device)
 
+        # calculate loss
+        loss = self.loss(actions, advantages)
+
         for i in range(iter):
 
             # zero the parameter gradients
             self.optimizer.zero_grad()
-
-            # calculate loss
-            loss = self.loss(actions, advantages)
 
             # optimize
             loss.backward(retain_graph=True)
