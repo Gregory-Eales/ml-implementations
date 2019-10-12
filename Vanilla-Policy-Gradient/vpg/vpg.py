@@ -41,15 +41,17 @@ class VPG(object):
 		# get policy prob distrabution
 		prediction = self.policy_network.forward(s)
 
-		# convert to numpy array
-		action = np.log(prediction.detach().numpy()[0])
+		# get action probabilities
+		action_probabilities = torch.distributions.Categorical(prediction)
 
+		# sample action
+		action = action_probabilities.sample()
 
-		# randomly select move based on distribution
-		try:action = np.random.choice(list(range(2)), p=action/np.sum(action))
-		except:action = np.random.choice(list(range(2)), p=[0.5, 0.5])
+		log_prob = action_probabilities.log_prob(action)
 
-		return action, torch.clone(prediction)
+		action = action.detach().numpy()[0]
+
+		return action, log_prob
 
 	def calculate_advantages(self, observation, prev_observation):
 
