@@ -1,4 +1,6 @@
 import torch
+import numpy as np
+
 
 class PolicyNetwork(torch.nn.Module):
 
@@ -19,6 +21,8 @@ class PolicyNetwork(torch.nn.Module):
         # get device
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu:0')
         self.to(self.device)
+
+        print(torch.cuda.is_available())
 
     def loss(self, log_probs, advantages):
         loss = -log_probs*advantages
@@ -47,9 +51,18 @@ class PolicyNetwork(torch.nn.Module):
         out = self.sigmoid(out)
         return out.to(torch.device('cpu:0'))
 
+    def normalize(self, x):
+        x = np.array(x)
+        x_mean = np.mean(x)
+        x_std = np.std(x) if np.std(x) > 0 else 1
+        x = (x-x_mean)/x_std
+        return x
+
     def update(self, actions, advantages, iter):
 
-        actions = torch.Tensor(actions).to(self.device)
+        advantages = self.normalize(advantages)
+
+        actions = torch.Tensor(actions).to(self.device).reshape(-1, 1)
         advantages = torch.Tensor(advantages).to(self.device)
 
         # calculate loss
