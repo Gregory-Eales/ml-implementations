@@ -43,20 +43,20 @@ class ValueNetwork(torch.nn.Module):
         out = self.fc2(out)
         out = self.tanh(out)
         out = self.fc3(out)
-        out = self.sigmoid(out)
+        out = self.relu(out)
         return out.to(torch.device('cpu:0'))
+
+    def normalize(self, x):
+        x = np.array(x)
+        x_mean = np.mean(x)
+        x_std = np.std(x) if np.std(x) > 0 else 1
+        x = (x-x_mean)/x_std
+        return x
 
     def update(self, observations, rewards, iter):
 
-        rewards = np.array(rewards)
-        reward_mean = np.mean(rewards)
-        reward_std = np.std(rewards) if np.std(rewards) > 0 else 1
-        rewards = (rewards-reward_mean)/reward_std
-
-        observations = np.array(observations)
-        observation_mean = np.mean(observations)
-        observation_std = np.std(observations) if np.std(observations) > 0 else 1
-        observations = (observations-observation_mean)/observation_std
+        observations = self.normalize(observations)
+        rewards = self.normalize(rewards)
 
         observations = torch.Tensor(observations).to(self.device)
         rewards = torch.Tensor(rewards).to(self.device)
