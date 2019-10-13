@@ -2,11 +2,11 @@
 implementation of vpg
 
 ## About
-reimplementation of vanilla policy gradient applied to the CartPole-v0 environment from the OpenAI gym<br/>
+reimplementation of vanilla policy gradient applied to the CartPole-v0 environment from the OpenAI gym.
 
 ## Model
 
-The vanilla policy gradient algorithm is a very straight forward rl process that increases the probability of getting higher rewards and decreasing the probability of getting lower rewards...
+The vanilla policy gradient algorithm works by increasing the probability of actions that lead to the highest reward. This is done using both a policy and value network.
 
 <p align="center">
   <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/vpg_pseudocode.png">
