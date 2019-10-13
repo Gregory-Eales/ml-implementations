@@ -2,7 +2,7 @@ import logging
 
 import torch
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 from buffer import Buffer
@@ -87,7 +87,7 @@ class VPG(object):
 		# historical episode length
 		episode_lengths = [1]
 
-		plt.ion()
+		#plt.ion()
 		average_rewards = []
 		highest_rewards = []
 
@@ -104,7 +104,7 @@ class VPG(object):
 
 			print("Epoch: {}".format(epoch))
 			# for t steps:
-			for t in tqdm(range(n_steps)):
+			for t in range(n_steps):
 
 				# increment step
 				step += 1
@@ -162,13 +162,13 @@ class VPG(object):
 					observation = env.reset()
 
 			# update model
-			self.update(iter=20)
+			self.update(iter=10)
 			step=0
 			self.buffer.clear_buffer()
-			#print("Average Episode Length: {}".format(np.sum(episode_lengths)/len(episode_lengths)))
-			#print("Largest Episode Length: {}".format(max(episode_lengths)))
+			print("Average Episode Length: {}".format(np.sum(episode_lengths)/len(episode_lengths)))
+			print("Largest Episode Length: {}".format(max(episode_lengths)))
 
-
+			"""
 			# plot
 			average_rewards.append(np.sum(episode_lengths)/len(episode_lengths))
 			highest_rewards.append(max(episode_lengths))
@@ -181,21 +181,21 @@ class VPG(object):
 			plt.draw()
 			plt.pause(0.0001)
 			plt.clf()
+			"""
 
 
 def main():
 
-	# import gym
 	import gym
 
-	# initialize environment
+	torch.manual_seed(1)
+	np.random.seed(1)
+
 	env = gym.make('CartPole-v0')
 
-	vpg = VPG(alpha=0.08, input_dims=4, output_dims=2)
+	vpg = VPG(alpha=0.001, input_dims=4, output_dims=2)
 
-	vpg.train(env, n_epoch=10, n_steps=1000, render=False, verbos=False)
-
-	#vpg.train(env, n_epoch=1, n_steps=80, render=True, verbos=True)
+	vpg.train(env, n_epoch=20, n_steps=4000, render=False, verbos=False)
 
 if __name__ == "__main__":
 	main()
