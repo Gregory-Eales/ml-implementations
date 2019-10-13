@@ -161,7 +161,7 @@ class VPG(object):
 					observation = env.reset()
 
 			# update model
-			self.update(iter=80)
+			self.update(iter=20)
 			step=0
 			self.buffer.clear_buffer()
 			print("Average Episode Length: {}".format(np.sum(episode_lengths)/len(episode_lengths)))
@@ -192,9 +192,9 @@ def main():
 
 	env = gym.make('CartPole-v0')
 
-	vpg = VPG(alpha=0.001, input_dims=4, output_dims=2)
+	vpg = VPG(alpha=0.0001, input_dims=4, output_dims=2)
 
-	vpg.train(env, n_epoch=20, n_steps=4000, render=False, verbos=False)
+	vpg.train(env, n_epoch=50, n_steps=800, render=False, verbos=False)
 
 if __name__ == "__main__":
 	main()
