@@ -9,7 +9,7 @@ reimplementation of vanilla policy gradient applied to the CartPole-v0 environme
 The vanilla policy gradient algorithm is a very straight forward rl process that increases the probability of getting higher rewards and decreasing the probability of getting lower rewards...
 
 <p align="center">
-  <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/vpg_pseudocode.png">
+  <img width="600" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/vpg_pseudocode.png">
 </p>
 
 ## Environment
