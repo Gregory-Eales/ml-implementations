@@ -20,6 +20,8 @@ class PolicyNetwork(torch.nn.Module):
 
         # get device
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu:0')
+        print(torch.cuda.is_available())
+        print(self.device)
         self.to(self.device)
 
     def loss(self, log_probs, advantages):
