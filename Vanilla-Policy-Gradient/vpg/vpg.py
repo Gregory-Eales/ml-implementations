@@ -2,7 +2,7 @@ import logging
 
 import torch
 import numpy as np
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 from buffer import Buffer
@@ -25,7 +25,7 @@ class VPG(object):
 		self.policy_network = PolicyNetwork(alpha, input_dims, output_dims)
 
 		# initialize value network
-		self.value_network = ValueNetwork(alpha, input_dims, output_dims)
+		self.value_network = ValueNetwork(alpha, input_dims, 1)
 
 		# initialize vpg buffer
 		self.buffer = Buffer()
@@ -78,7 +78,6 @@ class VPG(object):
 		# update value network
 		self.value_network.update(observations, rewards, iter=iter)
 
-
 	def train(self, env, n_epoch, n_steps, render=False, verbos=True):
 
 		# initialize step variable
@@ -87,7 +86,7 @@ class VPG(object):
 		# historical episode length
 		episode_lengths = [1]
 
-		#plt.ion()
+		plt.ion()
 		average_rewards = []
 		highest_rewards = []
 
@@ -162,13 +161,13 @@ class VPG(object):
 					observation = env.reset()
 
 			# update model
-			self.update(iter=10)
+			self.update(iter=80)
 			step=0
 			self.buffer.clear_buffer()
 			print("Average Episode Length: {}".format(np.sum(episode_lengths)/len(episode_lengths)))
 			print("Largest Episode Length: {}".format(max(episode_lengths)))
 
-			"""
+
 			# plot
 			average_rewards.append(np.sum(episode_lengths)/len(episode_lengths))
 			highest_rewards.append(max(episode_lengths))
@@ -181,7 +180,7 @@ class VPG(object):
 			plt.draw()
 			plt.pause(0.0001)
 			plt.clf()
-			"""
+
 
 
 def main():

@@ -55,14 +55,15 @@ class ValueNetwork(torch.nn.Module):
 
     def update(self, observations, rewards, iter):
 
-        observations = self.normalize(observations)
-        rewards = self.normalize(rewards)
+        observations = self.normalize(observations.tolist())
+        rewards = self.normalize(rewards.tolist())
 
-        observations = torch.Tensor(observations).to(self.device)
-        rewards = torch.Tensor(rewards).to(self.device)
+        observations = torch.Tensor(observations.tolist())
+        rewards = torch.Tensor(rewards.tolist())
 
         for i in range(iter):
 
+            torch.cuda.empty_cache()
             # zero the parameter gradients
             self.optimizer.zero_grad()
 
@@ -75,7 +76,6 @@ class ValueNetwork(torch.nn.Module):
             # optimize
             loss.backward(retain_graph=True)
             self.optimizer.step()
-
 
 def main():
 
