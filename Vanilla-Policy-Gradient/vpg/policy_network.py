@@ -1,5 +1,7 @@
 import torch
 import numpy as np
+from tqdm import tqdm
+from time import time
 
 
 class PolicyNetwork(torch.nn.Module):
@@ -26,7 +28,6 @@ class PolicyNetwork(torch.nn.Module):
 
     def loss(self, log_probs, advantages):
         loss = -log_probs*advantages
-        loss = torch.sum(loss)
         return loss
 
     # initialize network
@@ -62,21 +63,35 @@ class PolicyNetwork(torch.nn.Module):
 
         advantages = self.normalize(advantages)
 
-        actions = torch.Tensor(actions).to(self.device).reshape(-1, 1)
-        advantages = torch.Tensor(advantages).to(self.device)
+        actions = actions.reshape(-1, 1)
+        advantages = torch.Tensor(advantages)
+
+        n_samples = actions.shape[0]
+        num_batch = int(n_samples/5)
+
 
         # calculate loss
         loss = self.loss(actions, advantages)
 
-        for i in range(iter):
+        l = []
 
-            # zero the parameter gradients
-            self.optimizer.zero_grad()
+        for batch in range(5):
+            l.append(torch.sum(loss[batch*num_batch:(batch+1)*num_batch]))
 
-            # optimize
-            loss.backward(retain_graph=True)
-            self.optimizer.step()
+        print("Training Policy Net:")
+        for i in tqdm(range(iter)):
 
+            for batch in range(5):
+
+
+                torch.cuda.empty_cache()
+                # zero the parameter gradients
+                self.optimizer.zero_grad()
+
+                # optimize
+                l[batch].backward(retain_graph=True)
+
+                self.optimizer.step()
 
 def main():
 

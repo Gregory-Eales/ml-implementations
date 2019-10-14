@@ -63,7 +63,7 @@ class VPG(object):
 		q = self.value_network.forward(observation)
 
 		# calculate advantage
-		a = q-v
+		a = q - v + 1
 
 		return a.detach().numpy()
 
@@ -73,7 +73,7 @@ class VPG(object):
 		observations, actions, rewards, advantages = self.buffer.get_tensors()
 
 		# update policy
-		self.policy_network.update(actions, advantages, iter=iter)
+		self.policy_network.update(actions, advantages, iter=1)
 
 		# update value network
 		self.value_network.update(observations, rewards, iter=iter)
@@ -161,7 +161,7 @@ class VPG(object):
 					observation = env.reset()
 
 			# update model
-			self.update(iter=30)
+			self.update(iter=80)
 			step=0
 			self.buffer.clear_buffer()
 			print("Average Episode Length: {}".format(np.sum(episode_lengths)/len(episode_lengths)))
@@ -178,8 +178,12 @@ class VPG(object):
 			plt.plot(highest_rewards, label="highest reward")
 			plt.legend(loc="upper left")
 			plt.draw()
+			if epoch%10 == 0:
+				plt.savefig('reward_img/epoch{}.png'.format(epoch))
 			plt.pause(0.0001)
 			plt.clf()
+			if average_rewards[-1] > 180:
+				torch.save(self.policy_network.state_dict(), "policy_params.pt")
 
 
 
@@ -194,7 +198,7 @@ def main():
 
 	vpg = VPG(alpha=0.0001, input_dims=4, output_dims=2)
 
-	vpg.train(env, n_epoch=50, n_steps=800, render=False, verbos=False)
+	vpg.train(env, n_epoch=1000, n_steps=4000, render=False, verbos=False)
 
 if __name__ == "__main__":
 	main()

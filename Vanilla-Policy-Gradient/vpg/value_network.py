@@ -1,5 +1,6 @@
 import torch
 import numpy as np
+from tqdm import tqdm
 
 class ValueNetwork(torch.nn.Module):
 
@@ -63,21 +64,28 @@ class ValueNetwork(torch.nn.Module):
         observations = torch.Tensor(observations.tolist())
         rewards = torch.Tensor(rewards.tolist())
 
-        for i in range(iter):
+        n_samples = rewards.shape[0]
+        num_batch = int(n_samples/20)
 
-            torch.cuda.empty_cache()
-            # zero the parameter gradients
-            self.optimizer.zero_grad()
+        print("Training Value Net:")
+        for i in tqdm(range(iter)):
 
-            # make prediction
-            prediction = self.forward(observations)
+            for batch in range(20):
 
-            # calculate loss
-            loss = self.loss(prediction, rewards)
+                
+                torch.cuda.empty_cache()
+                # zero the parameter gradients
+                self.optimizer.zero_grad()
 
-            # optimize
-            loss.backward(retain_graph=True)
-            self.optimizer.step()
+                # make prediction
+                prediction = self.forward(observations[batch*num_batch:(batch+1)*num_batch])
+
+                # calculate loss
+                loss = self.loss(prediction, rewards[batch*num_batch:(batch+1)*num_batch])
+
+                # optimize
+                loss.backward(retain_graph=True)
+                self.optimizer.step()
 
 def main():
 
