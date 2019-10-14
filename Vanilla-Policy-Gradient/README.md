@@ -29,7 +29,7 @@ The enviroment used in this implementation is the CartPole-V1 enviroment provide
 
 ## Training
 
-By training the model over...
+By training the model over 1000 epechs with 4000 steps per epoch the model was able to
 
 
 <p align="center">
@@ -39,7 +39,7 @@ By training the model over...
 
 ## Results
 
-Given the performance...
+The solving criteria for the Cartpole-V0 environment
 
 ## Sources
 
