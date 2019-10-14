@@ -31,6 +31,12 @@ The enviroment used in this implementation is the CartPole-V1 enviroment provide
 
 By training the model over...
 
+
+<p align="center">
+  <img width="460" height="300" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/training_graph.gif">
+</p>
+
+
 ## Results
 
 Given the performance...
