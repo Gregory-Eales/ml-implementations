@@ -161,7 +161,7 @@ class VPG(object):
 					observation = env.reset()
 
 			# update model
-			self.update(iter=20)
+			self.update(iter=30)
 			step=0
 			self.buffer.clear_buffer()
 			print("Average Episode Length: {}".format(np.sum(episode_lengths)/len(episode_lengths)))
