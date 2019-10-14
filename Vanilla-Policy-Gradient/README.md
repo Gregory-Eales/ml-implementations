@@ -33,7 +33,7 @@ By training the model over...
 
 
 <p align="center">
-  <img height="600" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/training_graph.gif">
+  <img height="300" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/training_graph.gif">
 </p>
 
 
