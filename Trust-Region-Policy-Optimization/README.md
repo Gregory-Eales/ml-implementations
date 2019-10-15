@@ -13,6 +13,7 @@ reimplementation of trust region policy optimization applied to the MountainCar-
 * OpenAI SpinningUp (https://spinningup.openai.com/en/latest/algorithms/trpo.html)
 
 ### Papers
+* Trust Region Policy Optimization (https://arxiv.org/pdf/1502.05477.pdf)
 
 ## Meta
 
