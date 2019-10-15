@@ -19,7 +19,7 @@ The vanilla policy gradient algorithm works by increasing the probability of act
   <img width="460" height="300" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/CartPole-v1.gif">
 </p>
 
-The enviroment used in this implementation is the CartPole-V1 enviroment provided by OpenAI gym. This environment provides a simple...
+The enviroment used in this implementation is the CartPole-V0 enviroment provided by OpenAI gym. This environment provides a simple optimal controll challenge for an agent. The termination of an episode is triggered when the agent reaches 200 time steps, as well as when the agent looses control of the cartpole rig to a large degree.
 
 
 <p align="center">
