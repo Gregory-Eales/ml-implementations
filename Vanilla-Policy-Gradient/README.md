@@ -1,7 +1,4 @@
 # Vanilla-Policy-Gradient
-implementation of vpg
-
-## About
 reimplementation of vanilla policy gradient applied to the CartPole-v0 environment from the OpenAI gym.
 
 ## Algorithm
