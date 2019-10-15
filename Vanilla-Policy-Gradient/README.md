@@ -27,19 +27,14 @@ The enviroment used in this implementation is the CartPole-V1 enviroment provide
 </p>
 
 
-## Training
-
-By training the model over 1000 epechs with 4000 steps per epoch the model was able to
+## Results
+By training the model over 1000 epochs with 4000 steps per epoch the agent was able to substantially improve its average reward nearly to the maximum obtainable reward. The agent also almost consisently made it to the maximum time step allowed inside the environment within 100 epochs. 
 
 
 <p align="center">
   <img height="450" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/training_graph.gif">
 </p>
 
-
-## Results
-
-The solving criteria for the Cartpole-V0 environment
 
 ## Sources
 
