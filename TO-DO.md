@@ -24,7 +24,7 @@
   
  ## RL:
   - [x] Vanilla Policy Gradient: using VPG on OpenAI gym env
-  - [ ] Trust Region Policy Optimizatoin
+  - [x] Trust Region Policy Optimizatoin
   - [ ] Proximal Policy Optimization
   - [ ] Deep Determanistic Policy Gradient
   - [ ] Twin Delayed DDPG
