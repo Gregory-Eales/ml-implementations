@@ -1,9 +1,5 @@
 # ML-Reimplementations
-reimplementing machine learning algorithms from scratch
-
-<p align="center">
-  <img src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Images/machinelearning.png" width="700"/>
-</p>
+reimplementing machine learning algorithms
 
 ## About
 This repository contains machine learning reimplementations done from scratch using either numpy or pytorch/tensorflow (cuda). Each implementation has a readme with sources and a short explanation about the implementations as well as additional notes.
