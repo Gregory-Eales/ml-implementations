@@ -2,6 +2,9 @@
 reimplementation of trust region policy optimization applied to the MountainCar-v0 environment from the OpenAI gym.
 
 ## Algorithm
+<p align="center">
+  <img width="585" height="601" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Trust-Region-Policy-Optimization/img/trpo_pseudocode.jpg">
+</p>
 
 ## Environment
 
