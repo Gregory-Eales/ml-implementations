@@ -72,7 +72,7 @@ class ValueNetwork(torch.nn.Module):
 
             for batch in range(20):
 
-                
+
                 torch.cuda.empty_cache()
                 # zero the parameter gradients
                 self.optimizer.zero_grad()

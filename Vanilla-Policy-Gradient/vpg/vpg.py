@@ -127,7 +127,8 @@ class VPG(object):
 				self.buffer.store_reward(reward)
 
 				# calculate advantage
-				a = self.calculate_advantages(self.buffer.observation_buffer[-1], self.buffer.observation_buffer[-2])
+				a = self.calculate_advantages(self.buffer.observation_buffer[-1]
+				, self.buffer.observation_buffer[-2])
 
 				# store advantage
 				self.buffer.store_advantage(a)
@@ -164,7 +165,8 @@ class VPG(object):
 			self.update(iter=80)
 			step=0
 			self.buffer.clear_buffer()
-			print("Average Episode Length: {}".format(np.sum(episode_lengths)/len(episode_lengths)))
+			print("Average Episode Length: {}".format(
+			np.sum(episode_lengths)/len(episode_lengths)))
 			print("Largest Episode Length: {}".format(max(episode_lengths)))
 
 
