@@ -20,7 +20,7 @@ class PolicyNetwork(object):
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu:0')
         self.to(self.device)
 
-    def loss(self):
+    def loss(self, log_prob, advantage):
         pass
 
     def forward(self, x):

@@ -17,8 +17,12 @@ class TRPO(object):
 
     def train(self, env, epochs=1000, steps=4000):
 
-
         for epoch in range(epochs):
 
+            observation = env.reset()
+
             for step in range(steps):
-                pass
+
+                # get action
+
+                # take step
