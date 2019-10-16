@@ -18,14 +18,21 @@ class TRPO(object):
         self.policy_network = PolicyNetwork(alpha, input_size=input_size,
          output_size=output_size)
 
+    def update(self, iter=80):
+
+        observations, actions, rewards, advantages = self.buffer.get_tensors()
+
+        self.policy_network.optimize(log_prob, advantage, prev_params, iter=1)
+
+        self.value_network.optimize(observations, rewards, iter=iter)
+
+
     def calculate_advantage(self):
 
         prev_observation = self.buffer.observation_buffer[-2]
-
         observation = self.buffer.observation_buffer[-1]
 
         v1 = self.value_network(prev_observation)
-
         v2 = self.value_network(observation)
 
         return 1 + v2 - v1
@@ -76,8 +83,9 @@ def main():
     env = gym.make('MountainCar-v0')
 
     trpo = TRPO(alpha=0.001, input_size=2, output_size=3)
-    trpo.train(env, epochs=1, steps=200)
-    print(trpo.buffer.reward_buffer)
+    for param in trpo.policy_network.parameters():
+        print(param.shape)
+
 
 if __name__ == "__main__":
     main()

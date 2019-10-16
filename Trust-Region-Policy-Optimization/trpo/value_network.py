@@ -34,5 +34,12 @@ class ValueNetwork(torch.nn.Module):
         out = out.to(torch.device('cpu:0'))
         return out
 
-    def optimize(self, iterations=1):
-        pass
+    def optimize(self, observations, rewards, iter=iter):
+
+        for i in range(iter):
+
+            self.optimizer.zero_grad()
+            predictions = self.forward(observations)
+            loss = self.loss(predictions, rewards)
+            loss.backward(retain_graph=True)
+            self.optimizer.step()
