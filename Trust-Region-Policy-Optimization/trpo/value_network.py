@@ -2,9 +2,11 @@ import torch
 import numpy as np
 
 
-class ValueNetwork(object):
+class ValueNetwork(torch.nn.Module):
 
     def __init__(self, alpha, input_size, output_size):
+
+        super(ValueNetwork, self).__init__()
 
         self.input_size = input_size
         self.output_size = output_size
@@ -15,14 +17,14 @@ class ValueNetwork(object):
         self.tanh = torch.nn.Tanh()
         self.relu = torch.nn.LeakyReLU()
 
-        self.optimizer = torch.optim.Adam(lr=alpha)
+        self.optimizer = torch.optim.Adam(lr=alpha, params=self.parameters())
         self.loss = torch.nn.MSELoss()
 
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu:0')
         self.to(self.device)
 
     def forward(self, x):
-        x = x.to(self.device)
+        x = torch.Tensor(x).to(self.device)
         out = self.fc1(x)
         out = self.tanh(out)
         out = self.fc2(out)
