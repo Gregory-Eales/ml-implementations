@@ -15,7 +15,7 @@ class Buffer(object):
         self.reward_buffer.append(r)
 
     def store_observation(self, s):
-        s = torch.from_numpy(s)
+        s = torch.from_numpy(s).float()
         self.observation_buffer.append(s)
 
     def store_advantage(self, a):

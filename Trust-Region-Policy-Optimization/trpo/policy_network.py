@@ -35,6 +35,7 @@ class PolicyNetwork(torch.nn.Module):
         out = self.fc3(out)
         out = self.sigmoid(out)
         out = out.to(torch.device('cpu:0'))
+        return out
 
     def optimize(self, iterations=1):
         pass

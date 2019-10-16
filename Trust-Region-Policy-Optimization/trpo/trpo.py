@@ -18,7 +18,11 @@ class TRPO(object):
         self.policy_network = PolicyNetwork(alpha, input_size=input_size,
          output_size=output_size)
 
-    def calculate_advantage(self, prev_observation, observation):
+    def calculate_advantage(self):
+
+        prev_observation = self.buffer.observation_buffer[-2]
+
+        observation = self.buffer.observation_buffer[-1]
 
         v1 = self.value_network(prev_observation)
 
@@ -56,7 +60,7 @@ class TRPO(object):
                 advantage = self.calculate_advantage()
                 self.buffer.store_advantage(advantage)
 
-                if done or t == n_steps-1:
+                if done or step == steps-1:
                     observation = env.reset()
 
                     for s in reversed(range(1, step+1)):
@@ -73,6 +77,7 @@ def main():
 
     trpo = TRPO(alpha=0.001, input_size=2, output_size=3)
     trpo.train(env, epochs=1, steps=200)
+    print(trpo.buffer.reward_buffer)
 
 if __name__ == "__main__":
     main()
