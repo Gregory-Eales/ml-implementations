@@ -5,6 +5,11 @@ reimplementation of trust region policy optimization applied to the MountainCar-
 
 ## Environment
 
+<p align="center">
+  <img width="460" height="300" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Trust-Region-Policy-Optimization/img/random_mountaincar.mp4">
+</p>
+
+
 ## Results
 
 ## Sources
