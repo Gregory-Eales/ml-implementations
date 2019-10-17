@@ -23,8 +23,9 @@ class PolicyNetwork(torch.nn.Module):
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu:0')
         self.to(self.device)
 
-    def kl_divergence(self):
-        pass
+    def kl_divergence(self, old_pi, pi, advantage):
+        a = pi*torch.sum(pi*torch.log(old_pi/pi)).mean()
+
 
     def hessian_conjugate(self):
         pass
@@ -35,7 +36,8 @@ class PolicyNetwork(torch.nn.Module):
         delta = self.kl_divergence()
         x = self.hessian_conjugate()
 
-        loss = torch.sqrt(2*delta*x/(x.T*self.hessian_conjugate(x)))
+        loss = 2*delta*x/(x.T*self.hessian_conjugate(x))
+        loss = torch.sqrt(loss)
 
         return loss
 
