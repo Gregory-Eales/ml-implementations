@@ -20,32 +20,31 @@
 </p>
 
 ## About:
-overview of the algorithm and its implementation<br/>
-
+- overview of the algorithm and its implementation 
 
 ## Requirements:
-
-Requirement1: (requirement link)
+- include required libraries and versions
 
 ## Algorithm:
-
-Explain what model was used and include a diagram
+- explain algorithm overview
+- show pseudocode
+- explain implementation details
 
 ## Environment:
-
-Explain the data used and short analysis with graphs.
+- explain the environment and/or data
+- show screenshots/tables/plots
 
 ## Training:
-
-Explain training methods, and plot accuracy and loss through training.
+- explain training methods
+- plot accuracy and loss through training
 
 ## Results:
-
-Show end result accuracy with prediction plot.
+- show end result accuracy 
+- show prediction plot
+- include closing thoughts + improvements
 
 ## Sources:
-
-* sources
+- show sources
 
 ## Meta:
 
