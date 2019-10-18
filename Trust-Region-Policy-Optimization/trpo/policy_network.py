@@ -24,8 +24,7 @@ class PolicyNetwork(torch.nn.Module):
         self.to(self.device)
 
     def kl_divergence(self, old_pi, pi, advantage):
-        a = pi*torch.sum(pi*torch.log(old_pi/pi)).mean()
-
+        return torch.sum(old_pi*torch.log(old_pi/pi), 1).mean()
 
     def hessian_conjugate(self):
         pass
@@ -53,7 +52,7 @@ class PolicyNetwork(torch.nn.Module):
         out = out.to(torch.device('cpu:0'))
         return out
 
-    def optimize(self, actions, advantage, prev_params):
+    def optimize(self, log_probs, old_probs, advantages):
         self.optimizer.zero_grad()
         loss = self.loss(actions, advantage, prev_params)
         loss.backward(retain_graph=True)
