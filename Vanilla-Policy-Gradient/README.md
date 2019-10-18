@@ -12,7 +12,7 @@
 <p align="center">
   <a href="#About">About</a> •
   <a href="#Requirements">Requirements</a> •
-  <a href="#Model">Algorithm</a> •
+  <a href="#Algorithm">Algorithm</a> •
   <a href="#Environment">Environment</a> •
   <a href="#Training">Training</a> •
   <a href="#Results">Results</a> •
@@ -22,6 +22,8 @@
 
 ## About
 reimplementation of vanilla policy gradient applied to the CartPole-v0 environment from the OpenAI gym.
+
+## Requirements
 
 ## Algorithm
 
