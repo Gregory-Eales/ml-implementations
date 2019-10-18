@@ -44,11 +44,18 @@ class Buffer(object):
     def get_rewards(self):
         return torch.cat(self.reward_buffer)
 
+    def get_observations(self):
+        return torch.cat(self.observation_buffer)
+
+    def get_advantages(self):
+        return torch.cat(self.advantage_buffer)
+
     def clear_buffer(self):
         self.observation_buffer = []
         self.action_buffer = []
         self.reward_buffer = []
         self.advantage_buffer = []
+        self.log_prob_buffer = []
 
     def get_tensors(self):
         observations = torch.cat(self.observation_buffer)
