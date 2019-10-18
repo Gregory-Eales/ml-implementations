@@ -3,7 +3,7 @@
 <p align="center">
   <a href="#About">About</a> •
   <a href="#Requirements">Requirements</a> •
-  <a href="#Models">Models</a> •
+  <a href="#Model">Models</a> •
   <a href="#Environment">Environment</a> •
   <a href="#Training">Training</a> •
   <a href="#Results">Results</a> •
@@ -37,6 +37,15 @@ Show end result accuracy with prediction plot.
 ## Sources:
 
 * sources
+
+## Meta:
+## Meta
+
+Gregory Eales – [@GregoryHamE](https://twitter.com/GregoryHamE) – gregory.hamilton.e@gmail.com
+
+Distributed under the MIT license. See ``LICENSE`` for more information.
+
+[https://github.com/Gregory-Eales](https://github.com/Gregory-Eales)
 
 
 
