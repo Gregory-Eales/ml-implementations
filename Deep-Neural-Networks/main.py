@@ -1,18 +1,13 @@
-from neural_network import NeuralNetwork
 import time
-from data import get_data
+
 import torch
 from matplotlib import pyplot as plt
 import numpy as np
 
+from dnn.neural_network import NeuralNetwork
+from utils.data import get_data
 
 x, y = get_data()
-
-print(x.shape)
-
-print(x[1:3])
-
-print(y[1:3])
 
 
 NN = NeuralNetwork(5, 3, 5, hidden_addition=1)
@@ -42,5 +37,5 @@ for i in range(len(p)):
     correct += 1
 
 print(correct)
-    
+
 print("The model is " + str((correct/len(p))*100) + "% accurate")
