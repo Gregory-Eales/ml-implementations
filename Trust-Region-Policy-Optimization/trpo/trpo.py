@@ -42,7 +42,6 @@ class TRPO(object):
 
         self.value_network.optimize(observations, rewards, iter=iter)
 
-
     def calculate_advantage(self):
 
         prev_observation = self.buffer.observation_buffer[-2]
@@ -87,6 +86,8 @@ class TRPO(object):
                 self.buffer.store_observation(observation)
                 self.buffer.store_reward(reward)
 
+                env.render()
+
                 advantage = self.calculate_advantage()
                 self.buffer.store_advantage(advantage)
 
@@ -94,6 +95,7 @@ class TRPO(object):
                     observation = env.reset()
                     self.discount_rewards(step)
                     step = 0
+
 def main():
     import gym
     torch.manual_seed(1)
@@ -101,8 +103,7 @@ def main():
     env = gym.make('MountainCar-v0')
 
     trpo = TRPO(alpha=0.001, input_size=2, output_size=3)
-    for param in trpo.policy_network.parameters():
-        print(param.shape)
+    trpo.train(env=env, epochs=1, steps=10)
 
 
 if __name__ == "__main__":
