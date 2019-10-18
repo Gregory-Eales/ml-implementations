@@ -1,4 +1,26 @@
-# Vanilla-Policy-Gradient
+<h1 align="center"> Vanilla Policy Gradients </h1>
+
+<h4 align="center"> Reimplementation of Vanilla Policy Gradients </h4>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
+  <img src="https://img.shields.io/badge/Pytorch-v1.3-orange.svg">
+  <img src="https://img.shields.io/badge/Build-Passing-green.svg">
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg">
+</p>
+
+<p align="center">
+  <a href="#About">About</a> •
+  <a href="#Requirements">Requirements</a> •
+  <a href="#Model">Models</a> •
+  <a href="#Environment">Environment</a> •
+  <a href="#Training">Training</a> •
+  <a href="#Results">Results</a> •
+  <a href="#Sources">Sources</a>
+</p>
+
+
+## About
 reimplementation of vanilla policy gradient applied to the CartPole-v0 environment from the OpenAI gym.
 
 ## Algorithm
@@ -22,6 +44,8 @@ The enviroment used in this implementation is the CartPole-V0 enviroment provide
 <p align="center">
   <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/CartPoleTable.png">
 </p>
+
+## Training
 
 
 ## Results
