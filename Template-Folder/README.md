@@ -3,10 +3,10 @@
 <h4 align="center"> Reimplementation of Algorithm Name </h4>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Python](https://img.shields.io/badge/Python-v3.6+-blue.svg)
+![Dependency](https://img.shields.io/badge/Pytorch-v1.3-orange.svg)
 ![Dependency](https://img.shields.io/badge/Dependency-v1.1-blue.svg)
-![Dependency](https://img.shields.io/badge/Dependency-v1.1-blue.svg)
-![Dependency](https://img.shields.io/badge/Dependency-v1.1-blue.svg)
-![Dependency](https://img.shields.io/badge/Dependency-v1.1-blue.svg)
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 <p align="center">
   <a href="#About">About</a> •
