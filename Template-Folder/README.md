@@ -1,4 +1,4 @@
-# Algorithm-Name
+<h1 align="center"> Algorithm Name </h1>
 
 <p align="center">
   <a href="#About">About</a> •
