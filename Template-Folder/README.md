@@ -1,8 +1,8 @@
 <h1 align="center"> Algorithm Name </h1>
 
 <h4 align="center"> Reimplementation of Algorithm Name </h4>
-![Pytorch](https://img.shields.io/badge/Pytorch-v1.1-blue)
 
+![Pytorch](https://img.shields.io/badge/Pytorch-v1.1-blue.svg)
 
 <p align="center">
   <a href="#About">About</a> •
