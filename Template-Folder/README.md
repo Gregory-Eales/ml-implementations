@@ -2,9 +2,7 @@
 
 <h4 align="center"> Reimplementation of Algorithm Name </h4>
 
-https://img.shields.io/badge/<LABEL>-<MESSAGE>-<blue>
-https://img.shields.io/badge/<LABEL>-<MESSAGE>-<blue>
-https://img.shields.io/badge/<LABEL>-<MESSAGE>-<blue>
+https://img.shields.io/badge/Pytorch-v1.1-blue
 
 <p align="center">
   <a href="#About">About</a> •
