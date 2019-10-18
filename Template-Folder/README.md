@@ -2,9 +2,9 @@
 
 <h4 align="center"> Reimplementation of Algorithm Name </h4>
 
-https://img.shields.io/badge/<LABEL>-<MESSAGE>-<BLUE>
-https://img.shields.io/badge/<LABEL>-<MESSAGE>-<BLUE>
-https://img.shields.io/badge/<LABEL>-<MESSAGE>-<BLUE>
+https://img.shields.io/badge/<LABEL>-<MESSAGE>-<blue>
+https://img.shields.io/badge/<LABEL>-<MESSAGE>-<blue>
+https://img.shields.io/badge/<LABEL>-<MESSAGE>-<blue>
 
 <p align="center">
   <a href="#About">About</a> •
