@@ -3,10 +3,10 @@
 <h4 align="center"> Reimplementation of Algorithm Name </h4>
 
 <p align="center">
-<img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
-![Pytorch](https://img.shields.io/badge/Pytorch-v1.3-orange.svg)
-![Build](https://img.shields.io/badge/Build-Passing-green.svg)
-![License](https://img.shields.io/badge/License-MIT-blue.svg)
+  <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
+  <img src="https://img.shields.io/badge/Pytorch-v1.3-orange.svg">
+  <img src="https://img.shields.io/badge/Build-Passing-green.svg">
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg">
 </p>
 
 <p align="center">
