@@ -1,5 +1,7 @@
 <h1 align="center"> Algorithm Name </h1>
 
+<strong> Reimplementation of Algorithm Name </strong>
+
 <p align="center">
   <a href="#About">About</a> •
   <a href="#Requirements">Requirements</a> •
@@ -39,7 +41,6 @@ Show end result accuracy with prediction plot.
 * sources
 
 ## Meta:
-## Meta
 
 Gregory Eales – [@GregoryHamE](https://twitter.com/GregoryHamE) – gregory.hamilton.e@gmail.com
 
