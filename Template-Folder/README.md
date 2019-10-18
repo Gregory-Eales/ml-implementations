@@ -1,6 +1,6 @@
 <h1 align="center"> Algorithm Name </h1>
 
-<strong align="center"> Reimplementation of Algorithm Name </strong>
+<h4 align="center"> Reimplementation of Algorithm Name </h4>
 
 <p align="center">
   <a href="#About">About</a> •
