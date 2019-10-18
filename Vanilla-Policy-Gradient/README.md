@@ -12,7 +12,7 @@
 <p align="center">
   <a href="#About">About</a> •
   <a href="#Requirements">Requirements</a> •
-  <a href="#Model">Models</a> •
+  <a href="#Model">Algorithm</a> •
   <a href="#Environment">Environment</a> •
   <a href="#Training">Training</a> •
   <a href="#Results">Results</a> •
