@@ -12,7 +12,7 @@
 <p align="center">
   <a href="#About">About</a> •
   <a href="#Requirements">Requirements</a> •
-  <a href="#Model">Models</a> •
+  <a href="#Algorithm">Algorithm</a> •
   <a href="#Environment">Environment</a> •
   <a href="#Training">Training</a> •
   <a href="#Results">Results</a> •
@@ -27,7 +27,7 @@ overview of the algorithm and its implementation<br/>
 
 Requirement1: (requirement link)
 
-## Model:
+## Algorithm:
 
 Explain what model was used and include a diagram
 
