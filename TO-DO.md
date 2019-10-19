@@ -17,6 +17,7 @@
   - [ ] Dropout
   - [ ] Recurrent Neural Networks
   - [ ] Bidirectional Recurrent Neural Networks
+  - [ ] Neural Ordinary Differential Equations
   - [ ] Recursive Neural Networks
   - [ ] NN Autoencoders
   - [ ] Generative Adversarial Neural Networks
@@ -28,3 +29,12 @@
   - [ ] Deep Determanistic Policy Gradient
   - [ ] Twin Delayed DDPG
   - [ ] Soft Actor-Critic
+  - [ ] Deep Q-Networks
+  - [ ] C51
+  - [ ] Quantile Regression DQN
+  - [ ] Alpha Zero
+  - [ ] Hindsight Experience Replay
+  - [ ] World Models
+  - [ ] Imagination Augmented Agents
+  - [ ] Model-Based Model-Free
+  - [ ] Model Based Value Estimation
