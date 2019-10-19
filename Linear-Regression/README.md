@@ -1,6 +1,6 @@
-<h1 align="center"> The Perceptron </h1>
+<h1 align="center"> Algorithm Name </h1>
 
-<h4 align="center"> Reimplementation of the Perceptron </h4>
+<h4 align="center"> Reimplementation of Algorithm Name </h4>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
@@ -20,7 +20,7 @@
 </p>
 
 ## About:
-- overview of the algorithm and its implementation
+- overview of the algorithm and its implementation 
 
 ## Requirements:
 - include required libraries and versions
@@ -30,7 +30,7 @@
 - show pseudocode
 - explain implementation details
 
-## Data:
+## Environment:
 - explain the environment and/or data
 - show screenshots/tables/plots
 
@@ -39,7 +39,7 @@
 - plot accuracy and loss through training
 
 ## Results:
-- show end result accuracy
+- show end result accuracy 
 - show prediction plot
 - include closing thoughts + improvements
 
@@ -53,3 +53,6 @@ Gregory Eales – [@GregoryHamE](https://twitter.com/GregoryHamE) – gregory.ha
 Distributed under the MIT license. See ``LICENSE`` for more information.
 
 [https://github.com/Gregory-Eales](https://github.com/Gregory-Eales)
+
+
+

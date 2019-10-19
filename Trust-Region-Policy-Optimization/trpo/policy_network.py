@@ -24,18 +24,18 @@ class PolicyNetwork(torch.nn.Module):
         self.to(self.device)
 
     def kl_divergence(self, old_pi, pi, advantage):
-        return torch.sum(old_pi*torch.log(old_pi/pi), 1).mean()
+        return torch.sum(old_pi*(old_pi.log()-pi.log()), 1).mean()
 
     def hessian_conjugate(self):
         pass
 
-    def loss(self, actions, advantages, prev_params):
+    def loss(self, actions, advantages, prev_params, delta):
 
         g = torch.sum(actions*advantages)/actions.shape[0]
-        delta = self.kl_divergence()
+        kl = self.kl_divergence()
         x = self.hessian_conjugate()
 
-        loss = 2*delta*x/(x.T*self.hessian_conjugate(x))
+        loss = 2*delta*x/(g*x)
         loss = torch.sqrt(loss)
 
         return loss
