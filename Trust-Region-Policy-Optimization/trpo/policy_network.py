@@ -35,6 +35,7 @@ class PolicyNetwork(torch.nn.Module):
         kl = self.kl_divergence()
         x = self.hessian_conjugate()
 
+
         loss = 2*delta*x/(g*x)
         loss = torch.sqrt(loss)
 
