@@ -35,7 +35,7 @@
   - [ ] Alpha Zero
   - [ ] Hindsight Experience Replay
   - [ ] World Models
-  - [ ] Regret Minimization
+  - [ ] Counter Factual Regret Minimization
   - [ ] Imagination Augmented Agents
   - [ ] Model-Based Model-Free
   - [ ] Model Based Value Estimation
