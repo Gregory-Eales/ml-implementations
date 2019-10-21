@@ -1,11 +1,11 @@
-<h1 align="center"> Algorithm Name </h1>
+<h1 align="center"> Linear Regression </h1>
 
-<h4 align="center"> Reimplementation of Algorithm Name </h4>
+<h4 align="center"> Reimplementation of Linear Regression </h4>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
-  <img src="https://img.shields.io/badge/Dependency-v1.3-orange.svg">
-  <img src="https://img.shields.io/badge/Build-Passing-green.svg">
+  <img src="https://img.shields.io/badge/Numpy-v1.16.4-orange.svg">
+  <img src="https://img.shields.io/badge/Status-Complete-green.svg">
   <img src="https://img.shields.io/badge/License-MIT-blue.svg">
 </p>
 
@@ -20,26 +20,24 @@
 </p>
 
 ## About:
-- overview of the algorithm and its implementation 
+Implementation of linear regression trained to perform binary classification.
 
 ## Requirements:
-- include required libraries and versions
+- Numpy v1.16.4
+- Matplotlib
 
 ## Algorithm:
-- explain algorithm overview
-- show pseudocode
-- explain implementation details
+Linear regression is a line fitting algorithm that updates its parameters using gradient descent. In this implementation, linear regression is used as a binary classifier to predict if a data sample is from a distribution.
 
-## Environment:
-- explain the environment and/or data
-- show screenshots/tables/plots
+## Data:
+The data used is generated from two overlapping gaussian distributions. This provides a perfect test case for a binary classifier.
 
 ## Training:
 - explain training methods
 - plot accuracy and loss through training
 
 ## Results:
-- show end result accuracy 
+- show end result accuracy
 - show prediction plot
 - include closing thoughts + improvements
 
@@ -53,6 +51,3 @@ Gregory Eales – [@GregoryHamE](https://twitter.com/GregoryHamE) – gregory.ha
 Distributed under the MIT license. See ``LICENSE`` for more information.
 
 [https://github.com/Gregory-Eales](https://github.com/Gregory-Eales)
-
-
-
