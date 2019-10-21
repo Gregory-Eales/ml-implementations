@@ -37,7 +37,7 @@ Proximal Policy Optimization is an on policy algorithm that can be used in both 
 - show screenshots/tables/plots
 
 <p align="center">
-  <img width="624" height="394" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Proximal-Policy-Optimization/img/pendulum_v0.gif">
+  <img width="300" height="300" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Proximal-Policy-Optimization/img/pendulum_v0.gif">
 </p>
 
 ## Training:
