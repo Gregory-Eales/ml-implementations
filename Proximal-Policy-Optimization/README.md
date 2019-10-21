@@ -44,7 +44,12 @@ Proximal Policy Optimization is an on policy algorithm that can be used in both 
 - include closing thoughts + improvements
 
 ## Sources:
-- show sources
+
+### Articles:
+  - OpenAI Spinning Up (https://spinningup.openai.com/en/latest/algorithms/ppo.html)
+  
+### Papers:
+  - Proximal Policy Optimization (https://arxiv.org/pdf/1707.06347.pdf)
 
 ## Meta:
 
