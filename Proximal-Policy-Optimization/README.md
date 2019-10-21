@@ -23,7 +23,10 @@
 Implementation of the proximal policy algorithm using pytorch and trained on....
 
 ## Requirements:
-- include required libraries and versions
+- Pytorch
+- Numpy
+- Matplotlib
+- tqdm
 
 ## Algorithm:
 Proximal Policy Optimization is an on policy algorithm that can be used in both discrete and continuous environments. The implementation chosen is the ppo-clip variant as recommended in the OpenAI spinning up article. The clip variant uses clipping to incentivize the learning algorithm to stay near the original policy.
