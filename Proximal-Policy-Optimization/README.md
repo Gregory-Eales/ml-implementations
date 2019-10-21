@@ -27,8 +27,10 @@ Implementation of the proximal policy algorithm using pytorch and trained on....
 
 ## Algorithm:
 Proximal Policy Optimization is an on policy algorithm that can be used in both discrete and continuous environments. The implementation chosen is the ppo-clip variant as recommended in the OpenAI spinning up article. The clip variant uses clipping to incentivize the learning algorithm to stay near the original policy.
-- show pseudocode
-- explain implementation details
+<p align="center">
+  <img width="624" height="394" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Proximal-Policy-Optimization/img/ppo_pseudocode.png">
+</p>
+
 
 ## Environment:
 - explain the environment and/or data
@@ -47,7 +49,7 @@ Proximal Policy Optimization is an on policy algorithm that can be used in both 
 
 ### Articles:
   - OpenAI Spinning Up (https://spinningup.openai.com/en/latest/algorithms/ppo.html)
-  
+
 ### Papers:
   - Proximal Policy Optimization (https://arxiv.org/pdf/1707.06347.pdf)
 
