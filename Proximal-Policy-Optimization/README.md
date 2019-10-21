@@ -20,7 +20,7 @@
 </p>
 
 ## About:
-Implementation of the proximal policy algorithm using pytorch and trained on....
+Implementation of the proximal policy algorithm using pytorch and trained on the Pendulum-v0 environment provided by the OpenAI gym.
 
 ## Requirements:
 - Pytorch
