@@ -1,5 +1,5 @@
 import torch
-import numpy
+import numpy as np
 
 class PPO(object):
 
