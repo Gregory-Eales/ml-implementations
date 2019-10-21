@@ -5,7 +5,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
   <img src="https://img.shields.io/badge/Pytorch-v1.3-orange.svg">
-  <img src="https://img.shields.io/badge/Build-Passing-green.svg">
+  <img src="https://img.shields.io/badge/Status-Complete-green.svg">
   <img src="https://img.shields.io/badge/License-MIT-blue.svg">
 </p>
 
@@ -51,7 +51,7 @@ The enviroment used in this implementation is the CartPole-V0 enviroment provide
 
 
 ## Results
-By training the model over 1000 epochs with 4000 steps per epoch the agent was able to substantially improve its average reward nearly to the maximum obtainable reward. The agent also almost consisently made it to the maximum time step allowed inside the environment within 100 epochs. 
+By training the model over 1000 epochs with 4000 steps per epoch the agent was able to substantially improve its average reward nearly to the maximum obtainable reward. The agent also almost consisently made it to the maximum time step allowed inside the environment within 100 epochs.
 
 
 <p align="center">

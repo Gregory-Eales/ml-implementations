@@ -36,6 +36,10 @@ Proximal Policy Optimization is an on policy algorithm that can be used in both 
 - explain the environment and/or data
 - show screenshots/tables/plots
 
+<p align="center">
+  <img width="624" height="394" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Proximal-Policy-Optimization/img/pendulum_v0.gif">
+</p>
+
 ## Training:
 - explain training methods
 - plot accuracy and loss through training
