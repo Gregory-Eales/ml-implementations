@@ -17,6 +17,8 @@ class Buffer(object):
         # store advantage
         self.advantage_buffer = []
 
+        self.params = None
+
     def store_observation(self, obs):
         self.observation_buffer.append(obs)
 
@@ -28,6 +30,9 @@ class Buffer(object):
 
     def store_advantage(self, adv):
         self.advantage_buffer.append(adv)
+
+    def store_parameters(self, params):
+        self.params = params
 
     def clear_buffer(self):
         # store actions

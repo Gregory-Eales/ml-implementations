@@ -13,7 +13,7 @@
   <a href="#About">About</a> •
   <a href="#Requirements">Requirements</a> •
   <a href="#Algorithm">Algorithm</a> •
-  <a href="#Environment">Environment</a> •
+  <a href="#Data">Data</a> •
   <a href="#Training">Training</a> •
   <a href="#Results">Results</a> •
   <a href="#Sources">Sources</a>

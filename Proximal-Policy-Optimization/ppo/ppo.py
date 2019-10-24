@@ -12,14 +12,13 @@ class PPO(object):
 
         self.buffer = Buffer()
 
-        self.value_network = ValueNetwork(alpha, input_size=input_size,
-         output_size=1)
+        self.value_network = ValueNetwork(alpha=alpha, input_size=input_size)
 
-        self.policy_network = PolicyNetwork(alpha, input_size=input_size,
+        self.policy_network = PolicyNetwork(alpha=alpha, input_size=input_size,
          output_size=output_size)
 
-        self.old_policy_network = PolicyNetwork(alpha, input_size=input_size,
-         output_size=output_size)
+        self.old_policy_network = PolicyNetwork(alpha=alpha,
+         input_size=input_size, output_size=output_size)
 
         # store policy state
         self.buffer.store_parameters(self.policy_network.state_dict())
