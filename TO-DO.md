@@ -21,6 +21,7 @@
   - [ ] Recursive Neural Networks
   - [ ] NN Autoencoders
   - [ ] Generative Adversarial Neural Networks
+  - [ ] Differential Neural Computers
   
  ## RL:
   - [x] Vanilla Policy Gradient: using VPG on OpenAI gym env
