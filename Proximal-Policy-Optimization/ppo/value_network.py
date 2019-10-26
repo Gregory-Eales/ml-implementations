@@ -36,5 +36,17 @@ class ValueNetwork(torch.nn.Module):
         out = self.relu(out)
         return out.to(torch.device('cpu:0'))
 
-    def optimize(self, actions, rewards):
-        pass
+    def optimize(self, actions, observations, rewards, iter=iter):
+
+        x = torch.cat([actions, observations], dim=1)
+
+        for i in range(iter):
+            torch.cuda.empty_cache()
+            # zero the parameter gradients
+            self.optimizer.zero_grad()
+
+            self.loss = self.loss(x, rewards)
+            # optimize
+            self.loss.backward(retain_graph=True)
+
+            self.optimizer.step()
