@@ -8,8 +8,8 @@ def generate_data():
 
     x1 = np.array([a, b]).T
     x2 = np.array([b, a]).T
-    y1 = np.zeros([500, 1])
-    y2 = np.ones([500, 1])
+    y1 = np.ones([500, 1])
+    y2 = np.zeros([500, 1])
 
     x = np.concatenate([x1, x2])
     y = np.concatenate([y1, y2])
