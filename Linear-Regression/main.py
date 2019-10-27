@@ -24,6 +24,12 @@ plt.xlabel("Iteration(s)")
 plt.ylabel("Accuracy")
 plt.show()
 
+plt.title('Classification Data')
+plt.scatter(x[0:500,0], x[0:500,1], label='Class 1', marker='x')
+plt.scatter(x[500:1000,0], x[500:1000,1], label='Class 2', marker='v')
+plt.legend(['Class 1', 'Class 2'], loc='lower left')
+plt.show()
+
 plt.title('Linear Classification')
 plt.plot(t, s, label='Decision Boundry')
 plt.scatter(x[0:500,0], x[0:500,1], label='Class 1', marker='x')
