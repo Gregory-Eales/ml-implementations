@@ -44,12 +44,15 @@ class PPO(object):
 
     def calculate_advantage(self):
 
-        
         prev_observation = self.buffer.observation_buffer[-2]
         observation = self.buffer.observation_buffer[-1]
-        prev_log_prob = self.buffer.log_probs[-2]
-        log_prob = self.buffer.log_probs[-1]
-        prev_input = torch.cat([prev_log_prob, prev_observation])
+
+        if len(self.buffer.log_probs) <= 1:
+            prev_log_prob = self.buffer.log_probs[-1]
+        else:
+            prev_log_prob = torch.from_numpy(self.buffer.log_probs[-2])
+        log_prob = torch.from_numpy(self.buffer.log_probs[-1])
+        prev_input = torch.cat([prev_log_prob, prev_observation], dim=1)
         input = torch.cat([log_prob, observation])
 
         v1 = self.value_network(prev_observation)
