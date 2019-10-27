@@ -25,6 +25,8 @@ Implementation of linear regression trained to perform binary classification.
 ## Requirements:
 - Numpy v1.16.4
 - Matplotlib
+- Sklearn
+
 
 ## Algorithm:
 Linear regression is a line fitting algorithm that updates its parameters using gradient descent. In this implementation, linear regression is used as a binary classifier to predict if a data sample is from a distribution.
@@ -32,14 +34,31 @@ Linear regression is a line fitting algorithm that updates its parameters using 
 ## Data:
 The data used is generated from two overlapping gaussian distributions. This provides a perfect test case for a binary classifier.
 
+<p align="center">
+  <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Linear-Regression/img/class_data.png">
+</p>
+
 ## Training:
 - explain training methods
 - plot accuracy and loss through training
+
+<p align="center">
+  <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Linear-Regression/img/loss_per_iter.png">
+</p>
+
 
 ## Results:
 - show end result accuracy
 - show prediction plot
 - include closing thoughts + improvements
+
+<p align="center">
+  <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Linear-Regression/img/accuracy_per_epoch.png">
+</p>
+
+<p align="center">
+  <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Linear-Regression/img/class_data.png">
+</p>
 
 ## Sources:
 - show sources
