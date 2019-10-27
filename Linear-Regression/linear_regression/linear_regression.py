@@ -28,6 +28,8 @@ class LinearRegressor(object):
 
         for i in range(iter):
             prediction = self.predict(x)
+            prediction[prediction<0.5] = 0
+            prediction[prediction>=0.5] = 1
             error = self.mean_squared_error(prediction, y)
             self.historical_error.append(error)
             delta_w, delta_b = self.loss(x, prediction, y)
@@ -42,14 +44,27 @@ class LinearRegressor(object):
         s = m*t + b
         return t, s
 
+    def get_accuracy(self, x, y):
+        predictions = self.predict(x)
+        predictions[predictions<0.5] = 0
+        predictions[predictions>=0.5] = 1
+        total_samples = y.shape[0]
+        actual_pred = y
+        pred_error = np.sum(predictions-y)
+        print("total error:",pred_error)
+        print("total sample:",total_samples)
+        print("accuracy:",(total_samples-pred_error)/total_samples, "%")
+
+
 def main():
-    x = np.random.random([10, 2])
-    y = np.random.random([10, 1])
+    x = np.random.random([1000, 2])
+    y = np.random.random([1000, 1])
     lr = LinearRegressor(2)
     print(lr.w)
     lr.train(x, y, iter=5000, alpha=0.0001)
     plt.plot(lr.historical_error)
     plt.show()
+    lr.get_accuracy(x, y)
 
 
 if __name__ == "__main__":

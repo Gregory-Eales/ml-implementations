@@ -13,7 +13,11 @@ lr.train(x_shuffle, y_shuffle, iter=100, alpha=0.0001)
 
 t, s = lr.decision_boundry(start=-0.4, stop=1, step=0.01)
 
-plt.plot(t, s)
-plt.scatter(x[0:500,0], x[0:500,1])
-plt.scatter(x[500:1000,0], x[500:1000,1])
+lr.get_accuracy(x, y)
+
+plt.title('Linear Classification')
+plt.plot(t, s, label='Decision Boundry')
+plt.scatter(x[0:500,0], x[0:500,1], label='Class 1', marker='x')
+plt.scatter(x[500:1000,0], x[500:1000,1], label='Class 2', marker='v')
+plt.legend(['Decision Boundry', 'Class 1', 'Class 2'], loc='lower left')
 plt.show()
