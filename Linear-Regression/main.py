@@ -9,11 +9,20 @@ x, y = generate_data()
 x_shuffle, y_shuffle = shuffle(x, y, random_state=0)
 
 lr = LinearRegressor(input_size=2)
-lr.train(x_shuffle, y_shuffle, iter=100, alpha=0.0001)
+lr.train(x_shuffle, y_shuffle, iter=10000, alpha=0.001)
+plt.title("Loss per Iteration")
+plt.xlabel("Iteration(s)")
+plt.ylabel("Loss")
+plt.plot(lr.historical_error)
+plt.show()
 
 t, s = lr.decision_boundry(start=-0.4, stop=1, step=0.01)
 
-lr.get_accuracy(x, y)
+plt.title("Accuracy per Epoch")
+plt.plot(lr.historical_accuracy)
+plt.xlabel("Iteration(s)")
+plt.ylabel("Accuracy")
+plt.show()
 
 plt.title('Linear Classification')
 plt.plot(t, s, label='Decision Boundry')
