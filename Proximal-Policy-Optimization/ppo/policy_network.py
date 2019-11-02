@@ -1,6 +1,5 @@
 import torch
 
-
 class PolicyNetwork(torch.nn.Module):
 
     def __init__(self, input_size, output_size, alpha):

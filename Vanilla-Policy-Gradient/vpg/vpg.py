@@ -180,8 +180,10 @@ class VPG(object):
 			plt.plot(highest_rewards, label="highest reward")
 			plt.legend(loc="upper left")
 			plt.draw()
+			"""
 			if epoch%10 == 0:
 				plt.savefig('reward_img/epoch{}.png'.format(epoch))
+			"""
 			plt.pause(0.0001)
 			plt.clf()
 			if average_rewards[-1] > 180:
@@ -200,7 +202,7 @@ def main():
 
 	vpg = VPG(alpha=0.0001, input_dims=4, output_dims=2)
 
-	vpg.train(env, n_epoch=1000, n_steps=4000, render=False, verbos=False)
+	vpg.train(env, n_epoch=1000, n_steps=400, render=False, verbos=False)
 
 if __name__ == "__main__":
 	main()
