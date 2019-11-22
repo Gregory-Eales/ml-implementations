@@ -114,8 +114,8 @@ def main():
     np.random.seed(1)
     env = gym.make('MountainCar-v0')
 
-    trpo = PPO(alpha=0.001, input_size=2, output_size=3)
-    trpo.train(env=env, epochs=1, steps=1000)
+    ppo = PPO(alpha=0.001, input_size=2, output_size=3)
+    ppo.train(env=env, epochs=1, steps=1000)
 
 
 if __name__ == "__main__":
