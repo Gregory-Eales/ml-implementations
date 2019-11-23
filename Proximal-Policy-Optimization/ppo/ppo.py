@@ -12,7 +12,7 @@ class PPO(object):
 
         self.buffer = Buffer()
 
-        self.value_network = ValueNetwork(alpha=alpha, input_size=input_size+3)
+        self.value_network = ValueNetwork(alpha=alpha, input_size=3)
 
         self.policy_network = PolicyNetwork(alpha=alpha, input_size=input_size,
          output_size=output_size)
@@ -45,18 +45,26 @@ class PPO(object):
     def calculate_advantage(self):
 
         prev_observation = self.buffer.observation_buffer[-2]
+        prev_observation = torch.from_numpy(prev_observation).float()
         observation = self.buffer.observation_buffer[-1]
+        observation = torch.from_numpy(observation).float()
 
         if len(self.buffer.log_probs) <= 1:
             prev_log_prob = self.buffer.log_probs[-1]
         else:
-            prev_log_prob = torch.from_numpy(self.buffer.log_probs[-2])
-        log_prob = torch.from_numpy(self.buffer.log_probs[-1])
-        prev_input = torch.cat([prev_log_prob, prev_observation], dim=1)
-        input = torch.cat([log_prob, observation])
+            try:
+                prev_log_prob = torch.from_numpy(self.buffer.log_probs[-2]).float()
+            except:
+                prev_log_prob = self.buffer.log_probs[-2].float()
 
-        v1 = self.value_network(prev_observation)
-        v2 = self.value_network(observation)
+
+        log_prob = self.buffer.log_probs[-1].float()
+        prev_input = torch.cat([prev_log_prob, prev_observation], dim=0)
+
+        input = torch.cat([log_prob, observation], dim=0)
+
+        v1 = self.value_network(prev_input)
+        v2 = self.value_network(input)
 
         return 1 + v2 - v1
 
