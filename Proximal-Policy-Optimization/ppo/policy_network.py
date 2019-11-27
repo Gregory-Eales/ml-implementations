@@ -37,4 +37,4 @@ class PolicyNetwork(torch.nn.Module):
 
 def main():
 
-    policy_net = PolicyNetwork(alpha=0.1, in_dim=3, in_dim=3)
+    policy_net = PolicyNetwork(alpha=0.1, in_dim=3, out_dim=3)
