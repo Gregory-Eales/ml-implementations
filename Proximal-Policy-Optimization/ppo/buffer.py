@@ -34,5 +34,5 @@ class Buffer(object):
     def get_discounted_rewards(self):
         return self.discount_rewards
 
-    def get_values(self):
+    def get_data(self):
         pass
