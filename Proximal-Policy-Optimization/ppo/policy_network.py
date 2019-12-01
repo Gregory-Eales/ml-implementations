@@ -8,10 +8,11 @@ class PolicyNetwork(torch.nn.Module):
 
         self.in_dim = in_dim
         self.out_dim = out_dim
-
-        self.optimizer = torch.optim.Adam(params=self.params, lr=alpha)
-
+        self.define_network()
+        self.optimizer = torch.optim.Adam(params=self.parameters(), lr=alpha)
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu:0')
+
+        self.prev_params = self.parameters()
 
     def define_network(self):
         self.relu = torch.nn.LeakyReLU()
@@ -22,6 +23,16 @@ class PolicyNetwork(torch.nn.Module):
 
     def normalize(self):
         pass
+
+    def loss(self):
+        term1 = None
+        term2 = None
+
+        if term1 > term2:
+            pass
+
+        else:
+            pass
 
     def forward(self, x):
         out = torch.Tensor(x).to(self.device)
@@ -37,4 +48,11 @@ class PolicyNetwork(torch.nn.Module):
 
 def main():
 
-    policy_net = PolicyNetwork(alpha=0.1, in_dim=3, out_dim=3)
+    t1 = torch.ones(1, 3)
+    pn = PolicyNetwork(0.01, 3, 1)
+    print(pn(t1))
+    print(pn.parameters())
+
+
+if __name__ == "__main__":
+    main()
