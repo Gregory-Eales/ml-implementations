@@ -36,8 +36,7 @@ Proximal Policy Optimization is an on policy algorithm that can be used in both 
 
 
 ## Environment:
-- explain the environment and/or data
-- show screenshots/tables/plots
+The Pendulum-V0 environment poses a classical control problem focused on the balancing of a pendulum using a single output representing joint output. This environment has an observation space of size 3, giving the x and y components of the pendulum relative to the horizontal and vertical planes, as well as the dot of the angle. The reward is given by normalizing the angle theta and ranges between -16.2736044 and 0. This means that the goal of the agent is to minimize the cost at any given time, resulting in a net reward of 0.
 
 <p align="center">
   <img width="300" height="300" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Proximal-Policy-Optimization/img/pendulum_v0.gif">
