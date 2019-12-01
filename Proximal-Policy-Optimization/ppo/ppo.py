@@ -26,8 +26,15 @@ class PPO(object):
         # n is equal to the number of steps
         self.buffer.discount_reward(n_steps)
 
-    def train(self, env, n_steps, n_epoch, render=False, verbos=False):
+    def update(self):
 
+        state, action, reward, disc_reward, advantage = self.buffer.get_data()
+
+
+    def calculate_advantages(self):
+        pass
+
+    def train(self, env, n_steps, n_epoch, render=False, verbos=False):
 
         for i in range(iter):
 
@@ -48,4 +55,8 @@ class PPO(object):
                 # store metrics
                 self.store(state, action, reward)
 
+                if done:
+                    pass
+
             # update networks
+            self.update()
