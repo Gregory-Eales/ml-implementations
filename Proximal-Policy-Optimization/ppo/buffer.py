@@ -8,7 +8,8 @@ class Buffer(object):
         self.rewards = []
         self.states = []
         self.actions = []
-        self.old_actions = []
+        self.predictions = []
+        self.old_predictions = []
         self.discounted_rewards = []
         self.advantages = []
         self.log_probs = []
@@ -22,6 +23,12 @@ class Buffer(object):
 
     def store_action(self, action):
         self.actions.append(action)
+
+    def store_prediction(self, prediction):
+        self.predictions.append(prediction)
+
+    def store_old_prediction(self, prediction):
+        self.old_predictions.append(prediction)
 
     def store_log_prob(self, lg_prob):
         self.log_probs.append(lg_prob)
