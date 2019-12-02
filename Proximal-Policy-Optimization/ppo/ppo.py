@@ -12,8 +12,11 @@ class PPO(object):
 
     def __init__(self, alpha, in_dim, out_dim):
 
+        self.out_dim = out_dim
+        self.in_dim = in_dim
+
         self.buffer = Buffer()
-        self.value_net = ValueNetwork(alpha, in_dim, out_dim)
+        self.value_net = ValueNetwork(alpha, in_dim, 1)
         self.policy_net = PolicyNetwork(alpha, in_dim, out_dim)
         self.old_policy_net = PolicyNetwork(alpha, in_dim, out_dim)
 
@@ -23,11 +26,6 @@ class PPO(object):
         self.buffer.store_state(state)
         self.buffer.store_action(action)
         self.buffer.store_reward(reward)
-
-    def calc_discounted_rewards(self, n_steps):
-        # calculates the discounted reward using the past n rewards, where
-        # n is equal to the number of steps
-        self.buffer.discount_reward(n_steps)
 
     def calculate_advantages(self):
 
@@ -45,12 +43,19 @@ class PPO(object):
 
     def get_action(self):
         state = torch.Tensor(self.buffer.states[-1]).reshape(1, 3)
-        print(state.shape)
         prediction = self.policy_net.forward(state)
+        old_pred = self.old_policy_net.forward(state)
+        self.buffer.store_action(prediction)
+        self.buffer.store
         action_probabilities = torch.distributions.Categorical(prediction)
         action = action_probabilities.sample()
         log_prob = action_probabilities.log_prob(action)
-        print(action)
+        self.buffer.log_probs.append(log_prob)
+        # convert discrete to continuous2
+        action = -2.0 + 0.1*action.float()
+
+
+
         return action.item()
 
     def train(self, env, n_steps, n_epoch, render=False, verbos=False):
@@ -63,6 +68,8 @@ class PPO(object):
 
             for s in range(n_steps):
 
+                if render: self.env.render()
+
                 # render if true
                 if render: env.render()
 
@@ -70,24 +77,35 @@ class PPO(object):
                 action = self.get_action()
 
                 # get observation
-                state, reward, done, info = env.step(action)
+                state, reward, done, info = env.step([0])
 
                 # store metrics
-                self.store(state, action, reward)
+                if not done: self.store(state, action, reward)
 
-                if done:
-                    pass
+                if done or s == n_steps-1:
+                    self.buffer.store_action(action)
+                    self.buffer.store_reward(reward)
+                    self.buffer.discount_rewards(s+2)
 
             # update networks
-            self.update()
+            #self.update()
+
+
+
+            print(len(self.buffer.states))
+            print(len(self.buffer.actions))
+            print(len(self.buffer.rewards))
+            print(len(self.buffer.log_probs))
+            print(len(self.buffer.discounted_rewards))
+            print(len(self.buffer.advantages))
 
 
 def main():
     env = gym.make("Pendulum-v0")
 
-    ppo = PPO(alpha=0.01, in_dim=3, out_dim=1)
+    ppo = PPO(alpha=0.01, in_dim=3, out_dim=21)
 
-    ppo.train(env=env, n_steps=100, n_epoch=1)
+    ppo.train(env=env, n_steps=10, n_epoch=3)
 
 
 if __name__ == "__main__":
