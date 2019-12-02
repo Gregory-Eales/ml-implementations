@@ -15,6 +15,7 @@ class PPO(object):
         self.buffer = Buffer()
         self.value_net = ValueNetwork(alpha, in_dim, out_dim)
         self.policy_net = PolicyNetwork(alpha, in_dim, out_dim)
+        self.old_policy_net = PolicyNetwork(alpha, in_dim, out_dim)
 
 
     def store(self, state, action, reward):
@@ -42,7 +43,12 @@ class PPO(object):
     def get_action(self):
 
         state = torch.Tensor(self.buffer.states[-1])
-        print(state)
+        prediction = self.policy_net.forward(state)
+        action_probabilities = torch.distributions.Categorical(prediction)
+		action = action_probabilities.sample()
+		log_prob = action_probabilities.log_prob(action)
+
+		return action.item()
 
     def train(self, env, n_steps, n_epoch, render=False, verbos=False):
 
@@ -75,25 +81,7 @@ class PPO(object):
 def main():
     env = gym.make("Pendulum-v0")
 
-    env.reset()
-    for i in range(1):
-
-        env.render()
-        a, b, c, d = env.step(np.ones([1,1]))
-
-        a = a.reshape([1, 3]).tolist()[0]
-        print("####")
-
-        print(b.tolist())
-
-        print("####")
-        print(type(c))
-        print("####")
-        print(type(d))
-        print("####")
-
-        env.reset()
-
+    ppo = PPO(alpha=0.01,)
 
 
 if __name__ == "__main__":
