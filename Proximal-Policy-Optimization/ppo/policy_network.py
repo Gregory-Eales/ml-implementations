@@ -28,12 +28,6 @@ class PolicyNetwork(torch.nn.Module):
         term1 = None
         term2 = None
 
-        if term1 > term2:
-            pass
-
-        else:
-            pass
-
     def forward(self, x):
         out = torch.Tensor(x).to(self.device)
 
