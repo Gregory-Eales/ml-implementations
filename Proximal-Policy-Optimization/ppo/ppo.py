@@ -29,35 +29,39 @@ class PPO(object):
         # n is equal to the number of steps
         self.buffer.discount_reward(n_steps)
 
-    def calculate_advantages(self, s1, s2):
+    def calculate_advantages(self):
 
-        v1 = self.value_net(s1)
-        v2 = self.value_net(s2)
-        a = v2-v1
+        s2 = torch.Tensor(self.buffer.states[-1])
+        s1 = torch.Tensor(self.buffer.states[-2])
 
-        return a
+        v = self.value_net(s1)
+        q = self.value_net(s2)
+        a = q-v+1
+
+        self.buffer.store_advantage(a)
 
     def update(self):
         state, action, reward, disc_reward, advantage = self.buffer.get_data()
 
     def get_action(self):
-
-        state = torch.Tensor(self.buffer.states[-1])
+        state = torch.Tensor(self.buffer.states[-1]).reshape(1, 3)
+        print(state.shape)
         prediction = self.policy_net.forward(state)
         action_probabilities = torch.distributions.Categorical(prediction)
-		action = action_probabilities.sample()
-		log_prob = action_probabilities.log_prob(action)
-
-		return action.item()
+        action = action_probabilities.sample()
+        log_prob = action_probabilities.log_prob(action)
+        print(action)
+        return action.item()
 
     def train(self, env, n_steps, n_epoch, render=False, verbos=False):
 
-        for i in range(iter):
+        for i in range(n_epoch):
 
             # reset env
             state = env.reset()
+            self.buffer.store_state(state)
 
-            for s in range(nume_steps):
+            for s in range(n_steps):
 
                 # render if true
                 if render: env.render()
@@ -81,7 +85,9 @@ class PPO(object):
 def main():
     env = gym.make("Pendulum-v0")
 
-    ppo = PPO(alpha=0.01,)
+    ppo = PPO(alpha=0.01, in_dim=3, out_dim=1)
+
+    ppo.train(env=env, n_steps=100, n_epoch=1)
 
 
 if __name__ == "__main__":
