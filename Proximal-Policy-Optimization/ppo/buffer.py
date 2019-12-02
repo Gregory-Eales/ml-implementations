@@ -9,6 +9,7 @@ class Buffer(object):
         self.states = []
         self.actions = []
         self.discounted_rewards = []
+        self.advantages = []
 
     def store_reward(self, reward):
         self.rewards.append(reward.tolist())
@@ -19,6 +20,9 @@ class Buffer(object):
 
     def store_action(self, action):
         self.actions.append(action)
+
+    def store_advantage(self, adv):
+        self.advantages.append(adv)
 
     def discount_rewards(n_steps):
         pass
@@ -36,4 +40,10 @@ class Buffer(object):
         return self.discount_rewards
 
     def get_data(self):
-        pass
+        states = torch.Tensor(self.states)
+        actions = torch.Tensor(self.actions)
+        rewards = torch.Tensor(self.rewards)
+        disc_reward = torch.Tensor(self.discounted_rewards)
+        advantage = torch.cat(self.advantages)
+
+        return states, actions, rewards, disc_reward, advantage
