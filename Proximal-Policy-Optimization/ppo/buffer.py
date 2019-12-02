@@ -10,6 +10,7 @@ class Buffer(object):
         self.actions = []
         self.discounted_rewards = []
         self.advantages = []
+        self.log_probs = []
 
     def store_reward(self, reward):
         self.rewards.append(reward.tolist())
@@ -20,6 +21,9 @@ class Buffer(object):
 
     def store_action(self, action):
         self.actions.append(action)
+
+    def store_log_prob(self, lg_prob):
+        self.log_probs.append(lg_prob)
 
     def store_advantage(self, adv):
         self.advantages.append(adv)
