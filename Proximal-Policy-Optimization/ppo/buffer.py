@@ -11,10 +11,11 @@ class Buffer(object):
         self.discounted_rewards = []
 
     def store_reward(self, reward):
-        self.rewards.append(reward)
+        self.rewards.append(reward.tolist())
 
     def store_state(self, state):
-        self.states.append(state)
+        # in: numpy array
+        self.states.append(state.reshape([1, 3]).tolist()[0])
 
     def store_action(self, action):
         self.actions.append(action)
