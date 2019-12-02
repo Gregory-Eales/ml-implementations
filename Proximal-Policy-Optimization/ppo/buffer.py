@@ -8,6 +8,7 @@ class Buffer(object):
         self.rewards = []
         self.states = []
         self.actions = []
+        self.old_actions = []
         self.discounted_rewards = []
         self.advantages = []
         self.log_probs = []
@@ -28,8 +29,21 @@ class Buffer(object):
     def store_advantage(self, adv):
         self.advantages.append(adv)
 
-    def discount_rewards(n_steps):
-        pass
+    def discount_rewards(self, n_steps):
+
+        r  = self.rewards[-n_steps:]
+        r_discounted = []
+        prev_val = 0
+        for i in reversed(range(n_steps)):
+            r_discounted.append(r[i]*(0.9**(i)))
+
+        r_discounted = list(reversed(r_discounted))
+
+        for i in range(n_steps-1):
+            r_discounted[i] += sum(r_discounted[i+1:])
+
+
+        self.discounted_rewards += r_discounted
 
     def get_rewards(self):
         return self.rewards
