@@ -15,7 +15,7 @@ class PolicyNetwork(torch.nn.Module):
         self.prev_params = self.parameters()
 
     def define_network(self):
-        self.relu = torch.nn.LeakyReLU()
+        self.relu = torch.nn.ReLU()
         self.sigmoid = torch.nn.Sigmoid()
         self.l1 = torch.nn.Linear(self.in_dim, 128)
         self.l2 = torch.nn.Linear(128, 128)
@@ -30,13 +30,12 @@ class PolicyNetwork(torch.nn.Module):
 
     def forward(self, x):
         out = torch.Tensor(x).to(self.device)
-
         out = self.l1(out)
         out = self.relu(out)
         out = self.l2(out)
         out = self.relu(out)
         out = self.l3(out)
-        out = self.sigmoid(out)
+        out = self.relu(out)
 
         return out.to(torch.device('cpu:0'))
 
