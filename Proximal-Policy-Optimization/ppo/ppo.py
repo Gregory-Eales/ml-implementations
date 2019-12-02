@@ -1,5 +1,7 @@
 import torch
 import numpy as np
+import gym
+import time
 
 from policy_network import PolicyNetwork
 from value_network import ValueNetwork
@@ -30,7 +32,6 @@ class PPO(object):
 
         state, action, reward, disc_reward, advantage = self.buffer.get_data()
 
-
     def calculate_advantages(self):
         pass
 
@@ -60,3 +61,31 @@ class PPO(object):
 
             # update networks
             self.update()
+
+
+def main():
+    env = gym.make("Pendulum-v0")
+
+    env.reset()
+    for i in range(1):
+
+        env.render()
+        a, b, c, d = env.step(np.ones([1,1]))
+
+        a = a.reshape([1, 3]).tolist()[0]
+        print("####")
+
+        print(b.tolist())
+
+        print("####")
+        print(type(c))
+        print("####")
+        print(type(d))
+        print("####")
+
+        env.reset()
+
+
+
+if __name__ == "__main__":
+    main()
