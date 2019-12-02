@@ -28,12 +28,21 @@ class PPO(object):
         # n is equal to the number of steps
         self.buffer.discount_reward(n_steps)
 
-    def update(self):
+    def calculate_advantages(self, s1, s2):
 
+        v1 = self.value_net(s1)
+        v2 = self.value_net(s2)
+        a = v2-v1
+
+        return a
+
+    def update(self):
         state, action, reward, disc_reward, advantage = self.buffer.get_data()
 
-    def calculate_advantages(self):
-        pass
+    def get_action(self):
+
+        state = torch.Tensor(self.buffer.states[-1])
+        print(state)
 
     def train(self, env, n_steps, n_epoch, render=False, verbos=False):
 
