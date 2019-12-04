@@ -44,10 +44,11 @@ class PolicyNetwork(torch.nn.Module):
 
     def optimize(self, log_probs, old_log_probs, advantages, iter=10):
 
-        loss = self.loss(log_probs, old_log_probs, advantages)
-        loss.backward(retain_graph=True)
-        self.optimizer.zero_grad()
-        self.optimizer.step()
+        for i in range(iter):
+            loss = self.loss(log_probs, old_log_probs, advantages)
+            loss.backward(retain_graph=True)
+            self.optimizer.zero_grad()
+            self.optimizer.step()
 
 def main():
 
