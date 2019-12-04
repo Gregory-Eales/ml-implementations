@@ -39,6 +39,10 @@ class ValueNetwork(torch.nn.Module):
     def update(self):
         pass
 
+
+    def optimize(self, states, rewards, iter):
+        pass
+
 def main():
 
     t1 = torch.ones(1, 3)
