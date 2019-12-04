@@ -113,7 +113,7 @@ class PPO(object):
                 else: self.store(state, action, reward)
 
             # update networks
-            self.update(iter=5)
+            self.update(iter=10)
             mean_reward = torch.sum(self.buffer.get_discounted_rewards().mean())
             print(mean_reward)
             self.historical_reward.append(mean_reward.item())
@@ -135,11 +135,13 @@ class PPO(object):
         plt.show()
 
 def main():
+
     env = gym.make("Pendulum-v0")
-
-    ppo = PPO(alpha=0.001, in_dim=3, out_dim=40)
-
-    ppo.train(env=env, n_steps=100, n_epoch=10)
+    env.seed(0)
+    torch.manual_seed(0)
+    np.random.seed(0)
+    ppo = PPO(alpha=0.1, in_dim=3, out_dim=40)
+    ppo.train(env=env, n_steps=1000, n_epoch=5)
 
 
 if __name__ == "__main__":
