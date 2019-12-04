@@ -2,6 +2,7 @@ import torch
 import numpy as np
 import gym
 import time
+from matplotlib import pyplot as plt
 
 from policy_network import PolicyNetwork
 from value_network import ValueNetwork
@@ -19,6 +20,8 @@ class PPO(object):
         self.value_net = ValueNetwork(alpha, in_dim, 1)
         self.policy_net = PolicyNetwork(alpha, in_dim, out_dim)
         self.old_policy_net = PolicyNetwork(alpha, in_dim, out_dim)
+
+        self.historical_reward = []
 
 
     def store(self, state, action, reward):
@@ -40,14 +43,16 @@ class PPO(object):
 
         self.buffer.store_advantage(a)
 
-    def update(self, iter=10):
+    def update(self, iter=100):
         states = self.buffer.get_states()
         disc_rewards = self.buffer.get_discounted_rewards()
-        ol = self.buffer.get
-        pred = self.buffer.get_predictions()
+        log_probs = self.buffer.get_log_probs()
+        old_probs = self.buffer.get_old_log_probs()
         advantages = self.buffer.get_advantages()
 
-        self.policy_net.optimize(log_probs, old_log_probs, advantages)
+        self.old_policy_net.load_state_dict(self.policy_net.state_dict())
+
+        self.policy_net.optimize(log_probs, old_probs, advantages, iter=iter)
 
         self.value_net.optimize(states, disc_rewards, iter=iter)
 
@@ -68,7 +73,7 @@ class PPO(object):
         self.buffer.store_old_log_probs(old_log_prob)
 
         # convert discrete to continuous2
-        action = -2.0 + 0.1*action.float()
+        action = -2.0 + 4/self.out_dim*action.float()
 
 
 
@@ -93,7 +98,7 @@ class PPO(object):
                 action = self.get_action()
 
                 # get observation
-                state, reward, done, info = env.step([0])
+                state, reward, done, info = env.step([action])
 
                 # store metrics
 
@@ -108,9 +113,14 @@ class PPO(object):
                 else: self.store(state, action, reward)
 
             # update networks
-            #self.update()
+            self.update(iter=5)
+            mean_reward = torch.sum(self.buffer.get_discounted_rewards().mean())
+            print(mean_reward)
+            self.historical_reward.append(mean_reward.item())
 
+            self.buffer = Buffer()
 
+            """
             print("###########")
             print("states  ", len(self.buffer.states))
             print("actions ", len(self.buffer.actions))
@@ -120,15 +130,16 @@ class PPO(object):
             print("log prob", len(self.buffer.log_probs))
             print("disc rwr", len(self.buffer.discounted_rewards))
             print("advantag", len(self.buffer.advantages))
-
-
+            """
+        plt.plot(self.historical_reward)
+        plt.show()
 
 def main():
     env = gym.make("Pendulum-v0")
 
-    ppo = PPO(alpha=0.01, in_dim=3, out_dim=21)
+    ppo = PPO(alpha=0.001, in_dim=3, out_dim=40)
 
-    ppo.train(env=env, n_steps=10, n_epoch=3)
+    ppo.train(env=env, n_steps=100, n_epoch=10)
 
 
 if __name__ == "__main__":
