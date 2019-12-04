@@ -22,9 +22,9 @@ class ValueNetwork(torch.nn.Module):
         self.tanh = torch.nn.Tanh()
         self.sigmoid = torch.nn.Sigmoid()
 
-        self.l1 = torch.nn.Linear(self.in_dim, 128)
-        self.l2 = torch.nn.Linear(128, 128)
-        self.l3 = torch.nn.Linear(128, self.out_dim)
+        self.l1 = torch.nn.Linear(self.in_dim, 256)
+        self.l2 = torch.nn.Linear(256, 256)
+        self.l3 = torch.nn.Linear(256, self.out_dim)
 
     def forward(self, x):
         out = torch.Tensor(x).to(self.device)
@@ -36,8 +36,13 @@ class ValueNetwork(torch.nn.Module):
         out = self.sigmoid(out)
         return out.to(torch.device('cpu:0'))
 
-    def update(self):
-        pass
+    def update(self, iter, state, disc_reward):
+        for i in range(iter):
+            p = self.forward(state)
+            loss = self.loss(p, disc_reward)
+            loss.backward(retain_graph=True)
+            self.optimizer.zero_grad()
+            self.optimizer.step()
 
 
     def optimize(self, states, rewards, iter):
