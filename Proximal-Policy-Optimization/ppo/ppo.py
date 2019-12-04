@@ -32,30 +32,41 @@ class PPO(object):
 
         s2 = torch.Tensor(self.buffer.states[-1])
         s1 = torch.Tensor(self.buffer.states[-2])
+        r = self.buffer.rewards[-1]
 
         v = self.value_net(s1)
         q = self.value_net(s2)
-        a = q-v+1
+        a = q-v+r
 
         self.buffer.store_advantage(a)
 
-    def update(self):
+    def update(self, iter=10):
         states = self.buffer.get_states()
-        disc_reward = self.buffer.get_discounted_rewards()
-        old_pred = self.buffer.get_old_predictions()
+        disc_rewards = self.buffer.get_discounted_rewards()
+        ol = self.buffer.get
         pred = self.buffer.get_predictions()
         advantages = self.buffer.get_advantages()
+
+        self.policy_net.optimize(log_probs, old_log_probs, advantages)
+
+        self.value_net.optimize(states, disc_rewards, iter=iter)
 
     def get_action(self):
         state = torch.Tensor(self.buffer.states[-1]).reshape(1, 3)
         prediction = self.policy_net.forward(state)
         old_pred = self.old_policy_net.forward(state)
-        self.buffer.store_prediction(prediction)
-        self.buffer.store_old_prediction(old_pred)
+
         action_probabilities = torch.distributions.Categorical(prediction)
         action = action_probabilities.sample()
         log_prob = action_probabilities.log_prob(action)
+
+        old_action_probabilities = torch.distributions.Categorical(old_pred)
+        old_action = old_action_probabilities.sample()
+        old_log_prob = old_action_probabilities.log_prob(action)
+
         self.buffer.store_log_prob(log_prob)
+        self.buffer.store_old_log_probs(old_log_prob)
+
         # convert discrete to continuous2
         action = -2.0 + 0.1*action.float()
 
@@ -104,7 +115,7 @@ class PPO(object):
             print("states  ", len(self.buffer.states))
             print("actions ", len(self.buffer.actions))
             print("pred    ", len(self.buffer.predictions))
-            print("old pred", len(self.buffer.old_predictions))
+            print("old log ", len(self.buffer.old_log_probs))
             print("r       ", len(self.buffer.rewards))
             print("log prob", len(self.buffer.log_probs))
             print("disc rwr", len(self.buffer.discounted_rewards))
