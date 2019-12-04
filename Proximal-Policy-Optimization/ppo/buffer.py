@@ -9,7 +9,7 @@ class Buffer(object):
         self.states = []
         self.actions = []
         self.predictions = []
-        self.old_predictions = []
+        self.old_log_probs = []
         self.discounted_rewards = []
         self.advantages = []
         self.log_probs = []
@@ -27,8 +27,8 @@ class Buffer(object):
     def store_prediction(self, prediction):
         self.predictions.append(prediction)
 
-    def store_old_prediction(self, prediction):
-        self.old_predictions.append(prediction)
+    def store_old_log_probs(self, old_log_prob):
+        self.old_log_probs.append(old_log_prob)
 
     def store_log_prob(self, lg_prob):
         self.log_probs.append(lg_prob)
@@ -63,6 +63,12 @@ class Buffer(object):
 
     def get_discounted_rewards(self):
         return self.discount_rewards
+
+    def get_log_probs(self):
+        return self.log_probs
+
+    def get_old_log_probs(self):
+        return self.old_log_probs
 
     def get_data(self):
         states = torch.Tensor(self.states)
