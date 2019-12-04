@@ -56,19 +56,22 @@ class Buffer(object):
         return self.rewards
 
     def get_states(self):
-        return self.states
+        return torch.Tensor(self.states).float()
 
     def get_actions(self):
         return self.actions
 
     def get_discounted_rewards(self):
-        return self.discount_rewards
+        return torch.Tensor(self.discounted_rewards).float()
 
     def get_log_probs(self):
-        return self.log_probs
+        return torch.cat(self.log_probs)
 
     def get_old_log_probs(self):
-        return self.old_log_probs
+        return torch.cat(self.old_log_probs)
+
+    def get_advantages(self):
+        return torch.cat(self.advantages)
 
     def get_data(self):
         states = torch.Tensor(self.states)
