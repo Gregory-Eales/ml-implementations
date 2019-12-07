@@ -33,7 +33,7 @@ class ValueNetwork(torch.nn.Module):
         out = self.l2(out)
         out = self.relu(out)
         out = self.l3(out)
-        out = self.sigmoid(out)
+        #out = self.relu(out)
         return out.to(torch.device('cpu:0'))
 
     def update(self, iter, state, disc_reward):
