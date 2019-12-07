@@ -52,7 +52,7 @@ class PPO(object):
 
         self.old_policy_net.load_state_dict(self.policy_net.state_dict())
 
-        self.policy_net.optimize(log_probs, old_probs, advantages, iter=iter)
+        self.policy_net.optimize(log_probs, old_probs, advantages, iter=10)
 
         self.value_net.optimize(states, disc_rewards, iter=iter)
 
@@ -83,34 +83,31 @@ class PPO(object):
 
         for i in range(n_epoch):
 
-            # reset env
-            state = env.reset()
-            self.buffer.store_state(state)
+            for n in range(int(n_steps/200)):
+                # reset env
+                state = env.reset()
+                self.buffer.store_state(state)
+                for s in range(200):
 
-            for s in range(n_steps):
+                    if render: env.render()
 
-                if render: self.env.render()
+                    # get action
+                    action = self.get_action()
 
-                # render if true
-                if render: env.render()
+                    # get observation
+                    state, reward, done, info = env.step([action])
 
-                # get action
-                action = self.get_action()
-
-                # get observation
-                state, reward, done, info = env.step([action])
-
-                # store metrics
+                    # store metrics
 
 
-                if done or s == n_steps-1:
-                    self.buffer.store_action(action)
-                    self.buffer.store_reward(reward)
-                    self.buffer.discount_rewards(s+1)
-                    self.calculate_advantages()
+                    if done or s == 199:
+                        self.buffer.store_action(action)
+                        self.buffer.store_reward(reward)
+                        self.buffer.discount_rewards(s+1)
+                        self.calculate_advantages()
 
 
-                else: self.store(state, action, reward)
+                    else: self.store(state, action, reward)
 
             # update networks
             self.update(iter=10)
@@ -140,8 +137,8 @@ def main():
     env.seed(0)
     torch.manual_seed(0)
     np.random.seed(0)
-    ppo = PPO(alpha=0.1, in_dim=3, out_dim=40)
-    ppo.train(env=env, n_steps=1000, n_epoch=5)
+    ppo = PPO(alpha=0.1, in_dim=3, out_dim=30)
+    ppo.train(env=env, n_steps=600, n_epoch=30, render=False)
 
 
 if __name__ == "__main__":
