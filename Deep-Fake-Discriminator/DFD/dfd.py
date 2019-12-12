@@ -17,9 +17,11 @@ class DeepFakeDiscriminator(torch.nn.Module):
 
     def initialize_parameters(self):
 
-        self.conv1 = torch.nn.Conv3d(3, 16, [10, 40, 40])
-        self.conv2 = torch.nn.Conv3d(128, 32, [10, 40, 40])
-        self.conv3 = torch.nn.Conv3d(256, 64, [10, 40, 40])
+        # input is samples, channels, frames, 1920, 1080
+
+        self.conv1 = torch.nn.Conv3d(3, 16, [10, 128, 128], stride=8)
+        self.conv2 = torch.nn.Conv3d(16, 32, [1, 32, 32], stride=8)
+        self.conv3 = torch.nn.Conv3d(32, 64, [1, 12, 25], stride=8)
 
         self.l1 = torch.nn.Linear(in_features=64, out_features=64)
         self.l2 = torch.nn.Linear(in_features=64, out_features=1)
@@ -47,15 +49,15 @@ class DeepFakeDiscriminator(torch.nn.Module):
 
 def main():
     dfd = DeepFakeDiscriminator()
-    p1 = "/Users/gregeales/Desktop/Repositories/ML-Reimplementations/"
-    p2 = "Deep-Fake-Discriminator/DFD/sample_vids/vid1.mp4"
+    p1 = "C:/Users/Greg/Desktop/Repositories/ML-Reimplementations"
+    p2 = "/Deep-Fake-Discriminator/DFD/sample_vids/vid1.mp4"
     print("Initialized Net")
     x = load_mp4_cv2(p1+p2)
     x = torch.Tensor(x)
     print("Loaded Tensor")
     x = x.reshape(1, 3, 10, 1080, 1920)
     print(x.shape)
-    print(dfd.forward(x).shape)
+    dfd.forward(x)
 
 
 
