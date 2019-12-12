@@ -16,11 +16,11 @@ def load_mp4_cv2(path):
     frameWidth = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     frameHeight = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-    buf = np.empty((frameCount, frameHeight, frameWidth, 3), np.dtype('uint8'))
+    buf = np.empty((10, frameHeight, frameWidth, 3), np.dtype('uint8'))
 
     fc = 0
     ret = True
-    while (fc < frameCount  and ret):
+    while (fc < 10  and ret):
         ret, buf[fc] = cap.read()
         fc += 1
     cap.release()
