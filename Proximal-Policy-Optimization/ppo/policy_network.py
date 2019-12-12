@@ -2,7 +2,7 @@ import torch
 
 class PolicyNetwork(torch.nn.Module):
 
-    def __init__(self, alpha, in_dim, out_dim, epsilon=0.2):
+    def __init__(self, alpha, in_dim, out_dim, epsilon=0.3):
 
         super(PolicyNetwork, self).__init__()
 
@@ -12,7 +12,7 @@ class PolicyNetwork(torch.nn.Module):
         self.define_network()
         self.optimizer = torch.optim.Adam(params=self.parameters(), lr=alpha)
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu:0')
-
+        self.to(self.device)
         self.prev_params = self.parameters()
 
     def define_network(self):

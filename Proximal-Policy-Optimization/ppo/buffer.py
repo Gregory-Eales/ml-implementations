@@ -3,8 +3,8 @@ import numpy as np
 
 class Buffer(object):
 
-    def __init__(self):
-
+    def __init__(self, in_dim):
+        self.in_dim = in_dim
         self.rewards = []
         self.states = []
         self.actions = []
@@ -15,11 +15,11 @@ class Buffer(object):
         self.log_probs = []
 
     def store_reward(self, reward):
-        self.rewards.append(reward.tolist())
+        self.rewards.append(reward)
 
     def store_state(self, state):
         # in: numpy array
-        self.states.append(state.reshape([1, 3]).tolist()[0])
+        self.states.append(state.reshape([1, self.in_dim]).tolist()[0])
 
     def store_action(self, action):
         self.actions.append(action)
