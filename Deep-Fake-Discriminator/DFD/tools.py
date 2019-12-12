@@ -1,12 +1,11 @@
 import torch
-import torchvision
+import skvideo.io
 import cv2
 import numpy as np
 
 
 def load_mp4_file(path):
-    vframe, aframes, info = torchvision.io.read_video(path)
-    return vframe, aframes, info
+    return skvideo.io.vread(path)
 
 
 def load_mp4_cv2(path):
@@ -28,8 +27,8 @@ def load_mp4_cv2(path):
 
 
 def main():
-    p1 = "/Users/gregeales/Desktop/Repositories/ML-Reimplementations/"
-    p2 = "Deep-Fake-Discriminator/DFD/sample_vids/vid1.mp4"
+    p1 = "C:/Users/Greg/Desktop/Repositories/ML-Reimplementations"
+    p2 = "/Deep-Fake-Discriminator/DFD/sample_vids/vid1.mp4"
     t = load_mp4_cv2(p1+p2)
     t = torch.Tensor(t)
     print(t.shape)
