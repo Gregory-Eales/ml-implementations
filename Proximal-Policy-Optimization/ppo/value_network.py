@@ -15,6 +15,8 @@ class ValueNetwork(torch.nn.Module):
         self.loss = torch.nn.MSELoss()
 
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else 'cpu:0')
+        self.to(self.device)
+
 
     def define_network(self):
 
@@ -33,7 +35,7 @@ class ValueNetwork(torch.nn.Module):
         out = self.l2(out)
         out = self.relu(out)
         out = self.l3(out)
-        #out = self.relu(out)
+        out = self.relu(out)
         return out.to(torch.device('cpu:0'))
 
     def update(self, iter, state, disc_reward):
