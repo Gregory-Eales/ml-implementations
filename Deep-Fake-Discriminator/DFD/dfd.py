@@ -15,6 +15,8 @@ class DeepFakeDiscriminator(torch.nn.Module):
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu:0")
         self.to(self.device)
 
+        torch.nn.
+
     def initialize_parameters(self):
 
         # input is samples, channels, frames, 1920, 1080
