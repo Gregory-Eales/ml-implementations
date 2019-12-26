@@ -1,6 +1,6 @@
-<h1 align="center"> Algorithm Name </h1>
+<h1 align="center"> Deep Deterministic Policy Gradients </h1>
 
-<h4 align="center"> Reimplementation of Algorithm Name </h4>
+<h4 align="center"> Reimplementation of the Deep Deterministic Policy Gradient algorithm </h4>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
