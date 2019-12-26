@@ -1,6 +1,6 @@
-<h1 align="center"> Algorithm Name </h1>
+<h1 align="center"> Deep Fake Descriminator </h1>
 
-<h4 align="center"> Reimplementation of Algorithm Name </h4>
+<h4 align="center"> Reimplementation of a deep fake descriminator</h4>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
