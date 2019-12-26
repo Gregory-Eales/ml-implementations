@@ -1,6 +1,6 @@
-<h1 align="center"> Algorithm Name </h1>
+<h1 align="center"> Convolutional Neural Network </h1>
 
-<h4 align="center"> Reimplementation of Algorithm Name </h4>
+<h4 align="center"> Reimplementation of a convolutional neural network using pytorch </h4>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
@@ -13,24 +13,26 @@
   <a href="#About">About</a> •
   <a href="#Requirements">Requirements</a> •
   <a href="#Algorithm">Algorithm</a> •
-  <a href="#Environment">Environment</a> •
+  <a href="#Environment">Data</a> •
   <a href="#Training">Training</a> •
   <a href="#Results">Results</a> •
   <a href="#Sources">Sources</a>
 </p>
 
 ## About:
-- overview of the algorithm and its implementation 
+This is an implementation of a convolutional neural network using pytorch and trained on the mnist image dataset for character recognition.
 
 ## Requirements:
-- include required libraries and versions
+- pytorch v X.X
+- numpy v X.X
+- python v3.6
 
 ## Algorithm:
 - explain algorithm overview
 - show pseudocode
 - explain implementation details
 
-## Environment:
+## Data:
 - explain the environment and/or data
 - show screenshots/tables/plots
 
