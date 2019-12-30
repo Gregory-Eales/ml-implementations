@@ -25,6 +25,10 @@ reimplementation of vanilla policy gradient applied to the CartPole-v0 environme
 
 ## Requirements
 
+- Python 3.6
+- Torch 1.1.0
+- 
+
 ## Algorithm
 
 The vanilla policy gradient algorithm works by increasing the probability of actions that lead to the highest reward. This is done using both a policy and value network. The value network is trained using the observations and actions of an a single epoch. The policy network is trained using its actions from that episode as well as the corresponding advantage estimate that is calculated using the value network.
