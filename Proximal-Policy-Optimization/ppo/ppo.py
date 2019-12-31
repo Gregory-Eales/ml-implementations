@@ -17,8 +17,8 @@ class PPO(object):
         self.in_dim = in_dim
 
         self.buffer = Buffer(in_dim)
-        self.value_net = ValueNetwork(alpha, in_dim, 1)
-        self.policy_net = PolicyNetwork(alpha, in_dim, out_dim)
+        self.value_net = ValueNetwork(0.1, in_dim, 1)
+        self.policy_net = PolicyNetwork(0.1, in_dim, out_dim)
         self.old_policy_net = PolicyNetwork(alpha, in_dim, out_dim)
         self.old_policy_net.load_state_dict(self.policy_net.state_dict())
         self.historical_reward = []
@@ -39,7 +39,7 @@ class PPO(object):
 
         v = self.value_net(s1)
         q = self.value_net(s2)
-        a = q-v+1
+        a = q-v+r
 
         self.buffer.store_advantage(a)
 
@@ -54,7 +54,7 @@ class PPO(object):
 
         self.policy_net.optimize(log_probs, old_probs, advantages, iter=1)
 
-        self.value_net.optimize(states, disc_rewards, iter=iter)
+        self.value_net.optimize(iter, states, disc_rewards)
 
     def get_action(self):
         state = torch.Tensor(self.buffer.states[-1]).reshape(1, self.in_dim)
@@ -66,14 +66,10 @@ class PPO(object):
         log_prob = action_probabilities.log_prob(action)
 
         old_action_probabilities = torch.distributions.Categorical(old_pred)
-        old_action = old_action_probabilities.sample()
-        old_log_prob = old_action_probabilities.log_prob(old_action)
+        old_log_prob = old_action_probabilities.log_prob(action)
 
         self.buffer.store_log_prob(log_prob)
         self.buffer.store_old_log_probs(old_log_prob)
-
-        # convert discrete to continuous2
-        #action = -2.0 + 4/self.out_dim*action.float()
 
 
 
@@ -87,8 +83,10 @@ class PPO(object):
                 # reset env
                 state = env.reset()
                 self.buffer.store_state(state)
-                for s in range(200):
-
+                done = False
+                s = 0
+                while not done:
+                    s+1
                     if render: env.render()
 
                     # get action
@@ -99,10 +97,8 @@ class PPO(object):
 
                     # store metrics
 
-
                     if done:
-                        self.buffer.store_action(action)
-                        self.buffer.store_reward(reward)
+                        self.store(state, action, reward)
                         self.buffer.discount_rewards(s)
                         self.calculate_advantages()
                         break
@@ -110,7 +106,7 @@ class PPO(object):
                     else: self.store(state, action, reward)
 
             # update networks
-            self.update(iter=80)
+            self.update(iter=50)
             mean_reward = torch.sum(self.buffer.get_discounted_rewards().mean())
             print(mean_reward)
             self.historical_reward.append(mean_reward.item())
@@ -123,8 +119,8 @@ class PPO(object):
 def main():
 
     env = gym.make("CartPole-v0")
-    ppo = PPO(alpha=0.001, in_dim=4, out_dim=2)
-    ppo.train(env=env, n_steps=800, n_epoch=20, render=False)
+    ppo = PPO(alpha=0.01, in_dim=4, out_dim=2)
+    ppo.train(env=env, n_steps=1600, n_epoch=20, render=False)
 
 
 if __name__ == "__main__":
