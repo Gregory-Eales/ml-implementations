@@ -4,10 +4,11 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+import scipy.misc
 
-from buffer import Buffer
-from value_network import ValueNetwork
-from policy_network import PolicyNetwork
+from .buffer import Buffer
+from .value_network import ValueNetwork
+from .policy_network import PolicyNetwork
 
 class VPG(object):
 
@@ -22,7 +23,7 @@ class VPG(object):
 		self.output_dims = output_dims
 
 		# initialize policy network
-		self.policy_network = PolicyNetwork(alpha, input_dims, output_dims)
+		self.policy_network = PolicyNetwork(0.0001, input_dims, output_dims)
 
 		# initialize value network
 		self.value_network = ValueNetwork(alpha, input_dims, 1)
@@ -186,10 +187,27 @@ class VPG(object):
 			"""
 			plt.pause(0.0001)
 			plt.clf()
-			if average_rewards[-1] > 180:
+			if average_rewards[-1] > 120:
 				torch.save(self.policy_network.state_dict(), "policy_params.pt")
 
+	def play(self, env):
 
+		for i in range(1):
+
+			# initial reset of environment
+			observation = env.reset()
+			done = False
+			frame = 0
+			while not done:
+				frame+=1
+				img = env.render(mode="rgb_array")
+				scipy.misc.imsave('img/gif/img{}.jpg'.format(frame), img)
+
+				# get action, and network policy prediction
+				action, log_prob = self.act(observation)
+
+				# get state + reward
+				observation, reward, done, info = env.step(action)
 
 def main():
 
@@ -200,9 +218,9 @@ def main():
 
 	env = gym.make('CartPole-v0')
 
-	vpg = VPG(alpha=0.0001, input_dims=4, output_dims=2)
+	vpg = VPG(alpha=0.001, input_dims=4, output_dims=2)
 
-	vpg.train(env, n_epoch=1000, n_steps=400, render=False, verbos=False)
+	vpg.train(env, n_epoch=1000, n_steps=800, render=False, verbos=False)
 
 if __name__ == "__main__":
 	main()

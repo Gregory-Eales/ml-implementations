@@ -18,28 +18,24 @@ class PolicyNetwork(torch.nn.Module):
         self.relu = torch.nn.LeakyReLU()
         self.sigmoid = torch.nn.Sigmoid()
 
+        self.kl_divergence = torch.nn.KLDivLoss()
         self.optimizer = torch.optim.Adam(lr=alpha, params=self.parameters())
 
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu:0')
         self.to(self.device)
 
-    def kl_divergence(self, old_pi, pi, advantage):
-        return torch.sum(old_pi*(old_pi.log()-pi.log()), 1).mean()
-
     def hessian_conjugate(self):
         pass
 
-    def loss(self, actions, advantages, prev_params, delta):
+    def loss(self, log_probs, prev_probs, advantages, alpha, delta):
 
-        g = torch.sum(actions*advantages)/actions.shape[0]
-        kl = self.kl_divergence()
-        x = self.hessian_conjugate()
+        l = torch.sum(policy/prev_policy * advantages)
 
+        kl = self.kl_divergence(policy, prev_policy)
 
-        loss = 2*delta*x/(g*x)
-        loss = torch.sqrt(loss)
+        while True:
 
-        return loss
+            pass
 
 
     def forward(self, x):
