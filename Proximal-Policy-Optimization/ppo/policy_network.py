@@ -1,4 +1,5 @@
 import torch
+from tqdm import tqdm
 
 class PolicyNetwork(torch.nn.Module):
 
@@ -19,17 +20,17 @@ class PolicyNetwork(torch.nn.Module):
         self.relu = torch.nn.ReLU()
         self.leaky_relu = torch.nn.LeakyReLU()
         self.sigmoid = torch.nn.Sigmoid()
-        self.l1 = torch.nn.Linear(self.in_dim, 128)
-        self.l2 = torch.nn.Linear(128, 128)
-        self.l3 = torch.nn.Linear(128, self.out_dim)
+        self.l1 = torch.nn.Linear(self.in_dim, 64)
+        self.l2 = torch.nn.Linear(64, 64)
+        self.l3 = torch.nn.Linear(64, self.out_dim)
 
     def normalize(self):
         pass
 
     def loss(self, log_probs, old_log_probs, advantages):
-        r_theta = log_probs/old_log_probs
+        r_theta = log_probs/(old_log_probs.detach())
         clipped_r = r_theta.clamp(1.0 - self.epsilon, 1.0 + self.epsilon)
-        return -torch.min(r_theta*advantages, clipped_r).mean()
+        return torch.min(r_theta*advantages, clipped_r).mean()
 
     def forward(self, x):
         out = torch.Tensor(x).to(self.device)
@@ -42,13 +43,22 @@ class PolicyNetwork(torch.nn.Module):
 
         return out.to(torch.device('cpu:0'))
 
-    def optimize(self, log_probs, old_log_probs, advantages, iter=10):
+    def optimize(self, log_probs, old_probs, adv, iter=1):
 
-        for i in range(iter):
-            loss = self.loss(log_probs, old_log_probs, advantages)
+        num_batch = log_probs.shape[0]//16
+
+        print("Training Policy Network: ")
+
+        for b in tqdm(range(num_batch)):
+
+            n1 = b*16
+            n2 = (b+1)*16
+
+            loss = self.loss(log_probs[n1:n2], old_probs[n1:n2], adv[n1:n2])
             loss.backward(retain_graph=True)
             self.optimizer.zero_grad()
             self.optimizer.step()
+
 
 def main():
 
