@@ -43,7 +43,7 @@ class PPO(object):
 
         self.buffer.store_advantage(a)
 
-    def update(self, iter=100):
+    def update(self, iter=50):
         states = self.buffer.get_states()
         disc_rewards = self.buffer.get_discounted_rewards()
         log_probs = self.buffer.get_log_probs()
@@ -100,10 +100,10 @@ class PPO(object):
                     # store metrics
 
 
-                    if done or s == 199:
+                    if done:
                         self.buffer.store_action(action)
                         self.buffer.store_reward(reward)
-                        self.buffer.discount_rewards(s+1)
+                        self.buffer.discount_rewards(s)
                         self.calculate_advantages()
                         break
 
@@ -117,25 +117,14 @@ class PPO(object):
 
             self.buffer = Buffer(self.in_dim)
 
-            """
-            print("###########")
-            print("states  ", len(self.buffer.states))
-            print("actions ", len(self.buffer.actions))
-            print("pred    ", len(self.buffer.predictions))
-            print("old log ", len(self.buffer.old_log_probs))
-            print("r       ", len(self.buffer.rewards))
-            print("log prob", len(self.buffer.log_probs))
-            print("disc rwr", len(self.buffer.discounted_rewards))
-            print("advantag", len(self.buffer.advantages))
-            """
         plt.plot(self.historical_reward)
         plt.show()
 
 def main():
 
     env = gym.make("CartPole-v0")
-    ppo = PPO(alpha=1.1, in_dim=4, out_dim=2)
-    ppo.train(env=env, n_steps=2000, n_epoch=50, render=False)
+    ppo = PPO(alpha=0.001, in_dim=4, out_dim=2)
+    ppo.train(env=env, n_steps=800, n_epoch=20, render=False)
 
 
 if __name__ == "__main__":

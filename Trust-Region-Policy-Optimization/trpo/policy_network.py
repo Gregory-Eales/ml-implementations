@@ -24,18 +24,13 @@ class PolicyNetwork(torch.nn.Module):
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu:0')
         self.to(self.device)
 
-    def hessian_conjugate(self):
-        pass
+    def loss(self, log_probs, prev_probs, advantages):
 
-    def loss(self, log_probs, prev_probs, advantages, alpha, delta):
+        l = torch.sum(log_probs/prev_probs * advantages)
 
-        l = torch.sum(policy/prev_policy * advantages)
+        kl = self.kl_divergence(log_probs, prev_probs)
 
-        kl = self.kl_divergence(policy, prev_policy)
-
-        while True:
-
-            pass
+        return torch.sum(l - kl)
 
 
     def forward(self, x):
@@ -51,6 +46,6 @@ class PolicyNetwork(torch.nn.Module):
 
     def optimize(self, log_probs, old_probs, advantages):
         self.optimizer.zero_grad()
-        loss = self.loss(actions, advantage, prev_params)
+        loss = self.loss(log_probs, old_probs, advantages)
         loss.backward(retain_graph=True)
         self.optimizer.step()

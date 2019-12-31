@@ -19,9 +19,9 @@ class PolicyNetwork(torch.nn.Module):
         self.relu = torch.nn.ReLU()
         self.leaky_relu = torch.nn.LeakyReLU()
         self.sigmoid = torch.nn.Sigmoid()
-        self.l1 = torch.nn.Linear(self.in_dim, 256)
-        self.l2 = torch.nn.Linear(256, 256)
-        self.l3 = torch.nn.Linear(256, self.out_dim)
+        self.l1 = torch.nn.Linear(self.in_dim, 128)
+        self.l2 = torch.nn.Linear(128, 128)
+        self.l3 = torch.nn.Linear(128, self.out_dim)
 
     def normalize(self):
         pass
@@ -38,7 +38,7 @@ class PolicyNetwork(torch.nn.Module):
         out = self.l2(out)
         out = self.leaky_relu(out)
         out = self.l3(out)
-        out = self.relu(out)
+        out = self.sigmoid(out)
 
         return out.to(torch.device('cpu:0'))
 

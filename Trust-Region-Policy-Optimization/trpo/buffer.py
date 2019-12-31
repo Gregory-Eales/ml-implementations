@@ -13,11 +13,11 @@ class Buffer(object):
         self.old_parameters = None
 
     def store_reward(self, r):
-        r = torch.tensor(r)
+        r = torch.tensor(r).reshape(1,1)
         self.reward_buffer.append(r)
 
     def store_observation(self, s):
-        s = torch.from_numpy(s).float()
+        s = torch.from_numpy(s).float().reshape(1, 2)
         self.observation_buffer.append(s)
 
     def store_advantage(self, a):
@@ -27,7 +27,7 @@ class Buffer(object):
         self.action_buffer.append(a)
 
     def store_log_prob(self, pi):
-        self.log_prob_buffer.append(pi)
+        self.log_prob_buffer.append(pi.reshape(1,1))
 
     def store_parameters(self, params):
         self.old_parameters = params
@@ -42,10 +42,10 @@ class Buffer(object):
         return torch.cat(self.action_buffer)
 
     def get_rewards(self):
-        return torch.cat(self.reward_buffer)
+        return torch.cat(self.reward_buffer, dim=0)
 
     def get_observations(self):
-        return torch.cat(self.observation_buffer)
+        return torch.cat(self.observation_buffer)[:-1].reshape(-1, 2)
 
     def get_advantages(self):
         return torch.cat(self.advantage_buffer)

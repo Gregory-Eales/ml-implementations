@@ -24,9 +24,9 @@ class ValueNetwork(torch.nn.Module):
         self.tanh = torch.nn.Tanh()
         self.sigmoid = torch.nn.Sigmoid()
 
-        self.l1 = torch.nn.Linear(self.in_dim, 256)
-        self.l2 = torch.nn.Linear(256, 256)
-        self.l3 = torch.nn.Linear(256, self.out_dim)
+        self.l1 = torch.nn.Linear(self.in_dim, 128)
+        self.l2 = torch.nn.Linear(128, 128)
+        self.l3 = torch.nn.Linear(128, self.out_dim)
 
     def forward(self, x):
         out = torch.Tensor(x).to(self.device)
