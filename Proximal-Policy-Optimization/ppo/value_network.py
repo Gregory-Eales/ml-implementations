@@ -1,4 +1,5 @@
 import torch
+from tqdm import tqdm
 
 class ValueNetwork(torch.nn.Module):
 
@@ -24,9 +25,9 @@ class ValueNetwork(torch.nn.Module):
         self.tanh = torch.nn.Tanh()
         self.sigmoid = torch.nn.Sigmoid()
 
-        self.l1 = torch.nn.Linear(self.in_dim, 128)
-        self.l2 = torch.nn.Linear(128, 128)
-        self.l3 = torch.nn.Linear(128, self.out_dim)
+        self.l1 = torch.nn.Linear(self.in_dim, 64)
+        self.l2 = torch.nn.Linear(64, 64)
+        self.l3 = torch.nn.Linear(64, self.out_dim)
 
     def forward(self, x):
         out = torch.Tensor(x).to(self.device)
@@ -38,17 +39,27 @@ class ValueNetwork(torch.nn.Module):
         out = self.relu(out)
         return out.to(torch.device('cpu:0'))
 
-    def update(self, iter, state, disc_reward):
-        for i in range(iter):
-            p = self.forward(state)
-            loss = self.loss(p, disc_reward)
-            loss.backward(retain_graph=True)
-            self.optimizer.zero_grad()
-            self.optimizer.step()
+    def optimize(self, iter, state, disc_reward):
 
+        print("Training Value Network: ")
 
-    def optimize(self, states, rewards, iter):
-        pass
+        print(state.shape)
+
+        for i in tqdm(range(iter)):
+
+            num_batch = state.shape[0]//16
+
+            for b in range(num_batch):
+
+                n1 = b*16
+                n2 = (b+1)*16
+
+                p = self.forward(state[n1:n2]).reshape(16, 1)
+                loss = self.loss(p, disc_reward[n1:n2])
+                loss.backward(retain_graph=True)
+                self.optimizer.zero_grad()
+                self.optimizer.step()
+
 
 def main():
 
