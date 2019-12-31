@@ -25,6 +25,11 @@ reimplementation of vanilla policy gradient applied to the CartPole-v0 environme
 
 ## Requirements
 
+- Python 3.6
+- Torch 1.1.0
+- Numpy 1.16.4
+- Matplotlib 2.2.4
+
 ## Algorithm
 
 The vanilla policy gradient algorithm works by increasing the probability of actions that lead to the highest reward. This is done using both a policy and value network. The value network is trained using the observations and actions of an a single epoch. The policy network is trained using its actions from that episode as well as the corresponding advantage estimate that is calculated using the value network.
@@ -49,14 +54,13 @@ The enviroment used in this implementation is the CartPole-V0 enviroment provide
 
 ## Training
 
-
-## Results
-By training the model over 1000 epochs with 4000 steps per epoch the agent was able to substantially improve its average reward nearly to the maximum obtainable reward. The agent also almost consisently made it to the maximum time step allowed inside the environment within 100 epochs.
-
-
 <p align="center">
   <img height="450" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/training_graph.gif">
 </p>
+
+
+## Results
+By training the model over 1000 epochs with 4000 steps per epoch the agent was able to substantially improve its average reward nearly to the maximum obtainable reward. The agent also almost consisently made it to the maximum time step allowed inside the environment within 100 epochs.
 
 
 ## Sources
