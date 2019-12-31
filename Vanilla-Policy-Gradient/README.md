@@ -55,7 +55,7 @@ The enviroment used in this implementation is the CartPole-V0 enviroment provide
 ## Training
 
 <p align="center">
-  <img height="300" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/training_graph.gif">
+  <img height="400" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/training_graph.gif">
 </p>
 
 
