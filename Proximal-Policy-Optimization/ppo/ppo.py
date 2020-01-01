@@ -1,127 +1,59 @@
 import torch
-import numpy as np
-import gym
-import time
-from matplotlib import pyplot as plt
+from tqdm import tqdm
 
-from policy_network import PolicyNetwork
-from value_network import ValueNetwork
-from buffer import Buffer
+
+from .policy_network import PolicyNetwork
+from .value_network import ValueNetwork
+from .buffer import Buffer
+
 
 
 class PPO(object):
 
-    def __init__(self, alpha, in_dim, out_dim):
 
-        self.out_dim = out_dim
-        self.in_dim = in_dim
+    def __init__(self):
 
-        self.buffer = Buffer(in_dim)
-        self.value_net = ValueNetwork(0.1, in_dim, 1)
-        self.policy_net = PolicyNetwork(0.1, in_dim, out_dim)
-        self.old_policy_net = PolicyNetwork(alpha, in_dim, out_dim)
-        self.old_policy_net.load_state_dict(self.policy_net.state_dict())
-        self.historical_reward = []
+        self.value_network = ValueNetwork()
+        self.policy_network = PolicyNetwork()
+        self.buffer = Buffer()
 
+    def act(self, state):
 
-    def store(self, state, action, reward):
-
-        self.buffer.store_state(state)
-        self.buffer.store_action(action)
-        self.buffer.store_reward(reward)
-        self.calculate_advantages()
+        print(state)
+        pass
 
     def calculate_advantages(self):
+        pass
 
-        s2 = torch.Tensor(self.buffer.states[-1])
-        s1 = torch.Tensor(self.buffer.states[-2])
-        r = self.buffer.rewards[-1]
+    def update(self, epochs=80):
 
-        v = self.value_net(s1)
-        q = self.value_net(s2)
-        a = q-v+r
+        states, actions, rewards = self.buffer.get()
 
-        self.buffer.store_advantage(a)
+        self.value_network.optimize()
+        self.policy_network.optimize()
 
-    def update(self, iter=50):
-        states = self.buffer.get_states()
-        disc_rewards = self.buffer.get_discounted_rewards()
-        log_probs = self.buffer.get_log_probs()
-        old_probs = self.buffer.get_old_log_probs()
-        advantages = self.buffer.get_advantages()
+    def train(self, env, n_steps, n_epochs):
 
-        self.old_policy_net.load_state_dict(self.policy_net.state_dict())
+        for epoch in range(n_epochs):
 
-        self.policy_net.optimize(log_probs, old_probs, advantages, iter=1)
+            state = env.reset()
+            for step in tqdm(range(n_steps)):
 
-        self.value_net.optimize(iter, states, disc_rewards)
+                action = self.act(state)
 
-    def get_action(self):
-        state = torch.Tensor(self.buffer.states[-1]).reshape(1, self.in_dim)
-        prediction = self.policy_net.forward(state)
-        old_pred = self.old_policy_net.forward(state)
+                state, reward, done, _  = env.step(action)
 
-        action_probabilities = torch.distributions.Categorical(prediction)
-        action = action_probabilities.sample()
-        log_prob = action_probabilities.log_prob(action)
+                self.buffer.store(state, action, reward)
 
-        old_action_probabilities = torch.distributions.Categorical(old_pred)
-        old_log_prob = old_action_probabilities.log_prob(action)
-
-        self.buffer.store_log_prob(log_prob)
-        self.buffer.store_old_log_probs(old_log_prob)
+                if done:
+                    pass
 
 
 
-        return action.item()
-
-    def train(self, env, n_steps, n_epoch, render=False, verbos=False):
-
-        for i in range(n_epoch):
-
-            for n in range(int(n_steps/200)):
-                # reset env
-                state = env.reset()
-                self.buffer.store_state(state)
-                done = False
-                s = 0
-                while not done:
-                    s+1
-                    if render: env.render()
-
-                    # get action
-                    action = self.get_action()
-
-                    # get observation
-                    state, reward, done, info = env.step(action)
-
-                    # store metrics
-
-                    if done:
-                        self.store(state, action, reward)
-                        self.buffer.discount_rewards(s)
-                        self.calculate_advantages()
-                        break
-
-                    else: self.store(state, action, reward)
-
-            # update networks
-            self.update(iter=50)
-            mean_reward = torch.sum(self.buffer.get_discounted_rewards().mean())
-            print(mean_reward)
-            self.historical_reward.append(mean_reward.item())
-
-            self.buffer = Buffer(self.in_dim)
-
-        plt.plot(self.historical_reward)
-        plt.show()
-
-def main():
-
-    env = gym.make("CartPole-v0")
-    ppo = PPO(alpha=0.01, in_dim=4, out_dim=2)
-    ppo.train(env=env, n_steps=1600, n_epoch=20, render=False)
 
 
-if __name__ == "__main__":
-    main()
+
+
+
+    def play(self):
+        pas
