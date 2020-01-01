@@ -26,7 +26,7 @@ reimplementation of vanilla policy gradient applied to the CartPole-v0 environme
 ## Requirements
 
 - Python 3.6
-- Torch 1.1.0
+- Pytorch 1.1.0
 - Numpy 1.16.4
 - Matplotlib 2.2.4
 
