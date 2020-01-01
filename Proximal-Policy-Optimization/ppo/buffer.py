@@ -1,52 +1,47 @@
 import torch
 import numpy as np
 
+
 class Buffer(object):
 
     def __init__(self):
 
-        # store actions
-        self.action_buffer = []
-
-        # store state
-        self.observation_buffer = []
-
-        # store reward
-        self.reward_buffer = []
-
-        # store advantage
+        self.policy_buffer = []
+        self.old_policy_buffer = []
         self.advantage_buffer = []
+        self.state_buffer = []
 
-    def store_observation(self, obs):
-        self.observation_buffer.append(obs)
 
-    def store_reward(self, rwrd):
-        self.reward_buffer.append(rwrd)
-
-    def store_action(self, act):
-        self.action_buffer.append(act)
-
-    def store_advantage(self, adv):
+    def store_advantages(self, adv):
         self.advantage_buffer.append(adv)
 
-    def clear_buffer(self):
-        # store actions
-        self.action_buffer = []
+    def store_policy(self, p):
+        self.policy_buffer.append(p)
 
-        # store state
-        self.observation_buffer = []
+    def store_old_policy(self, old_p):
+        self.old_policy_buffer.append(old_p)
 
-        # store reward
-        self.reward_buffer = []
+    def store_state(self, state):
+        self.state_buffer.append(state)
 
-        # store advantage
-        self.advantage_buffer = []
 
-    def get_tensors(self):
+    def store(self, state, policy, old_policy):
+        self.store_state(state)
+        self.store_old_policy(old_policy)
+        self.store_policy(policy)
 
-        observations = torch.Tensor(self.observation_buffer[1:])
-        actions = torch.cat(self.action_buffer)
-        rewards = torch.Tensor(self.reward_buffer).reshape(-1, 1)
-        advantages = torch.Tensor(self.advantage_buffer)
+    def get_old_policy(self):
+        pass
 
-        return observations, actions, rewards, advantages
+    def get_policy(self):
+        pass
+
+    def get_states(self):
+        pass
+
+    def get_advantages(self):
+        pass
+
+    def get(self):
+
+        return
