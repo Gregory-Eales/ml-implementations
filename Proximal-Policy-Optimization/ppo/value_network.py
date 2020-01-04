@@ -63,9 +63,9 @@ class ValueNetwork(torch.nn.Module):
 
 def main():
 
-    t1 = torch.ones(1, 3)
+    t1 = torch.rand(100, 3)
     vn = ValueNetwork(0.01, 3, 1)
-    print(vn(t1))
+    vn.optimize(iter=100, state=t1, disc_reward=torch.rand(100, 1))
 
 
 
