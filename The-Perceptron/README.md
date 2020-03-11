@@ -20,15 +20,15 @@
 </p>
 
 ## About:
-- overview of the algorithm and its implementation
+Implementation of the Rosenblat's perceptron agorithm.
 
 ## Requirements:
-- include required libraries and versions
+- numpy
+- matplotlib
+- pandas
 
 ## Algorithm:
-- explain algorithm overview
-- show pseudocode
-- explain implementation details
+The perceptron algorithm is a single artificial neuron that takes in weighted inputs with a bias and then uses an activation function to regularize the outputs between 1 and 0. This algorithm combined with gradient descent is the key building block for deep learning and modern artificial intelligence.
 
 ## Data:
 - explain the environment and/or data

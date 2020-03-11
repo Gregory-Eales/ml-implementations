@@ -20,26 +20,27 @@
 </p>
 
 ## About:
-- overview of the algorithm and its implementation 
+This is an implementation of a deep fake discriminator in an attempt to identify videos that have been modified by the deep fakes algorithm as a part of the kaggle deep fake challenge.
 
 ## Requirements:
-- include required libraries and versions
+- numpy
+- torch
+- pandas
+- matplotlib
+
 
 ## Algorithm:
-- explain algorithm overview
-- show pseudocode
-- explain implementation details
+This algorithm employs a 3 dimensional convolutional neural network which takes in multiple video frames and determines whether they have elements that have been video generated.
 
-## Environment:
-- explain the environment and/or data
-- show screenshots/tables/plots
+## Data:
+-
 
 ## Training:
 - explain training methods
 - plot accuracy and loss through training
 
 ## Results:
-- show end result accuracy 
+- show end result accuracy
 - show prediction plot
 - include closing thoughts + improvements
 
@@ -53,6 +54,3 @@ Gregory Eales – [@GregoryHamE](https://twitter.com/GregoryHamE) – gregory.ha
 Distributed under the MIT license. See ``LICENSE`` for more information.
 
 [https://github.com/Gregory-Eales](https://github.com/Gregory-Eales)
-
-
-

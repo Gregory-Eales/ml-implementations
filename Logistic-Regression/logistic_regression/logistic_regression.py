@@ -1,4 +1,4 @@
-import numpy as np 
+import numpy as np
 from tqdm import tqdm
 from time import sleep
 
@@ -10,9 +10,6 @@ class LogisticRegressor(object):
 		self.historical_cost = []
 
 	def train(self, x, y, iterations, alpha):
-		print("    ------------------------------------------")
-		print("    |   Training Logistic Regression Model   |")
-		print("    ------------------------------------------")
 		
 		for iteration in tqdm(range(iterations)):
 			error = 0
