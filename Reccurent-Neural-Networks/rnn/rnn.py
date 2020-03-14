@@ -1,61 +1,44 @@
 import torch
 
-class RNN(object):
+class RNN(torch.nn.Module):
 
-    def __init__(self, x_shape, y_shape):
-        
-        # store init variables
-        self.x_shape = x_shape
-        self.y_shape = y_shape
+    def __init__(self, sequence_size):
 
-        # init dense params
-        self.dense_w = {}
-        self.dense_z = {}
-        self.dense_b = {}
-        self.dense_a = {}
+        super(RNN, self).__init__()
 
-        # init reccurent params
-        self.rec_w = {}
-        self.rec_z = {}
-        self.rec_b = {}
-        self.rec_a = {}
+        self.sequence_size = sequence_size
+        self.layers = {}
 
-    def initialize_weights(self):
-        self.init_reccurent_weights()
-        self.init_dense_weights()
+        self.leaky_relu = torch.nn.LeakyReLU()
+        self.loss = torch.nn.MSELoss()
+        self.optimizer = torch.optim.SGD(params=self.parameters(), lr=0.1)
 
-    def init_reccurent_weights(self):
+    def define_network(self):
+
+        self.layers["l1"] = torch.nn.Linear(1, 1)
+
+        for i in range(1, self.sequence_size):
+            self.layers["l"+str(i+1)] = torch.nn.Linear(2, 1)
+
+    def forward(self, x):
+
+
+        out = self.layers["l1"](x[0])
+
+        for i in range(1, self.sequence_size):
+            input = torch.cat([out, x[i]]).reshape(1, 2)
+            out = self.layers["l"+str(i+1)](input)
+
+        return out
+
+    def update(self):
         pass
 
-    def init_dense_weights(self):
-        pass
 
-    def single_reccurent(self):
-        pass
-
-    def reccurent_forward(self):
-        pass
-
-    def dense_forward(self):
-        pass
-
-    def reccurent_backward(self):
-        pass
-
-    def sigmoid_prime(self, z):
-        a = torch.sigmoid(z)
-        return a*(a-1)
-
-    def tanh_prime(self, z):
-        return 1 - (torch.tanh(z)**2)
-
-    def relu_prime(self, z):
-        z[z>0] = 1
-        z[z<0] = 0
-        return z
+def main():
+    rnn = RNN(sequence_size=5)
+    x = torch.rand(5, 1)
 
 
-
-
-
-
+if __name__ == "__main__":
+    main()
