@@ -2,17 +2,17 @@ import torch
 from tqdm import tqdm
 import numpy as np
 
-from policy_network import PolicyNetwork
-from value_network import ValueNetwork
-from buffer import Buffer
+from .policy_network import PolicyNetwork
+from .value_network import ValueNetwork
+from .buffer import Buffer
 
 class PPO(object):
 
-    def __init__(self, alpha=0.001, input_dims=3, output_dims=2):
+    def __init__(self, alpha=0.001, in_dim=3, out_dim=2):
 
         self.value_network = ValueNetwork(alpha=alpha, in_dim=in_dim, out_dim=1)
         self.policy_network = PolicyNetwork(alpha=alpha, in_dim=in_dim, out_dim=out_dim)
-        self.old_policy_network = PolicyNetwork()
+        self.old_policy_network = PolicyNetwork(alpha=alpha, in_dim=in_dim, out_dim=out_dim)
         state_dict = self.policy_network.state_dict()
         self.old_policy_network.load_state_dict(state_dict)
         self.buffer = Buffer()
