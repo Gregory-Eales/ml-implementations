@@ -2,7 +2,7 @@ import torch
 
 class Network(torch.nn.Module):
 
-    def __init__(self):
+    def __init__(self, in_size, hidden_size, out_size):
 
         super(Network, self).__init__()
 
@@ -12,11 +12,10 @@ class Network(torch.nn.Module):
 
     def define_network(self):
 
-        self.lstm1 = torch.nn.LSTM()
-        self.lstm2 = torch.nn.LSTM()
-        self.lstm3 = torch.nn.LSTM()
+        self.lstm = torch.nn.LSTM()
 
         self.leaky_relu = torch.nn.LeakyReLU()
+
 
     def forward(self, x):pass
 
