@@ -26,17 +26,16 @@ Implementation of the Rosenblat's perceptron agorithm.
 - numpy
 - matplotlib
 - pandas
+- sklearn
 
 ## Algorithm:
 The perceptron algorithm is a single artificial neuron that takes in weighted inputs with a bias and then uses an activation function to regularize the outputs between 1 and 0. This algorithm combined with gradient descent is the key building block for deep learning and modern artificial intelligence.
 
 ## Data:
-- explain the environment and/or data
-- show screenshots/tables/plots
+The data used in this perceptron implementation is a part of the abolone dataset found on the UCI website. The challenge given to the perceptron was to determine if the given datasample is male or other.
 
 ## Training:
-- explain training methods
-- plot accuracy and loss through training
+Training is done using vectorization and batched gradient desent.
 
 ## Results:
 - show end result accuracy
