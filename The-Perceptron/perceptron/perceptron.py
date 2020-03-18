@@ -6,25 +6,27 @@ class Perceptron(object):
 
 	def __init__(self, input_shape = [1, 2]):
 		self.w = np.random.random(input_shape) / 10
-		self.w = self.w[0]
+		self.w = self.w[0].reshape(1, -1)
 		self.error = 0
 		self.historical_error = []
 
 	def train(self, x, y, alpha, iterations):
 
+		m = x.shape[0]
+
 		for iteration in tqdm(range(iterations)):
-			self.error = 0
 
-			for i in range(x.shape[0]):
-				z = np.dot(self.w, x[i].T)
-				self.error = self.error + abs(y[i] - z)
-				self.w = self.w - self.cost(y[i], z, x[i], alpha)
-
-			self.historical_error.append(self.error)
+			z = self.predict(x)
+			self.error = abs(y - z)
+			self.w = self.w - np.sum(self.cost(y, z, x, alpha).T, axis=1)/m
+			self.historical_error.append(np.sum(self.error))
 
 	def cost(self, z, y, x, alpha):
-		return alpha * x * (y - z)
+		cost = alpha * x * (y - z)
+		return cost
 
 	def predict(self, x):
 		z = np.dot(self.w, x.T)
-		return z
+		z[z>=0] = 1
+		z[z<0] = 0
+		return z.reshape((-1, 1))
