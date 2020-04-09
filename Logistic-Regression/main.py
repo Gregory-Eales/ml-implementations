@@ -1,5 +1,5 @@
-import data
-import logistic_regression
+import utils.data
+from lr.lr import LogisticRegressor
 import numpy as np
 from matplotlib import pyplot as plt
 import random
@@ -26,7 +26,7 @@ y = np.array(y)
 
 
 
-regressor = logistic_regression.LogisticRegressor([1, 2])
+regressor = LogisticRegressor([1, 2])
 
 regressor.train(x, y, 50000, 0.01)
 
@@ -54,9 +54,3 @@ for i in range(200):
 plt.scatter(db1, db2)
 plt.scatter(x[:, 0], x[:, 1])
 plt.show()
-
-
-
-
-
-
