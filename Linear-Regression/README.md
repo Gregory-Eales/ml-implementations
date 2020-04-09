@@ -29,18 +29,17 @@ Implementation of linear regression trained to perform binary classification.
 
 
 ## Algorithm:
-Linear regression is a line fitting algorithm that updates its parameters using gradient descent. In this implementation, linear regression is used as a binary classifier to predict if a data sample is from a distribution.
+Linear regression is a line fitting algorithm that updates its parameters using gradient descent. In this implementation, linear regression is used as a binary classifier to predict if a data sample is from a particular classification.
 
 ## Data:
-The data used is generated from two overlapping gaussian distributions. This provides a perfect test case for a binary classifier.
+The data used is generated randomly to form two slightly overlapping gaussian distributions. This provides a perfect test case for a simple binary classifier.
 
 <p align="center">
   <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Linear-Regression/img/class_data.png">
 </p>
 
 ## Training:
-- explain training methods
-- plot accuracy and loss through training
+The model is trained using gradient descent with out batching and a learning rate of 0.001 with 10,000 iterations.
 
 <p align="center">
   <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Linear-Regression/img/loss_per_iter.png">
@@ -48,9 +47,7 @@ The data used is generated from two overlapping gaussian distributions. This pro
 
 
 ## Results:
-- show end result accuracy
-- show prediction plot
-- include closing thoughts + improvements
+The model is able to achieve a very convincing decision boundary, clearly dividing the two class distributions and is able to correctly classify data with around 97% accuracy. 
 
 <p align="center">
   <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Linear-Regression/img/accuracy_per_epoch.png">
