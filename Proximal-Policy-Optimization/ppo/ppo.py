@@ -16,12 +16,12 @@ class PPO(object):
         state_dict = self.policy_network.state_dict()
         self.old_policy_network.load_state_dict(state_dict)
         self.buffer = Buffer()
-        self.mean_reward()
+        self.mean_reward = None
 
     def act(self, state):
 
         # convert to torch get_tensors
-        s = torch.tensor(s).reshape(-1, len(s)).float()
+        s = torch.tensor(state).reshape(-1, len(state)).float()
 
 		# get policy prob distrabution
         prediction = self.policy_network.forward(s)
@@ -47,7 +47,7 @@ class PPO(object):
 
     def discount_reward(self):
 
-        r = self.buffer.get_rewards
+        r = np.array(self.buffer.get_rewards())
         disc_r = []
         discount = 0.99
 
@@ -80,7 +80,7 @@ class PPO(object):
 
                 state, reward, done, info = env.step(action)
 
-                self.buffer.store(state, action, reward)
+                self.buffer.store_trajectory(state, action, reward)
 
 
                 self.calculate_advantage()

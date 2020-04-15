@@ -10,6 +10,8 @@ class Buffer(object):
         self.old_policy_buffer = []
         self.advantage_buffer = []
         self.state_buffer = []
+        self.reward_buffer = []
+        self.action_buffer = []
 
 
     def store_advantages(self, adv):
@@ -24,6 +26,10 @@ class Buffer(object):
     def store_state(self, state):
         self.state_buffer.append(state)
 
+    def store_trajectory(self, state, action, reward):
+        self.state_buffer.append(state)
+        self.action_buffer.append(action)
+        self.reward_buffer.append(reward)
 
     def store(self, state, policy, old_policy):
         self.store_state(state)
@@ -31,16 +37,19 @@ class Buffer(object):
         self.store_policy(policy)
 
     def get_old_policy(self):
-        pass
+        return self.old_policy_buffer
 
     def get_policy(self):
         pass
 
     def get_states(self):
-        pass
+        return self.state_buffer
 
     def get_advantages(self):
-        pass
+        return self.advantage_buffer
+
+    def get_rewards(self):
+        return self.reward_buffer
 
     def get(self):
 
