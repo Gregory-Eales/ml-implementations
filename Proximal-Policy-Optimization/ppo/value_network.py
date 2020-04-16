@@ -39,23 +39,23 @@ class ValueNetwork(torch.nn.Module):
         out = self.relu(out)
         return out.to(torch.device('cpu:0'))
 
-    def optimize(self, iter, state, disc_reward):
+    def optimize(self, states, rewards, epochs=10):
 
         print("Training Value Network: ")
 
-        print(state.shape)
+        print(states.shape)
 
-        for i in tqdm(range(iter)):
+        for i in tqdm(range(epochs)):
 
-            num_batch = state.shape[0]//16
+            num_batch = states.shape[0]//16
 
             for b in range(num_batch):
 
                 n1 = b*16
                 n2 = (b+1)*16
 
-                p = self.forward(state[n1:n2]).reshape(16, 1)
-                loss = self.loss(p, disc_reward[n1:n2])
+                p = self.forward(states[n1:n2]).reshape(16, 1)
+                loss = self.loss(p, rewards[n1:n2])
                 loss.backward(retain_graph=True)
                 self.optimizer.zero_grad()
                 self.optimizer.step()

@@ -27,8 +27,7 @@ class PolicyNetwork(torch.nn.Module):
     def normalize(self):
         pass
 
-    def loss(self, log_probs, old_log_probs, advantages):
-        r_theta = log_probs/(old_log_probs.detach())
+    def loss(self, r_theta, advantages):
         clipped_r = r_theta.clamp(1.0 - self.epsilon, 1.0 + self.epsilon)
         return torch.min(r_theta*advantages, clipped_r).mean()
 
@@ -43,9 +42,10 @@ class PolicyNetwork(torch.nn.Module):
 
         return out.to(torch.device('cpu:0'))
 
-    def optimize(self, log_probs, old_probs, adv, iter=1):
+    def optimize(self, adv, r, iter=1):
 
-        num_batch = log_probs.shape[0]//16
+        num_batch = r.shape[0]//16
+        rem_batch = r.shape[0]%16
 
         print("Training Policy Network: ")
 
@@ -54,10 +54,23 @@ class PolicyNetwork(torch.nn.Module):
             n1 = b*16
             n2 = (b+1)*16
 
-            loss = self.loss(log_probs[n1:n2], old_probs[n1:n2], adv[n1:n2])
-            loss.backward(retain_graph=True)
-            self.optimizer.zero_grad()
-            self.optimizer.step()
+            if b == 0:
+                loss = self.loss(r[n1:n2], adv[n1:n2])
+                loss.backward(retain_graph=True)
+                self.optimizer.zero_grad()
+                self.optimizer.step()
+
+            else:
+                loss = self.loss(r[n1:n2], adv[n1:n2])
+                loss.backward(retain_graph=True)
+                self.optimizer.zero_grad()
+                self.optimizer.step()
+
+        loss = self.loss(r[-rem_batch:], adv[-rem_batch:])
+        loss.backward(retain_graph=True)
+        self.optimizer.zero_grad()
+        self.optimizer.step()
+
 
 
 def main():

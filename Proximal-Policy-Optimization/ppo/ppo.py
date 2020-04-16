@@ -8,7 +8,7 @@ from .buffer import Buffer
 
 class PPO(object):
 
-    def __init__(self, alpha=0.001, in_dim=3, out_dim=2):
+    def __init__(self, alpha=0.0001, in_dim=3, out_dim=2):
 
         self.value_network = ValueNetwork(alpha=alpha, in_dim=in_dim, out_dim=1)
         self.policy_network = PolicyNetwork(alpha=alpha, in_dim=in_dim, out_dim=out_dim)
@@ -16,7 +16,7 @@ class PPO(object):
         state_dict = self.policy_network.state_dict()
         self.old_policy_network.load_state_dict(state_dict)
         self.buffer = Buffer()
-        self.mean_reward = None
+        self.mean_reward = []
 
     def act(self, state):
 
@@ -34,6 +34,15 @@ class PPO(object):
 
         log_prob = action_probabilities.log_prob(action)
 
+        self.buffer.store_policy(log_prob)
+
+        # get old policy
+        # get policy prob distrabution
+        old_pred = self.old_policy_network.forward(s)
+        old_ap = torch.distributions.Categorical(old_pred)
+        old_log_prob = action_probabilities.log_prob(action)
+        self.buffer.store_old_policy(old_log_prob.detach())
+
         return action.item()
 
     def calculate_advantage(self):
@@ -43,9 +52,11 @@ class PPO(object):
         v2 = self.value_network.forward(states[-1])
         v1 = self.value_network.forward(states[-2])
 
-        return 1 + v2 - v1
+        a = 1 + v2 - v1
 
-    def discount_reward(self):
+        self.buffer.store_advantages(a)
+
+    def discount_reward(self, n):
 
         r = np.array(self.buffer.get_rewards())
         disc_r = []
@@ -61,6 +72,9 @@ class PPO(object):
         states, policy, old_policy, rewards, advantages = self.buffer.get()
 
         r = policy/old_policy
+
+        state_dict = self.policy_network.state_dict()
+        self.old_policy_network.load_state_dict(state_dict)
 
         self.policy_network.optimize(advantages, r)
         self.value_network.optimize(states, rewards, epochs=epochs)
@@ -88,14 +102,18 @@ class PPO(object):
                 if done:
                     self.discount_reward()
 
-            self.update(epoch=80)
+            self.update()
 
             mean_reward = self.buffer.get_rewards()
             mean_reward = torch.sum(mean_reward)/mean_reward.shape[0]
 
-            if self.mean_reward[-1] > 150:
+            self.mean_reward.append(mean_reward)
+
+            if mean_reward > 150:
                 file_name = "policy_params.pt"
                 torch.save(self.policy_network.state_dict(), file_name)
+
+            self.buffer.clear()
 
     def play(self):
         pas
