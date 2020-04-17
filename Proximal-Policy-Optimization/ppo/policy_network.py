@@ -1,9 +1,10 @@
 import torch
 from tqdm import tqdm
+import numpy as np
 
 class PolicyNetwork(torch.nn.Module):
 
-    def __init__(self, alpha, in_dim, out_dim, epsilon=0.3):
+    def __init__(self, alpha, in_dim, out_dim, epsilon=0.2):
 
         super(PolicyNetwork, self).__init__()
 
@@ -20,56 +21,64 @@ class PolicyNetwork(torch.nn.Module):
         self.relu = torch.nn.ReLU()
         self.leaky_relu = torch.nn.LeakyReLU()
         self.sigmoid = torch.nn.Sigmoid()
-        self.l1 = torch.nn.Linear(self.in_dim, 64)
-        self.l2 = torch.nn.Linear(64, 64)
-        self.l3 = torch.nn.Linear(64, self.out_dim)
+        self.tanh = torch.nn.Tanh()
+        self.l1 = torch.nn.Linear(self.in_dim, 128)
+        self.l2 = torch.nn.Linear(128, 128)
+        self.l3 = torch.nn.Linear(128, self.out_dim)
 
-    def normalize(self):
-        pass
+    def normalize(self, x):
+        x = np.array(x)
+        x_mean = np.mean(x)
+        x_std = np.std(x) if np.std(x) > 0 else 1
+        x = (x-x_mean)/x_std
+        return torch.Tensor(x)
 
     def loss(self, r_theta, advantages):
-        clipped_r = r_theta.clamp(1.0 - self.epsilon, 1.0 + self.epsilon)
-        return torch.min(r_theta*advantages, clipped_r).mean()
+
+        clipped_r = torch.clamp(r_theta, 1.0 - self.epsilon, 1.0 + self.epsilon)
+        return torch.min(r_theta*advantages, clipped_r*advantages)
 
     def forward(self, x):
         out = torch.Tensor(x).to(self.device)
         out = self.l1(out)
-        out = self.leaky_relu(out)
+        out = self.tanh(out)
         out = self.l2(out)
-        out = self.leaky_relu(out)
+        out = self.tanh(out)
         out = self.l3(out)
         out = self.sigmoid(out)
 
         return out.to(torch.device('cpu:0'))
 
-    def optimize(self, adv, r, iter=1):
+    def optimize(self, r, adv, iter=1):
 
-        num_batch = r.shape[0]//16
-        rem_batch = r.shape[0]%16
+        adv = self.normalize(adv)
 
-        print("Training Policy Network: ")
+        n_samples = r.shape[0]
+        num_batch = int(n_samples/5)
 
-        for b in tqdm(range(num_batch)):
 
-            n1 = b*16
-            n2 = (b+1)*16
+        # calculate loss
+        loss = self.loss(r, adv)
 
-            if b == 0:
-                loss = self.loss(r[n1:n2], adv[n1:n2])
-                loss.backward(retain_graph=True)
+        l = []
+
+        for batch in range(5):
+            l.append(torch.sum(loss[batch*num_batch:(batch+1)*num_batch]))
+
+        print("Training Policy Net:")
+        for i in tqdm(range(iter)):
+
+            for batch in range(5):
+
+
+                torch.cuda.empty_cache()
+                # zero the parameter gradients
                 self.optimizer.zero_grad()
-                self.optimizer.step()
 
-            else:
-                loss = self.loss(r[n1:n2], adv[n1:n2])
-                loss.backward(retain_graph=True)
-                self.optimizer.zero_grad()
-                self.optimizer.step()
+                # optimize
+                l[batch].backward(retain_graph=True)
 
-        loss = self.loss(r[-rem_batch:], adv[-rem_batch:])
-        loss.backward(retain_graph=True)
-        self.optimizer.zero_grad()
-        self.optimizer.step()
+                self.optimizer.step()
 
 
 

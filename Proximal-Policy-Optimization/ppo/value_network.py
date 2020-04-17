@@ -1,64 +1,92 @@
 import torch
+import numpy as np
 from tqdm import tqdm
 
 class ValueNetwork(torch.nn.Module):
 
-    def __init__(self, alpha, in_dim, out_dim):
+    def __init__(self, alpha, input_dims, output_dims):
 
+        self.input_dims = input_dims
+        self.output_dims = output_dims
+
+        # inherit from nn module class
         super(ValueNetwork, self).__init__()
 
-        self.in_dim = in_dim
-        self.out_dim = out_dim
+        # initialize_network
+        self.initialize_network()
 
-        self.define_network()
+        # define optimizer
+        self.optimizer = torch.optim.Adam(lr=alpha, params=self.parameters())
 
-        self.optimizer = torch.optim.Adam(params=self.parameters(), lr=alpha)
+        # define loss
         self.loss = torch.nn.MSELoss()
 
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() else 'cpu:0')
+        # get device
+        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu:0')
         self.to(self.device)
 
 
-    def define_network(self):
+    # initialize network
+    def initialize_network(self):
 
+		# define network components
+        self.fc1 = torch.nn.Linear(self.input_dims, 128)
+        self.fc2 = torch.nn.Linear(128, 128)
+        self.fc3 = torch.nn.Linear(128, self.output_dims)
         self.relu = torch.nn.LeakyReLU()
-        self.tanh = torch.nn.Tanh()
         self.sigmoid = torch.nn.Sigmoid()
-
-        self.l1 = torch.nn.Linear(self.in_dim, 64)
-        self.l2 = torch.nn.Linear(64, 64)
-        self.l3 = torch.nn.Linear(64, self.out_dim)
+        self.tanh = torch.nn.Tanh()
 
     def forward(self, x):
-        out = torch.Tensor(x).to(self.device)
-        out = self.l1(out)
-        out = self.relu(out)
-        out = self.l2(out)
-        out = self.relu(out)
-        out = self.l3(out)
+        x = torch.Tensor(x).to(self.device)
+        out = self.fc1(x)
+        out = self.tanh(out)
+        out = self.fc2(out)
+        out = self.tanh(out)
+        out = self.fc3(out)
         out = self.relu(out)
         return out.to(torch.device('cpu:0'))
 
-    def optimize(self, states, rewards, epochs=10):
+    def normalize(self, x):
+        x = np.array(x)
+        x_mean = np.mean(x)
+        x_std = np.std(x) if np.std(x) > 0 else 1
+        x = (x-x_mean)/x_std
+        return x
 
-        print("Training Value Network: ")
+    def optimize(self, observations, rewards, epochs=10):
 
-        print(states.shape)
 
+        observations = self.normalize(observations.tolist())
+        rewards = self.normalize(rewards.tolist())
+
+
+        observations = torch.Tensor(observations.tolist())
+        rewards = torch.Tensor(rewards.tolist())
+
+        n_samples = rewards.shape[0]
+        num_batch = int(n_samples/20)
+
+        print("Training Value Net:")
         for i in tqdm(range(epochs)):
 
-            num_batch = states.shape[0]//16
+            for batch in range(20):
 
-            for b in range(num_batch):
 
-                n1 = b*16
-                n2 = (b+1)*16
-
-                p = self.forward(states[n1:n2]).reshape(16, 1)
-                loss = self.loss(p, rewards[n1:n2])
-                loss.backward(retain_graph=True)
+                torch.cuda.empty_cache()
+                # zero the parameter gradients
                 self.optimizer.zero_grad()
+
+                # make prediction
+                prediction = self.forward(observations[batch*num_batch:(batch+1)*num_batch])
+
+                # calculate loss
+                loss = self.loss(prediction, rewards[batch*num_batch:(batch+1)*num_batch])
+
+                # optimize
+                loss.backward(retain_graph=True)
                 self.optimizer.step()
+
 
 
 def main():
