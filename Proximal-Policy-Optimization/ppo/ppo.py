@@ -16,7 +16,7 @@ class PPO(object):
 		self.output_dims = out_dim
 
 		# initialize policy network
-		self.policy_network = PolicyNetwork(0.001, in_dim, out_dim)
+		self.policy_network = PolicyNetwork(0.0005, in_dim, out_dim)
 
 		# initialize old policy
 		self.old_policy_network = PolicyNetwork(alpha=alpha, in_dim=in_dim, out_dim=out_dim)
@@ -24,7 +24,7 @@ class PPO(object):
 		self.old_policy_network.load_state_dict(state_dict)
 
 		# initialize value network
-		self.value_network = ValueNetwork(0.001, in_dim, 1)
+		self.value_network = ValueNetwork(0.0001, in_dim, 1)
 
 		# initialize vpg buffer
 		self.buffer = Buffer()
@@ -78,8 +78,8 @@ class PPO(object):
 		observations, actions, old_actions, rewards, advantages = self.buffer.get_tensors()
 
 		# set state dict
-		#state_dict = self.policy_network.state_dict()
-		#self.old_policy_network.load_state_dict(state_dict)
+		state_dict = self.policy_network.state_dict()
+		self.old_policy_network.load_state_dict(state_dict)
 
 		r = (old_actions.detach())/actions
 

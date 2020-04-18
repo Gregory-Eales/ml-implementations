@@ -4,7 +4,7 @@ import numpy as np
 
 class PolicyNetwork(torch.nn.Module):
 
-    def __init__(self, alpha, in_dim, out_dim, epsilon=0.2):
+    def __init__(self, alpha, in_dim, out_dim, epsilon=0.1):
 
         super(PolicyNetwork, self).__init__()
 
@@ -22,9 +22,9 @@ class PolicyNetwork(torch.nn.Module):
         self.leaky_relu = torch.nn.LeakyReLU()
         self.sigmoid = torch.nn.Sigmoid()
         self.tanh = torch.nn.Tanh()
-        self.l1 = torch.nn.Linear(self.in_dim, 128)
-        self.l2 = torch.nn.Linear(128, 128)
-        self.l3 = torch.nn.Linear(128, self.out_dim)
+        self.l1 = torch.nn.Linear(self.in_dim, 64)
+        self.l2 = torch.nn.Linear(64, 64)
+        self.l3 = torch.nn.Linear(64, self.out_dim)
 
     def normalize(self, x):
         x = np.array(x)

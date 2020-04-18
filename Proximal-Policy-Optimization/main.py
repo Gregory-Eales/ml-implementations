@@ -12,7 +12,9 @@ env = gym.make('CartPole-v0')
 
 ppo = PPO(alpha=0.00001, in_dim=4, out_dim=2)
 
-ppo.train(env, n_epoch=50, n_steps=1200, render=False, verbos=False)
+ppo.policy_network.load_state_dict(torch.load("policy_params.pt"))
+
+ppo.train(env, n_epoch=1000, n_steps=800, render=False, verbos=False)
 
 plt.plot(ppo.hist_length)
 plt.show()

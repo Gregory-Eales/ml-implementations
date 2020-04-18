@@ -30,9 +30,9 @@ class ValueNetwork(torch.nn.Module):
     def initialize_network(self):
 
 		# define network components
-        self.fc1 = torch.nn.Linear(self.input_dims, 128)
-        self.fc2 = torch.nn.Linear(128, 128)
-        self.fc3 = torch.nn.Linear(128, self.output_dims)
+        self.fc1 = torch.nn.Linear(self.input_dims, 64)
+        self.fc2 = torch.nn.Linear(64, 64)
+        self.fc3 = torch.nn.Linear(64, self.output_dims)
         self.relu = torch.nn.LeakyReLU()
         self.sigmoid = torch.nn.Sigmoid()
         self.tanh = torch.nn.Tanh()
