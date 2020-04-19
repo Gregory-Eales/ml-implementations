@@ -1,44 +1,45 @@
 import torch
+from torch.nn import functional as F
+from torch import optim
+from torch import nn
+import pytorch_lightning as pl
+from pytorch_lightning import Trainer
 
+class PolicyNetwork(pl.LightningModule):
 
-class PolicyNetwork(torch.nn.Module):
-
-    def __init__(self, in_dim, out_dim, hid_dim, alpha):
+    def __init__(self, in_dim, out_dim):
 
         super(PolicyNetwork, self).__init__()
 
-        self.in_dim = in_dim
-        self.out_dim = out_dim
-        self.hid_dim = hid_dim
-        self.alpha = alpha
+        self.l1 = nn.Linear(in_dim, 64)
+        self.l2 = nn.Linear(64, 64)
+        self.l3 = nn.Linear(64, out_dim)
 
-        self.leaky_relu = torch.nn.LeakyReLU()
-        self.relu = torch.nn.ReLU()
-        self.sigmoid = torch.nn.Sigmoid()
-        self.l1 = torch.nn.Linear(in_dim, hid_dim)
-        self.l2 = torch.nn.Linear(hid_dim, hid_dim)
-        self.l3 = torch.nn.Linear(hid_dim, out_dim)
-
-        self.optimizer = torch.optim.Adam(self.parameters(), lr=alpha)
-
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu:0")
-        self.to(self.device)
 
     def forward(self, x):
-        out = torch.Tensor(x).to(self.device)
-        out = self.l1(out)
-        out = self.leaky_relu(out)
+        
+        out = self.l1(x)
+        out = F.relu(out)
         out = self.l2(out)
-        out = self.leaky_relu(out)
+        out = F.relu(out)
         out = self.l3(out)
-        out = self.relu(out)
-        return out.to(torch.device("cpu:0")).float()
+        out = F.relu(out)
 
-    def loss(self):
+        return out
+
+    def configure_optimizers(self):
+        optimizer = optim.Adam(self.parameters(), lr=1e-3)
+        return optimizer, optim.lr_scheduler.StepLR(optimizer, step_size=1)
+
+    def loss(self, output, target):
         pass
 
-    def optimize(self):
-        pass
+    def training_step(self, batch, batch_idx):
+        data, target = batch
+        output = self.forward(data)
+        loss = self.loss(output, target)
+        self.logger.summary.scalar('loss', loss)
+        return loss
 
 def main():
     pn = PolicyNetwork(3, 3, 3, 0.01)
