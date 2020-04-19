@@ -8,4 +8,4 @@ class DDPG(object):
 
     def __init__(self):
 
-        self.buffer
+        self.buffer = Buffer()
