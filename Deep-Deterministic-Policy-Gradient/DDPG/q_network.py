@@ -16,9 +16,10 @@ class QNetwork(pl.LightningModule):
         self.l3 = nn.Linear(64, out_dim)
 
 
-    def forward(self, x):
-        
-        out = self.l1(x)
+    def forward(self, s, a):
+
+        out = torch.cat([s, a])
+        out = self.l1(out)
         out = F.relu(out)
         out = self.l2(out)
         out = F.relu(out)
@@ -43,7 +44,7 @@ class QNetwork(pl.LightningModule):
 def main():
 
 	qnet = QNetwork(in_dim=3, out_dim=1)
-	trainer = Trainer(logger=True)
+	trainer = Trainer(max_epochs=1)
 	trainer.fit(qnet)
 
 
