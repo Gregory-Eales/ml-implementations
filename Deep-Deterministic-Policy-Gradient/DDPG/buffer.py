@@ -20,15 +20,15 @@ class Buffer(object):
 
 	def store_terminal(self, done):
 		if done: self.terminal_buffer.append(1)
-		else: 0
-
+		else: self.terminal_buffer.append(0)
 
 	def store(self, observation, reward, done):
 		self.store_observation(observation)
 		self.store_reward(reward)
+		self.store_terminal(done)
 
 	def store_observation(self, observation):
-		self.observation_buffer.append(observation)
+		self.observation_buffer.append(observation.reshape(-1))
 
 	def store_reward(self, r):
 		self.reward_buffer.append(r)
@@ -44,6 +44,16 @@ class Buffer(object):
 
 	def store_advantage(self, adv):
 		self.advantage_buffer.append(adv)
+
+	def get(self):
+
+		o = torch.Tensor(self.observation_buffer)
+		a = torch.cat(self.action_buffer)
+		r = torch.Tensor(self.reward_buffer).reshape(-1, 1)
+		d_r = torch.Tensor(self.discount_reward_buffer).reshape(-1, 1)
+		t_b = torch.Tensor(self.terminal_buffer).reshape(-1, 1)
+
+		return o, a, r, d_r, t_b
 
 	def get_observation(self):
 		return self.observation_buffer
