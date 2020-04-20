@@ -45,6 +45,10 @@ class Buffer(object):
 	def store_advantage(self, adv):
 		self.advantage_buffer.append(adv)
 
+
+	def random_sample(self):
+		pass
+
 	def get(self):
 
 		o = torch.Tensor(self.observation_buffer)
