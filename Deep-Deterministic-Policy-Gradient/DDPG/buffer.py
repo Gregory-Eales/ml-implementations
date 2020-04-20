@@ -47,7 +47,18 @@ class Buffer(object):
 
 
 	def random_sample(self):
-		pass
+
+		r=torch.randperm(2)
+		c=torch.randperm(2)
+		t=t[r][:,c]
+
+		o = torch.Tensor(self.observation_buffer)
+		a = torch.cat(self.action_buffer)
+		r = torch.Tensor(self.reward_buffer).reshape(-1, 1)
+		d_r = torch.Tensor(self.discount_reward_buffer).reshape(-1, 1)
+		t_b = torch.Tensor(self.terminal_buffer).reshape(-1, 1)
+
+		return o, a, r, d_r, t_b
 
 	def get(self):
 
