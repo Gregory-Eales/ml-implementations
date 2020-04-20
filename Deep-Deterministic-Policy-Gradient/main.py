@@ -26,7 +26,7 @@ def train(env, ddpg, epochs=10, episodes=100, steps=100, render=False):
                     dr = ddpg.discount_reward(t)
                     break
 
-        #ddpg.update()
+        ddpg.update()
 
     env.close()
 
