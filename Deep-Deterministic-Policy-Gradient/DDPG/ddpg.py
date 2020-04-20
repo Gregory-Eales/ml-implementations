@@ -16,13 +16,28 @@ class DDPG(object):
         self.target_q = PolicyNetwork(in_dim, out_dim, q_net=self.target_p)
 
     def compute_targets(self):
-    	pass
+    	o, a, r, d_r, t_b = self.get()
+
+    	print("o", o.shape)
+    	print("a", a.shape)
+    	print("r", r.shape)
+    	print("d_r", d_r.shape)
+    	print("t_b", t_b.shape)
+
+
+
+    	return d_r + 0.99*(1-t_b)*self.target_q.forward(o)
+
 
     def store(self, observation, reward, done):
     	self.buffer.store(observation, reward, done)
 
+
+    def get(self):
+    	return self.buffer.get()
+
     def discount_reward(self, t):
-    	reward = self.buffer.get_reward()[-t:]
+    	reward = self.buffer.get_reward()[-t-1:]
     	disc_reward = []
     	for i in range(len(reward)):
     		r = 0
@@ -38,8 +53,16 @@ class DDPG(object):
     	return action.detach().numpy()
 
     def update(self):
-
+    	target = self.compute_targets()
+    	print("target", target.shape)
     	self.update_q_net()
     	self.update_policy()
+
+    def update_q_net(self):
+    	pass
+
+    def update_policy(self):
+    	pass
+
 
     
