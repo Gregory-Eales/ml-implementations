@@ -7,23 +7,28 @@ from pytorch_lightning import Trainer
 
 class PolicyNetwork(pl.LightningModule):
 
-    def __init__(self, in_dim, out_dim):
+    def __init__(self, in_dim, out_dim, q_net=None):
 
         super(PolicyNetwork, self).__init__()
+
+        self.in_dim = in_dim
+        self.out_dim = out_dim
 
         self.l1 = nn.Linear(in_dim, 64)
         self.l2 = nn.Linear(64, 64)
         self.l3 = nn.Linear(64, out_dim)
 
+        self.q_network = q_net
 
     def forward(self, x):
         
-        out = self.l1(x)
+        out = torch.Tensor(x).reshape(-1, self.in_dim)
+        out = self.l1(out)
         out = F.relu(out)
         out = self.l2(out)
         out = F.relu(out)
         out = self.l3(out)
-        out = F.relu(out)
+        out = torch.tanh(out)
 
         return out
 
@@ -32,17 +37,16 @@ class PolicyNetwork(pl.LightningModule):
         return optimizer, optim.lr_scheduler.StepLR(optimizer, step_size=1)
 
     def loss(self, output, target):
-        pass
-
-    def training_step(self, batch, batch_idx):
-        data, target = batch
-        output = self.forward(data)
         loss = self.loss(output, target)
-        self.logger.summary.scalar('loss', loss)
-        return loss
+
+    def training_step(self, s_batch, batch_idx):
+        actions = self.forward(s_batch)
+        q = self.q_network(s_batch, actions).mean()
+        self.logger.summary.scalar('loss', q)
+        return q
 
 def main():
-    pn = PolicyNetwork(3, 3, 3, 0.01)
+    pn = PolicyNetwork(in_dim=3, out_dim=1)
     x = torch.ones(10, 3)
     print(pn.forward(x))
 
