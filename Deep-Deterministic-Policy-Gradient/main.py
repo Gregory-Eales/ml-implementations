@@ -5,26 +5,27 @@ from DDPG.ddpg import DDPG
 
 from matplotlib import pyplot as plt
 
-def train(env, ddpg, epochs=10, episodes=100, steps=100, render=False):
+def train(env, ddpg, epochs=10, episodes=200, steps=100, render=False):
     
     for e in range(epochs):
 
         for i_episode in range(episodes):
 
-            observation = env.reset()
+            s = env.reset()
 
             for t in range(steps):
 
                 if render: env.render()
                
-                action = ddpg.act(observation)
-                observation, reward, done, info = env.step(action)
-                if t==steps-1: done = True
-                ddpg.store(observation, reward, done)
+                a = ddpg.act(s)
+                s_p, r, d, info = env.step(a)
+                if t==steps-1: d = True
 
-                if done:
-                    dr = ddpg.discount_reward(t)
-                    break
+                ddpg.store(s, a, r, s_p, d)
+
+                if d:
+                    ddpg.discount_reward(t)
+                s = s_p
 
         ddpg.update()
 

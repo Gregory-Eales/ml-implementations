@@ -9,7 +9,8 @@ class Buffer(object):
 		self.reset()
 
 	def reset(self):
-		self.observation_buffer = []
+		self.state_buffer = []
+		self.state_prime_buffer = []
 		self.reward_buffer = []
 		self.discount_reward_buffer = []
 		self.action_buffer = []
@@ -22,13 +23,18 @@ class Buffer(object):
 		if done: self.terminal_buffer.append(1)
 		else: self.terminal_buffer.append(0)
 
-	def store(self, observation, reward, done):
-		self.store_observation(observation)
-		self.store_reward(reward)
-		self.store_terminal(done)
+	def store(self, s, a, r, s_p, d):
+		self.store_state(s)
+		self.store_action(a)
+		self.store_reward(r)
+		self.store_state_prime(s_p)
+		self.store_terminal(d)
 
-	def store_observation(self, observation):
-		self.observation_buffer.append(observation.reshape(-1))
+	def store_state(self, state):
+		self.state_buffer.append(state.reshape(-1))
+
+	def store_state_prime(self, s_p):
+		self.state_prime_buffer.append(s_p.reshape(-1))
 
 	def store_reward(self, r):
 		self.reward_buffer.append(r)
@@ -52,26 +58,29 @@ class Buffer(object):
 		c=torch.randperm(2)
 		t=t[r][:,c]
 
-		o = torch.Tensor(self.observation_buffer)
+		s = torch.Tensor(self.state_buffer)
 		a = torch.cat(self.action_buffer)
 		r = torch.Tensor(self.reward_buffer).reshape(-1, 1)
 		d_r = torch.Tensor(self.discount_reward_buffer).reshape(-1, 1)
 		t_b = torch.Tensor(self.terminal_buffer).reshape(-1, 1)
 
-		return o, a, r, d_r, t_b
+		return s, a, r, d_r, t_b
 
 	def get(self):
 
-		o = torch.Tensor(self.observation_buffer)
+		o = torch.Tensor(self.state_buffer)
 		a = torch.cat(self.action_buffer)
 		r = torch.Tensor(self.reward_buffer).reshape(-1, 1)
 		d_r = torch.Tensor(self.discount_reward_buffer).reshape(-1, 1)
-		t_b = torch.Tensor(self.terminal_buffer).reshape(-1, 1)
+		d = torch.Tensor(self.terminal_buffer).reshape(-1, 1)
 
-		return o, a, r, d_r, t_b
+		return o, a, r, d_r, d
 
-	def get_observation(self):
-		return self.observation_buffer
+	def get_state(self):
+		return self.state_buffer
+
+	def get_state_prime(self):
+		return self.state_prime_buffer
 
 	def get_reward(self):
 		return self.reward_buffer
