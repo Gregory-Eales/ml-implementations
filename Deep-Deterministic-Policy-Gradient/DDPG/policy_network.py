@@ -12,9 +12,10 @@ class PolicyNetwork(torch.nn.Module):
 		self.in_dim = in_dim
 		self.out_dim = out_dim
 
-		self.l1 = nn.Linear(in_dim, 64)
-		self.l2 = nn.Linear(64, 64)
-		self.l3 = nn.Linear(64, out_dim)
+		self.l1 = nn.Linear(in_dim, 400)
+		self.l2 = nn.Linear(400, 200)
+		self.l3 = nn.Linear(200, out_dim)
+		self.relu = nn.LeakyReLU()
 
 		self.optimizer = torch.optim.Adam(lr=alpha, params=self.parameters())
 
@@ -25,9 +26,9 @@ class PolicyNetwork(torch.nn.Module):
 		
 		out = torch.Tensor(x).reshape(-1, self.in_dim)
 		out = self.l1(out)
-		out = F.relu(out)
+		out = self.relu(out)
 		out = self.l2(out)
-		out = F.relu(out)
+		out = self.relu(out)
 		out = self.l3(out)
 		out = torch.tanh(out)
 
@@ -35,7 +36,7 @@ class PolicyNetwork(torch.nn.Module):
 
 
 	def loss(self, q):
-		return torch.mean(q)
+		return -torch.sum(q)/q.shape[0]
 
 	def optimize(self, q):
 
@@ -44,6 +45,8 @@ class PolicyNetwork(torch.nn.Module):
 	  loss = self.loss(q)
 	  loss.backward(retain_graph=True)
 	  self.optimizer.step()
+
+	  return -loss.detach().numpy()
 
 def main():
 	pn = PolicyNetwork(in_dim=3, out_dim=1)
