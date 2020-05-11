@@ -52,29 +52,30 @@ class Buffer(object):
 		self.advantage_buffer.append(adv)
 
 
-	def random_sample(self):
+	def random_sample(self, s, a, r, s_p, d, n=50):
 
-		r=torch.randperm(2)
-		c=torch.randperm(2)
-		t=t[r][:,c]
+		rand_perm = torch.randperm(s.shape[0])
+		[rand_perm][0:n]
 
-		s = torch.Tensor(self.state_buffer)
-		a = torch.cat(self.action_buffer)
-		r = torch.Tensor(self.reward_buffer).reshape(-1, 1)
-		d_r = torch.Tensor(self.discount_reward_buffer).reshape(-1, 1)
-		t_b = torch.Tensor(self.terminal_buffer).reshape(-1, 1)
+		s = s[rand_perm][0:n]
+		a = a[rand_perm][0:n]
+		r = r[rand_perm][0:n]
+		s_p = s_p[rand_perm][0:n]
+		d = d[rand_perm][0:n]
 
-		return s, a, r, d_r, t_b
+		return s, a, r, s_p, d
 
 	def get(self):
 
-		o = torch.Tensor(self.state_buffer)
-		a = torch.cat(self.action_buffer)
-		r = torch.Tensor(self.reward_buffer).reshape(-1, 1)
-		d_r = torch.Tensor(self.discount_reward_buffer).reshape(-1, 1)
+		s = torch.Tensor(self.state_buffer)
+		a = torch.Tensor(self.action_buffer).reshape(-1, 1)
+		r = torch.Tensor(self.discount_reward_buffer).reshape(-1, 1)
+		s_p = torch.Tensor(self.state_prime_buffer)
 		d = torch.Tensor(self.terminal_buffer).reshape(-1, 1)
 
-		return o, a, r, d_r, d
+		#print(s.shape, a.shape, r.shape, s_p.shape, d.shape)
+
+		return s, a, r, s_p, d
 
 	def get_state(self):
 		return self.state_buffer
