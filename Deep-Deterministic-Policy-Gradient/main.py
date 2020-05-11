@@ -27,13 +27,14 @@ def train(env, ddpg, epochs=10, episodes=200, steps=100, render=False):
                     ddpg.discount_reward(t)
                 s = s_p
 
-        ddpg.update()
+        ddpg.update(iter=20)
 
     env.close()
 
 
 env = gym.make('MountainCarContinuous-v0')
 ddpg = DDPG(in_dim=2, out_dim=1)
-train(env, ddpg, epochs=1, episodes=10, steps=100, render=False)
+train(env, ddpg, epochs=10, episodes=10, steps=100, render=False)
 
-
+plt.plot(ddpg.buffer.discount_reward_buffer)
+plt.show()
