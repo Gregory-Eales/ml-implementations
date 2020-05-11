@@ -68,8 +68,8 @@ class Buffer(object):
 	def get(self):
 
 		s = torch.Tensor(self.state_buffer)
-		a = torch.Tensor(self.action_buffer).reshape(-1, 1)
-		r = torch.Tensor(self.discount_reward_buffer).reshape(-1, 1)
+		a = torch.Tensor(self.action_buffer).reshape(-1, 2)
+		r = torch.Tensor(self.reward_buffer).reshape(-1, 1)
 		s_p = torch.Tensor(self.state_prime_buffer)
 		d = torch.Tensor(self.terminal_buffer).reshape(-1, 1)
 
