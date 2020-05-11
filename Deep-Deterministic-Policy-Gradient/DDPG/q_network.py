@@ -2,43 +2,50 @@ import torch
 from torch.nn import functional as F
 from torch import optim
 from torch import nn
-import pytorch_lightning as pl
-from pytorch_lightning import Trainer
 
-class QNetwork(pl.LightningModule):
+class QNetwork(torch.nn.Module):
 
-    def __init__(self, in_dim, out_dim):
+		def __init__(self, in_dim, out_dim, alpha=0.01):
 
-        super(QNetwork, self).__init__()
+				super(QNetwork, self).__init__()
 
-        self.l1 = nn.Linear(in_dim, 64)
-        self.l2 = nn.Linear(64, 64)
-        self.l3 = nn.Linear(64, out_dim)
+				self.l1 = nn.Linear(in_dim, 64)
+				self.l2 = nn.Linear(64, 64)
+				self.l3 = nn.Linear(64, out_dim)
 
 
-    def forward(self, s, a):
+				self.optimizer = torch.optim.Adam(lr=alpha, params=self.parameters())
 
-        out = torch.cat([s, a])
-        out = self.l1(out)
-        out = F.relu(out)
-        out = self.l2(out)
-        out = F.relu(out)
-        out = self.l3(out)
-        out = F.relu(out)
+			
+				self.loss = torch.nn.MSELoss()
 
-        return out
-
-    def configure_optimizers(self):
-    	optimizer = optim.Adam(self.parameters(), lr=1e-3)
-    	return optimizer, optim.lr_scheduler.StepLR(optimizer, step_size=1)
+				self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu:0')
+				self.to(self.device)
 
 
-    def training_step(self, batch, batch_idx):
-   		data, target = batch
-   		output = self.forward(data)
-   		loss = F.mse_loss(output, target)
-   		self.logger.summary.scalar('loss', loss)
-   		return loss
+		def forward(self, s, a):
+
+				out = torch.cat([s, a], dim=1)
+				out = torch.Tensor(out).to(self.device)
+
+				out = self.l1(out)
+				out = F.relu(out)
+				out = self.l2(out)
+				out = F.relu(out)
+				out = self.l3(out)
+				out = F.relu(out)
+
+				return out.to(torch.device("cpu:0"))
+
+		def optimize(self, s, a, y):
+
+			q = self.forward(s, a)
+			torch.cuda.empty_cache()
+			self.optimizer.zero_grad()
+			loss = self.loss(q, y)
+			loss.backward(retain_graph=True)
+			self.optimizer.step()
+
 
 
 def main():
