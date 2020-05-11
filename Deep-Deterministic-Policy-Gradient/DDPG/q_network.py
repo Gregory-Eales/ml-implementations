@@ -9,9 +9,10 @@ class QNetwork(torch.nn.Module):
 
 				super(QNetwork, self).__init__()
 
-				self.l1 = nn.Linear(in_dim, 64)
-				self.l2 = nn.Linear(64, 64)
-				self.l3 = nn.Linear(64, out_dim)
+				self.l1 = nn.Linear(in_dim, 400)
+				self.l2 = nn.Linear(400, 200)
+				self.l3 = nn.Linear(200, out_dim)
+				self.relu = nn.LeakyReLU()
 
 
 				self.optimizer = torch.optim.Adam(lr=alpha, params=self.parameters())
@@ -29,11 +30,14 @@ class QNetwork(torch.nn.Module):
 				out = torch.Tensor(out).to(self.device)
 
 				out = self.l1(out)
-				out = F.relu(out)
+				out = self.relu(out)
 				out = self.l2(out)
-				out = F.relu(out)
+				out = self.relu(out)
 				out = self.l3(out)
-				out = F.relu(out)
+				out = self.relu(out)
+
+				out = torch.clamp(out, -2000, 2000)
+				
 
 				return out.to(torch.device("cpu:0"))
 
@@ -46,6 +50,7 @@ class QNetwork(torch.nn.Module):
 			loss.backward(retain_graph=True)
 			self.optimizer.step()
 
+			return loss.detach().numpy()
 
 
 def main():
