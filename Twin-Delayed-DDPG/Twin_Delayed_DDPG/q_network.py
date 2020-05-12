@@ -9,9 +9,10 @@ class QNetwork(torch.nn.Module):
 
 				super(QNetwork, self).__init__()
 
-				self.l1 = nn.Linear(in_dim, 400)
-				self.l2 = nn.Linear(400, 200)
-				self.l3 = nn.Linear(200, out_dim)
+				self.l1 = nn.Linear(in_dim, 128)
+				self.l2 = nn.Linear(128, 128)
+				self.l3 = nn.Linear(128, 64)
+				self.l4 = nn.Linear(64, out_dim)
 				self.relu = nn.LeakyReLU()
 
 
@@ -35,8 +36,10 @@ class QNetwork(torch.nn.Module):
 				out = self.relu(out)
 				out = self.l3(out)
 				out = self.relu(out)
+				out = self.l4(out)
+				out = self.relu(out)
 
-				out = torch.clamp(out, -2000, 2000)
+				out = torch.clamp(out, -200, 200)
 				
 
 				return out.to(torch.device("cpu:0"))
