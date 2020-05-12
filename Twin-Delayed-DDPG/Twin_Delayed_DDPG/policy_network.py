@@ -12,9 +12,10 @@ class PolicyNetwork(torch.nn.Module):
 		self.in_dim = in_dim
 		self.out_dim = out_dim
 
-		self.l1 = nn.Linear(in_dim, 400)
-		self.l2 = nn.Linear(400, 200)
-		self.l3 = nn.Linear(200, out_dim)
+		self.l1 = nn.Linear(in_dim, 128)
+		self.l2 = nn.Linear(128, 128)
+		self.l3 = nn.Linear(128, 64)
+		self.l4 = nn.Linear(64, out_dim)
 		self.relu = nn.LeakyReLU()
 
 		self.optimizer = torch.optim.Adam(lr=alpha, params=self.parameters())
@@ -30,6 +31,8 @@ class PolicyNetwork(torch.nn.Module):
 		out = self.l2(out)
 		out = self.relu(out)
 		out = self.l3(out)
+		out = self.relu(out)
+		out = self.l4(out)
 		out = torch.tanh(out)
 
 		return out
