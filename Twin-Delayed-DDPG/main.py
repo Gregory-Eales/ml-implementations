@@ -105,7 +105,7 @@ def run(ddpg, env, episodes=10, steps=1000):
 		for t in range(steps):
 
 			env.render()
-			a = ddpg.act(s, epsilon=0.3)
+			a = ddpg.act(s, epsilon=0)
 			print(a)
 			s, r, d, info = env.step(a)
 			if t==steps-1: d = True
@@ -117,7 +117,7 @@ def run(ddpg, env, episodes=10, steps=1000):
 	env.close()
 
 
-env = gym.make('LunarLanderContinuous-v2')
+env = gym.make('Humanoid-v3')
 
 s_size=env.observation_space.shape[0]
 a_size=env.action_space.shape[0]
@@ -126,10 +126,10 @@ print("State Size:", s_size)
 print("Action Size:", a_size)
 
 ddpg = DDPG(in_dim=s_size, out_dim=a_size, p_alpha=1e-3, q_alpha=1e-3)
-reward = train(env, ddpg, epochs=100, episodes=1,
+reward = train(env, ddpg, epochs=200, episodes=1,
  steps=200, epsilon=0.1, render=False, graph=True, run=False)
 
-run(ddpg, env, episodes=3, steps=200)
+run(ddpg, env, episodes=3, steps=400)
 
 plt.plot(reward/np.max(reward), label="Reward")
 plt.plot(np.array(ddpg.q_loss)/np.max(ddpg.q_loss), label="Q loss")

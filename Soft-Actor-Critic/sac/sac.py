@@ -4,7 +4,7 @@ from .policy_network import PolicyNetwork
 from .q_network import QNetwork
 
 
-class DDPG(object):
+class SAC(object):
 
 	def __init__(self, in_dim, out_dim, p_alpha=1e-10, q_alpha=1e-10):
 
