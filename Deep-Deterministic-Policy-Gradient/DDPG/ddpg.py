@@ -62,6 +62,8 @@ class DDPG(object):
 				r += reward[i+j]*(0.99**j)
 			disc_reward.append(r)
 		self.buffer.store_disc_reward(disc_reward)
+
+		return disc_reward[-1]
 		
 
 	def act(self, state, epsilon=0.1):

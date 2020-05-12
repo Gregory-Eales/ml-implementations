@@ -2,6 +2,7 @@ import gym
 import torch
 import numpy as np
 from tqdm import tqdm
+from copy import copy
 
 from DDPG.ddpg import DDPG
 
@@ -12,8 +13,11 @@ def train(env, ddpg, epochs=10, episodes=200, steps=100, render=False, graph=Fal
     if graph: plt.ion()
 
     avg_reward = []
+    hist_adr = []
+    avg_disc_reward = 0
     for e in tqdm(range(epochs)):
         reward = []
+        disc_reward = []
         for i_episode in range(episodes):
 
             s = env.reset()
@@ -31,12 +35,14 @@ def train(env, ddpg, epochs=10, episodes=200, steps=100, render=False, graph=Fal
                 s = s_p
 
                 if d:
-                    ddpg.discount_reward(t)
+                    
                     reward.append(r)
+                    disc_reward.append(ddpg.discount_reward(t))
                     break
         
         avg_reward.append(np.sum(reward)/len(reward))
-
+        avg_disc_reward+=np.sum(disc_reward)/len(disc_reward)
+        hist_adr.append(copy(avg_disc_reward))
         
         
         ddpg.update(iter=10, n=100)
@@ -50,8 +56,8 @@ def train(env, ddpg, epochs=10, episodes=200, steps=100, render=False, graph=Fal
             plt.ylabel("Reward")
 
             
-            plt.plot(np.linspace(0, len(ddpg.q_loss), num=len(avg_reward)).tolist(),
-                np.array(avg_reward)/abs(np.max(avg_reward)), label="Reward")
+            #plt.plot(np.linspace(0, len(ddpg.q_loss), num=len(avg_reward)).tolist(),
+                #np.array(avg_reward)/abs(np.max(avg_reward)), label="Reward")
 
             q_loss = np.array(ddpg.q_loss)
             q_loss = q_loss/q_loss.max()
@@ -60,6 +66,10 @@ def train(env, ddpg, epochs=10, episodes=200, steps=100, render=False, graph=Fal
 
             plt.plot(q_loss, label="Q loss")
             plt.plot(p_loss, label="P loss")
+
+            ls = np.linspace(0, len(ddpg.q_loss), num=len(hist_adr))
+            ha = np.array(hist_adr)/abs(np.max(np.abs(hist_adr)))
+            plt.plot(ls,ha,label="Discounted Reward")
             plt.legend()
             plt.draw()
             
@@ -67,7 +77,7 @@ def train(env, ddpg, epochs=10, episodes=200, steps=100, render=False, graph=Fal
             plt.pause(0.0001)
             plt.clf()
 
-        run(ddpg, env, episodes=1, steps=200)
+        #run(ddpg, env, episodes=1, steps=200)
 
     env.close()
 
@@ -95,7 +105,7 @@ def run(ddpg, env, episodes=10, steps=200):
 
 env = gym.make('LunarLanderContinuous-v2')
 ddpg = DDPG(in_dim=8, out_dim=2, p_alpha=1e-3, q_alpha=1e-3)
-reward = train(env, ddpg, epochs=350, episodes=1,
+reward = train(env, ddpg, epochs=1000, episodes=1,
  steps=200, render=False, graph=True)
 
 #print(ddpg.p_loss)

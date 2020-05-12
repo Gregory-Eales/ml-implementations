@@ -33,7 +33,7 @@ class DDPG(object):
 
 		return r + gamma*(1-d)*self.target_q.forward(s_p, p)
 
-	def update_params(self, p=0.995):
+	def update_params(self, p=0.99):
 		
 		td = self.target_p.state_dict()
 		md = self.p_net.state_dict()
@@ -64,7 +64,7 @@ class DDPG(object):
 		self.buffer.store_disc_reward(disc_reward)
 		
 
-	def act(self, state, epsilon=0.1):
+	def act(self, state, epsilon=0.3):
 		action = self.p_net(state)
 		rand = epsilon*torch.randn(1, self.out_dim)
 		action = (action + rand).clamp(min=-1, max=1)
