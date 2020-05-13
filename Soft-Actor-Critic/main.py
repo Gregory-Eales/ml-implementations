@@ -7,7 +7,7 @@ from sac.sac import SAC
 
 from matplotlib import pyplot as plt
 
-def train(env, sac, epochs=10, episodes=200, steps=100, epsilon=0.3,
+def train(env, sac, epochs=10, episodes=200, steps=100,
  render=False, graph=False, run=False):
 	
 	if graph: plt.ion()
@@ -28,16 +28,16 @@ def train(env, sac, epochs=10, episodes=200, steps=100, epsilon=0.3,
 
 				
 				
-				a = sac.act(s, epsilon=epsilon)
+				a = sac.act(s)
 
 				s_p, r, d, info = env.step(a)
 				if t==steps-1: d = True
 
-				ddpg.store(s, a, r, s_p, d)
+				sac.store(s, a, r, s_p, d)
 				s = s_p
 
 				if d:
-					disc_r.append(ddpg.discount_reward(t))
+					disc_r.append(sac.discount_reward(t))
 					reward.append(r)
 					break
 		
@@ -45,7 +45,7 @@ def train(env, sac, epochs=10, episodes=200, steps=100, epsilon=0.3,
 
 		
 		
-		ddpg.update(iter=20, n=50)
+		sac.update(iter=20, n=50)
 		#run(ddpg, env, episodes=1, steps=200)
 
 		#ddpg.clear_buffer()
@@ -105,7 +105,7 @@ def run(ddpg, env, episodes=10, steps=1000):
 		for t in range(steps):
 
 			env.render()
-			a = ddpg.act(s, epsilon=0)
+			a = ddpg.act(s)
 			print(a)
 			s, r, d, info = env.step(a)
 			if t==steps-1: d = True
@@ -117,17 +117,18 @@ def run(ddpg, env, episodes=10, steps=1000):
 	env.close()
 
 
-env = gym.make('Humanoid-v3')
+env = gym.make('LunarLander-v2')
 
+"""
 s_size=env.observation_space.shape[0]
 a_size=env.action_space.shape[0]
 
 print("State Size:", s_size)
 print("Action Size:", a_size)
-
-sac = SAC(in_dim=s_size, out_dim=a_size, p_alpha=1e-3, q_alpha=1e-3)
+"""
+sac = SAC(in_dim=8, out_dim=4, p_alpha=1e-3, q_alpha=1e-3)
 reward = train(env, sac, epochs=200, episodes=1,
- steps=200, epsilon=0.1, render=False, graph=True, run=False)
+ steps=200, render=False, graph=True, run=False)
 
 run(sac, env, episodes=3, steps=400)
 
