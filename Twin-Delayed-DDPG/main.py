@@ -117,7 +117,7 @@ def run(ddpg, env, episodes=10, steps=1000):
 	env.close()
 
 
-env = gym.make('Humanoid-v3')
+env = gym.make('LunarLanderContinuous-v2')
 
 s_size=env.observation_space.shape[0]
 a_size=env.action_space.shape[0]
