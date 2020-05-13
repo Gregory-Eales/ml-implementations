@@ -14,6 +14,8 @@ class Buffer(object):
 		self.reward_buffer = []
 		self.discount_reward_buffer = []
 		self.action_buffer = []
+		self.log_prob_buffer = []
+		self.targ_log_prob_buffer = []
 		self.policy_buffer = []
 		self.advantage_buffer = []
 		self.terminal_buffer = []
@@ -45,6 +47,9 @@ class Buffer(object):
 	def store_action(self, act):
 		self.action_buffer.append(act)
 
+	def store_log_prob(self, log_p):
+		self.log_prob_buffer.append(log_p)
+
 	def store_policy(self, p):
 		self.policy_buffer.append(p)
 
@@ -52,7 +57,7 @@ class Buffer(object):
 		self.advantage_buffer.append(adv)
 
 
-	def random_sample(self, s, a, r, s_p, d, n=50):
+	def random_sample(self, s, a, r, s_p, d, l_p, n=50):
 
 		rand_perm = torch.randperm(s.shape[0])
 		[rand_perm][0:n]
@@ -62,8 +67,9 @@ class Buffer(object):
 		r = r[rand_perm][0:n]
 		s_p = s_p[rand_perm][0:n]
 		d = d[rand_perm][0:n]
+		l_p = l_p[rand_perm][0:n]
 
-		return s, a, r, s_p, d
+		return s, a, r, s_p, d, l_p
 
 	def get(self):
 
@@ -73,10 +79,11 @@ class Buffer(object):
 		r = torch.Tensor(self.reward_buffer).reshape(-1, 1)
 		s_p = torch.Tensor(self.state_prime_buffer)
 		d = torch.Tensor(self.terminal_buffer).reshape(-1, 1)
+		l_p = torch.Tensor(self.log_prob_buffer).reshape(-1, 1)
 
 		#print(s.shape, a.shape, r.shape, s_p.shape, d.shape)
 
-		return s, a, r, s_p, d
+		return s, a, r, s_p, d, l_p
 
 	def get_state(self):
 		return self.state_buffer
@@ -98,5 +105,8 @@ class Buffer(object):
 
 	def get_advantage(self):
 		return self.advantage_buffer
+
+	def get_log_prob(self):
+		return self.log_prob_buffer
 
 

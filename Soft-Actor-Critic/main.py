@@ -7,7 +7,7 @@ from sac.sac import SAC
 
 from matplotlib import pyplot as plt
 
-def train(env, ddpg, epochs=10, episodes=200, steps=100, epsilon=0.3,
+def train(env, sac, epochs=10, episodes=200, steps=100, epsilon=0.3,
  render=False, graph=False, run=False):
 	
 	if graph: plt.ion()
@@ -28,7 +28,7 @@ def train(env, ddpg, epochs=10, episodes=200, steps=100, epsilon=0.3,
 
 				
 				
-				a = ddpg.act(s, epsilon=epsilon)
+				a = sac.act(s, epsilon=epsilon)
 
 				s_p, r, d, info = env.step(a)
 				if t==steps-1: d = True
@@ -132,7 +132,7 @@ reward = train(env, sac, epochs=200, episodes=1,
 run(sac, env, episodes=3, steps=400)
 
 plt.plot(reward/np.max(reward), label="Reward")
-plt.plot(np.array(ddpg.q_loss)/np.max(ddpg.q_loss), label="Q loss")
-plt.plot(np.array(ddpg.p_loss)/np.max(ddpg.p_loss), label="P loss")
+plt.plot(np.array(sac.q_loss)/np.max(sac.q_loss), label="Q loss")
+plt.plot(np.array(sac.p_loss)/np.max(sac.p_loss), label="P loss")
 plt.legend()
 plt.show()

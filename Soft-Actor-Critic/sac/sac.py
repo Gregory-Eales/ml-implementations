@@ -133,8 +133,8 @@ class SAC(object):
 
 if __name__ == "__main__":
 
-	ddpg = DDPG(2, 2)
-	ddpg.update_params()
+	sac = SAC(2, 2)
+	SAC.update_params()
 
 	
 
