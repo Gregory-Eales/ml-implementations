@@ -73,12 +73,12 @@ class Buffer(object):
 
 	def get(self):
 
-		s = torch.Tensor(self.state_buffer)
-		a = torch.Tensor(self.action_buffer).reshape(-1, 1)
-		r = torch.Tensor(self.reward_buffer).reshape(-1, 1)
-		s_p = torch.Tensor(self.state_prime_buffer)
-		d = torch.Tensor(self.terminal_buffer).reshape(-1, 1)
-		l_p = torch.Tensor(self.log_prob_buffer).reshape(-1, 1)
+		s = torch.Tensor(self.state_buffer).float()
+		a = torch.Tensor(self.action_buffer).reshape(-1, 1).float()
+		r = torch.Tensor(self.reward_buffer).reshape(-1, 1).float()
+		s_p = torch.Tensor(self.state_prime_buffer).float()
+		d = torch.Tensor(self.terminal_buffer).reshape(-1, 1).float()
+		l_p = torch.Tensor(self.log_prob_buffer).reshape(-1, 1).float()
 
 		#print(s.shape, a.shape, r.shape, s_p.shape, d.shape)
 
