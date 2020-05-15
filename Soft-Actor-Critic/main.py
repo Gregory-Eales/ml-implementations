@@ -92,7 +92,7 @@ print("State Size:", s_size)
 print("Action Size:", a_size)
 
 sac = SAC(in_dim=s_size, out_dim=a_size, p_alpha=1e-3, q_alpha=1e-3)
-reward = train(env, sac, epochs=1000 , episodes=1,
+reward = train(env, sac, epochs=200 , episodes=1,
  steps=200, render=False, graphing=True, run=False)
 
 run(sac, env, episodes=1, steps=100)

@@ -40,7 +40,7 @@ class PolicyNetwork(torch.nn.Module):
 		out = self.l3(out)
 		out = self.leaky_relu(out)
 		out = self.l4(out)
-		out = self.relu(out)
+		out = self.tanh(out)
 
 		return out
 
