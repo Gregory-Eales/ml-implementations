@@ -57,7 +57,7 @@ class Buffer(object):
 		self.advantage_buffer.append(adv)
 
 
-	def random_sample(self, s, a, r, s_p, d, l_p, n=50):
+	def random_sample(self, s, a, r, s_p, d, n=50):
 
 		rand_perm = torch.randperm(s.shape[0])
 		[rand_perm][0:n]
@@ -67,22 +67,21 @@ class Buffer(object):
 		r = r[rand_perm][0:n]
 		s_p = s_p[rand_perm][0:n]
 		d = d[rand_perm][0:n]
-		l_p = l_p[rand_perm][0:n]
+	
 
-		return s, a, r, s_p, d, l_p
+		return s, a, r, s_p, d
 
 	def get(self):
 
 		s = torch.Tensor(self.state_buffer).float()
-		a = torch.Tensor(self.action_buffer).reshape(-1, 1).float()
+		a = torch.Tensor(self.action_buffer).reshape(-1, 2).float()
 		r = torch.Tensor(self.reward_buffer).reshape(-1, 1).float()
 		s_p = torch.Tensor(self.state_prime_buffer).float()
 		d = torch.Tensor(self.terminal_buffer).reshape(-1, 1).float()
-		l_p = torch.Tensor(self.log_prob_buffer).reshape(-1, 1).float()
 
 		#print(s.shape, a.shape, r.shape, s_p.shape, d.shape)
 
-		return s, a, r, s_p, d, l_p
+		return s, a, r, s_p, d
 
 	def get_state(self):
 		return self.state_buffer

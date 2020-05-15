@@ -14,4 +14,4 @@ vpg = VPG(alpha=0.001, input_dims=4, output_dims=2)
 
 vpg.policy_network.load_state_dict(torch.load("policy_params.pt"))
 
-vpg.play(env)
+vpg.play(env, steps=1000)

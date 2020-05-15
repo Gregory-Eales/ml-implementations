@@ -42,7 +42,7 @@ class PolicyNetwork(torch.nn.Module):
 		out = self.l4(out)
 		out = self.relu(out)
 
-		return out.clamp(0, 100) + 0.01
+		return out
 
 	def mean_forward(self, x):
 
@@ -61,10 +61,16 @@ class PolicyNetwork(torch.nn.Module):
 
 		rand = torch.randn(x.shape[0], self.out_dim).clamp(0, 1)
 
-		return self.tanh(mu + mean*rand).clamp(0, 1) + 0.01
+		return self.tanh(mu + mean*rand).clamp(-1, 1)
 
 
 	def loss(self, q, log_p, alpha):
+
+		"""
+		print("q:", q.shape)
+		print("log p:", log_p.shape)
+
+		"""
 		return (alpha*log_p-q).mean()
 
 	def optimize(self, q, log_p, alpha=0.2):

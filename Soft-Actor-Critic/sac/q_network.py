@@ -46,6 +46,12 @@ class QNetwork(torch.nn.Module):
 
 		def optimize(self, s, a, y):
 
+			"""
+			print("a:", a.shape)
+			print("s:", s.shape)
+			print("y:", y.shape)
+			"""
+			
 			q = self.forward(s, a)
 			torch.cuda.empty_cache()
 			self.optimizer.zero_grad()

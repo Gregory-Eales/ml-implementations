@@ -190,7 +190,7 @@ class VPG(object):
 			if average_rewards[-1] > 120:
 				torch.save(self.policy_network.state_dict(), "policy_params.pt")
 
-	def play(self, env):
+	def play(self, env, steps):
 
 		for i in range(1):
 
@@ -198,10 +198,11 @@ class VPG(object):
 			observation = env.reset()
 			done = False
 			frame = 0
-			while not done:
+			for i in range(steps):
+			#while not done:
 				frame+=1
-				img = env.render(mode="rgb_array")
-				scipy.misc.imsave('img/gif/img{}.jpg'.format(frame), img)
+				img = env.render()#mode="rgb_array")
+				#scipy.misc.imsave('img/gif/img{}.jpg'.format(frame), img)
 
 				# get action, and network policy prediction
 				action, log_prob = self.act(observation)
@@ -209,6 +210,9 @@ class VPG(object):
 				# get state + reward
 				observation, reward, done, info = env.step(action)
 
+		env.close()
+
+		
 def main():
 
 	import gym
