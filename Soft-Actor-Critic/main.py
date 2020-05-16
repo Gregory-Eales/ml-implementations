@@ -45,7 +45,7 @@ def train(env, sac, epochs=10, episodes=200, steps=100,
 
 		
 		
-		sac.update(iter=10, n=50)
+		sac.update(iter=1, n=50)
 	
 		if graphing:
 			graph(sac, avg_reward, disc_r)
@@ -84,6 +84,8 @@ def run(sac, env, episodes=10, steps=1000):
 
 env = gym.make('LunarLanderContinuous-v2')
 
+torch.manual_seed(1)
+np.random.seed(1)
 
 s_size=env.observation_space.shape[0]
 a_size=env.action_space.shape[0]
@@ -92,10 +94,10 @@ print("State Size:", s_size)
 print("Action Size:", a_size)
 
 sac = SAC(in_dim=s_size, out_dim=a_size, p_alpha=1e-3, q_alpha=1e-3)
-reward = train(env, sac, epochs=200 , episodes=1,
- steps=200, render=False, graphing=True, run=False)
+reward = train(env, sac, epochs=300 , episodes=1,
+ steps=100, render=False, graphing=True, run=False)
 
-run(sac, env, episodes=1, steps=100)
+run(sac, env, episodes=3, steps=100)
 
 """
 plt.plot(reward/np.max(reward), label="Reward")

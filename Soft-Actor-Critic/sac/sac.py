@@ -1,5 +1,5 @@
 import torch
-from torch.distributions.multivariate_normal import MultivariateNormal
+from torch.distributions.normal import Normal
 
 from .buffer import Buffer
 from .policy_network import PolicyNetwork
@@ -32,18 +32,14 @@ class SAC(object):
 		self.q2_loss = []
 		self.p_loss = []
 		
-	def compute_targets(self, r, s_p, d, alpha=0.2):
+	def compute_targets(self, r, s_p, d, alpha=0.3):
 
-		samp_action = self.act_p(s_p)
+		samp_action, log_p = self.act_p(s_p)
 
 		targ1 = self.target_q1.forward(s_p, samp_action)
 		targ2 = self.target_q2.forward(s_p, samp_action)
 
 		targ = torch.min(targ1, targ2)
-
-		m = MultivariateNormal(torch.zeros(2), torch.eye(2))
-
-		log_p = m.log_prob(samp_action).reshape(-1, 1)
 		
 		return r + (1-d)*(targ-alpha*log_p)
 
@@ -86,13 +82,12 @@ class SAC(object):
 
 	def act_p(self, state):
 
-		p = self.p_net.mean_forward(state)
-		p = self.p_net.forward(state)
+		p, log_p = self.p_net.log_forward(state)
 
-		return p
+		return p, log_p
 
 
-	def update(self, iter=10, n=100, alpha=0.2):
+	def update(self, iter=10, n=100, alpha=0.4):
 
 		s, a, r, s_p, d = self.buffer.get()
 
@@ -118,11 +113,19 @@ class SAC(object):
 
 		return q1_loss, q2_loss
 
-	def update_p_net(self, s, y, l_p, alpha=0.2):
-		action = self.act_p(s)
+	def update_p_net(self, s, y, l_p, alpha=0.4):
+		
 
-		m = MultivariateNormal(torch.zeros(2), torch.eye(2))
-		log_p = m.log_prob(action)
+		action, log_p = self.act_p(s)
+
+
+		"""
+		print("###################")
+		print(log_p)
+		print("###################")
+		print(action)
+		print("###################")
+		"""
 
 		q1 = self.target_q1.forward(s, action)
 		q2 = self.target_q2.forward(s, action)

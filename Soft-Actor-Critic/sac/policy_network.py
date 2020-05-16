@@ -2,6 +2,8 @@ import torch
 from torch.nn import functional as F
 from torch import optim
 from torch import nn
+from torch.distributions.normal import Normal
+import numpy as np
 
 class PolicyNetwork(torch.nn.Module):
 
@@ -12,12 +14,14 @@ class PolicyNetwork(torch.nn.Module):
 		self.in_dim = in_dim
 		self.out_dim = out_dim
 
-		self.l_mean = nn.Linear(64, out_dim)
-
 		self.l1 = nn.Linear(in_dim, 128)
 		self.l2 = nn.Linear(128, 128)
 		self.l3 = nn.Linear(128, 64)
 		self.l4 = nn.Linear(64, out_dim)
+
+		self.log_linear = nn.Linear(out_dim, out_dim)
+		self.mu_linear = nn.Linear(out_dim, out_dim)
+
 		self.leaky_relu = nn.LeakyReLU()
 		self.relu = nn.ReLU()
 		self.tanh = nn.Tanh()
@@ -44,7 +48,7 @@ class PolicyNetwork(torch.nn.Module):
 
 		return out
 
-	def mean_forward(self, x):
+	def log_forward(self, x):
 
 		out = torch.Tensor(x).reshape(-1, self.in_dim)
 
@@ -55,23 +59,29 @@ class PolicyNetwork(torch.nn.Module):
 		out = self.l3(out)
 		out = self.leaky_relu(out)
 		out = self.l4(out)
+		#out = self.tanh(out)
+		
+		
+		mu = self.mu_linear(out)
+		log_std = self.log_linear(out)
 
-		mu = out
-		mean = self.sigmoid(out)
+		log_std = torch.clamp(log_std, -20, 2)
+		std = torch.exp(log_std)
+		distribution = Normal(mu, std)
 
-		rand = torch.randn(x.shape[0], self.out_dim).clamp(0, 1)
+		action = distribution.rsample()
+		log_p = distribution.log_prob(action)
+		log_p -= (2*(np.log(2) - action - F.softplus(-2*action)))
 
-		return self.tanh(mu + mean*rand).clamp(-1, 1)
+		action = torch.tanh(action)
+
+		return action, log_p
 
 
 	def loss(self, q, log_p, alpha):
-
-		"""
-		print("q:", q.shape)
-		print("log p:", log_p.shape)
-
-		"""
-		return (alpha*log_p-q).mean()
+		l = q - alpha*log_p
+		#print(l.shape)
+		return -(l).mean()
 
 	def optimize(self, q, log_p, alpha=0.2):
 
@@ -85,7 +95,7 @@ class PolicyNetwork(torch.nn.Module):
 
 def main():
 	pn = PolicyNetwork(in_dim=3, out_dim=1)
-	x = torch.ones(10, 3)
+	x = torch.randn(10, 3)
 	print(pn.forward(x))
 
 if __name__ == "__main__":

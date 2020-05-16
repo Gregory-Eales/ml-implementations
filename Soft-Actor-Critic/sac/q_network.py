@@ -39,7 +39,7 @@ class QNetwork(torch.nn.Module):
 				out = self.l4(out)
 				out = self.relu(out)
 
-				#out = torch.clamp(out, -200, 200)
+				out = torch.clamp(out, -200, 200)
 				
 
 				return out.to(torch.device("cpu:0"))
