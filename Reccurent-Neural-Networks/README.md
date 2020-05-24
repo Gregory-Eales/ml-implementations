@@ -1,6 +1,6 @@
-<h1 align="center"> Algorithm Name </h1>
+<h1 align="center"> Reccurent Neural Network </h1>
 
-<h4 align="center"> Reimplementation of Algorithm Name </h4>
+<h4 align="center"> Reimplementation of a Reccurent Neural Network </h4>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
@@ -20,17 +20,19 @@
 </p>
 
 ## About:
-- overview of the algorithm and its implementation 
+This implementation envolves using an RNN to classify time series data....
 
 ## Requirements:
-- include required libraries and versions
+- Python v3.8
+- Pytorch v1.3
+- Matplotlib vX.X
 
 ## Algorithm:
 - explain algorithm overview
 - show pseudocode
 - explain implementation details
 
-## Environment:
+## Data:
 - explain the environment and/or data
 - show screenshots/tables/plots
 
