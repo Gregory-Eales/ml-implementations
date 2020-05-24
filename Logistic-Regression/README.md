@@ -1,5 +1,3 @@
-# Logistic Regression Reimplementation
-
 <h1 align="center"> Logistic Regression </h1>
 
 <h4 align="center"> Reimplementation of Logistic Regression </h4>
