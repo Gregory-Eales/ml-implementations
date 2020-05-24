@@ -20,14 +20,6 @@
   <a href="#Sources">Sources</a>
 </p>
 
-## To Do
-
-- grid search for optimal hyperparameters
-- add different random seeds
-- change alpha
-- different graphs
-
-
 ## About
 This is a reimplementation of vanilla policy gradient applied to the CartPole-v0 environment from the OpenAI gym.
 
