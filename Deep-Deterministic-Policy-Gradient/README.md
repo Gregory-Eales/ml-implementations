@@ -20,23 +20,33 @@
 </p>
 
 ## About:
-- overview of the algorithm and its implementation 
+implementation of the DPPG algorithm applied to the LunarLanard-v2 gym environment using pytorch
 
 ## Requirements:
-- include required libraries and versions
+- Pytorch
+- Numpy
+- Gym
+- Box-2D
+- TQDM
 
 ## Algorithm:
-- explain algorithm overview
-- show pseudocode
-- explain implementation details
+This algorithm learns the Q function of an environment while also learning policy whos goal is to maximize Q. This algorithm employs a replay buffer which it uses to learn off policy. It is based on the idea that if you know a Q funtion that is close to the optimal Q then you know which actions are approximately optimal, effectivly solving the environment.
+
+<p align="center">
+  <img width=400 src="img/DDPG-Psuedocode.png">
+</p>
 
 ## Environment:
-- explain the environment and/or data
-- show screenshots/tables/plots
+The environment used in this implementation was the LunarLander-v2 environment from the OpenAI gym. The algorithm requires the continuous variant and requires the agent to move
+
+<p align="center">
+  <img width=400 src="img/Lunar-Lander-Example.gif">
+</p>
 
 ## Training:
-- explain training methods
-- plot accuracy and loss through training
+The model was trained with a 3 layer MLP for all of the Q and Policy networks using ADAM for faster optimization.
+
+- show training graph
 
 ## Results:
 - show end result accuracy 
@@ -44,7 +54,9 @@
 - include closing thoughts + improvements
 
 ## Sources:
-- show sources
+- [Lunar Lander Example gif](https://stable-baselines.readthedocs.io/en/master/guide/examples.html)
+- [Spinning Up](https://spinningup.openai.com/en/latest/algorithms/ddpg.html)
+- [DDPG Psuedocode](https://spinningup.openai.com/en/latest/algorithms/ddpg.html)
 
 ## Meta:
 
