@@ -27,7 +27,7 @@ This is an implementation of a deep neural network with back propagation from sc
 - Matplotlib
 
 ## Algorithm:
-This implementation uses a multilayer perceptron with standard backprobagation to make classication from the ___ dataset. 
+This implementation uses a multilayer perceptron with standard backprobagation to make classication from the ___ dataset. Tanh was used in hidden layers and Sigmoid activations were used in the final layer.
 
 ## Data:
 - explain the environment and/or data
