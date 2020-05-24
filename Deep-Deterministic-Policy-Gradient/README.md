@@ -5,7 +5,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
   <img src="https://img.shields.io/badge/Dependency-v1.3-orange.svg">
-  <img src="https://img.shields.io/badge/Build-Passing-green.svg">
+  <img src="https://img.shields.io/badge/Status-Complete-green.svg">
   <img src="https://img.shields.io/badge/License-MIT-blue.svg">
 </p>
 
