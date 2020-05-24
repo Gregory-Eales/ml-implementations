@@ -30,6 +30,10 @@
 - show pseudocode
 - explain implementation details
 
+<p align="center">
+  <img width=400 src="/img/DDPG-Psuedocode.png">
+</p>
+
 ## Environment:
 - explain the environment and/or data
 - show screenshots/tables/plots
