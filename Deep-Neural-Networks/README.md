@@ -20,16 +20,14 @@
 </p>
 
 ## About:
-This is an implementation of a deep neural network with back propagation made from scratch with pytorch.
+This is an implementation of a deep neural network with back propagation from scratch with pytorch (No Autograd)
 
 ## Requirements:
 - Pytorch
 - Matplotlib
 
 ## Algorithm:
-- explain algorithm overview
-- show pseudocode
-- explain implementation details
+This implementation uses a multilayer perceptron with standard backprobagation to make classication from the ___ dataset. 
 
 ## Data:
 - explain the environment and/or data
