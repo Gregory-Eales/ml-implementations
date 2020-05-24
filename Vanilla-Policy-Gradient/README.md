@@ -58,15 +58,17 @@ The environment used in this implementation is the CartPole-V0 environment provi
   <img height="400" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/training_graph.gif">
 </p>
 
+The model was trained over a large number of steps per epoch to stablize learning because of the sudden drops in performance that effect basic policy gradient methods. The training graph is still fairly eratic due to random nature of action samlpling within the agent.
+
 
 ## Results
-By training the model over 1000 epochs with 4000 steps per epoch the agent was able to substantially improve its average reward nearly to the maximum obtainable reward. The agent also almost consistently made it to the maximum time step allowed inside the environment within 100 epochs.
 
 <p align="center">
   <img height="300", width="460" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Vanilla-Policy-Gradient/img/trained.gif">
 </p>
 
-  ` `
+By training the model over 1000 epochs with 4000 steps per epoch the agent was able to substantially improve its average reward nearly to the maximum obtainable reward. The agent also almost consistently made it to the maximum time step allowed inside the environment within 100 epochs.
+
 ## Sources
 
 ### Articles
