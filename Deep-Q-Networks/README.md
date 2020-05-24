@@ -1,6 +1,6 @@
 <h1 align="center"> Algorithm Name </h1>
 
-<h4 align="center"> Reimplementation of Algorithm Name </h4>
+<h4 align="center"> Deep Q Networks </h4>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
@@ -20,10 +20,14 @@
 </p>
 
 ## About:
-- overview of the algorithm and its implementation 
+This is an implementation of the Deep Q Network rl algorithm using pytroch and OpenAI's gym
 
 ## Requirements:
-- include required libraries and versions
+- python v3.8
+- pytorch v1.3
+- gym vX.x
+- matplotlib vX.X
+- 
 
 ## Algorithm:
 - explain algorithm overview
