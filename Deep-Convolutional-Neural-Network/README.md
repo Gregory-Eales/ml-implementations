@@ -28,17 +28,17 @@ This is an implementation of a convolutional neural network using pytorch and tr
 - python v3.6
 
 ## Algorithm:
-- explain algorithm overview
-- show pseudocode
-- explain implementation details
+Convolutional neural networks are based on mamalian visual cortex, extracting geometric features from each layer in what is comparable to a discrete convolution operation. This algorithm has lead to massive leaps in computer vision forever changing the field of deep learning and machine learning.
 
 ## Data:
-- explain the environment and/or data
-- show screenshots/tables/plots
+The data used to test this implementation is MNIST written character dataset.
+
+- MNIST IMAGE SAMPLES
+
+Each image is a 28 by 28 greyscale digit from 0-9. 
 
 ## Training:
-- explain training methods
-- plot accuracy and loss through training
+The model is trained using stochastic gradient descent to minimize the error from the mean squared error objective function. As you can see from the graph the loss steadily declines and early stoping is employed when the model validation loss begins to deviate too drasticly from the training loss.
 
 ## Results:
 - show end result accuracy 
@@ -46,7 +46,8 @@ This is an implementation of a convolutional neural network using pytorch and tr
 - include closing thoughts + improvements
 
 ## Sources:
-- show sources
+- MNIST Dataset 
+- Convolutional NN paper Yann LeCun
 
 ## Meta:
 
