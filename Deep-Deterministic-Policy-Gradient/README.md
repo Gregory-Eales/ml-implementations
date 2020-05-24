@@ -31,7 +31,7 @@
 - explain implementation details
 
 <p align="center">
-  <img width=400 src="/img/DDPG-Psuedocode.png">
+  <img width=400 src="img/DDPG-Psuedocode.png">
 </p>
 
 ## Environment:
