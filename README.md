@@ -10,9 +10,6 @@
 ## About
 This repository contains machine learning reimplementations done using either numpy or pytorch/tensorflow (cuda). Each implementation has a readme with sources and a short explanation about the algorithm as well as additional notes.
 
-## To Do
-Link: https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/TO-DO.md
-
 ## Meta
 
 Gregory Eales – [@GregoryHamE](https://twitter.com/GregoryHamE) – gregory.hamilton.e@gmail.com
