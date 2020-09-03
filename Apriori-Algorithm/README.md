@@ -1,6 +1,6 @@
-<h1 align="center"> Algorithm Name </h1>
+<h1 align="center"> Apriori Algorithm </h1>
 
-<h4 align="center"> Reimplementation of Algorithm Name </h4>
+<h4 align="center"> Reimplementation of Apriori Algorithm </h4>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
@@ -20,19 +20,19 @@
 </p>
 
 ## About:
-- overview of the algorithm and its implementation 
+This algorithm works by slowly building likely pairs of data features by using arbitrary thresholds or "minimum supports" to determine the pairs of data features with the greatest frequency. It is mainly used in database related applications and is a useful tool for quick statistical information about common recurrences inside of a dataset.
 
 ## Requirements:
 - include required libraries and versions
 
 ## Algorithm:
 - explain algorithm overview
-- show pseudocode
+- show pseudo-code
 - explain implementation details
 
 ## Environment:
 - explain the environment and/or data
-- show screenshots/tables/plots
+- show screen shots/tables/plots
 
 ## Training:
 - explain training methods

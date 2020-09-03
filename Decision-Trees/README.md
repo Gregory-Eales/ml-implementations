@@ -1,6 +1,6 @@
-<h1 align="center"> Algorithm Name </h1>
+<h1 align="center"> Decision Trees </h1>
 
-<h4 align="center"> Reimplementation of Algorithm Name </h4>
+<h4 align="center"> Reimplementation of Decision Trees </h4>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
@@ -20,7 +20,7 @@
 </p>
 
 ## About:
-- overview of the algorithm and its implementation 
+Decision trees make progressively specific classifications based on feature thresholds / conditions. This method requires a decent amount of hand engineering but can be an effective and simple tool.
 
 ## Requirements:
 - include required libraries and versions

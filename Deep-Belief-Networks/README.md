@@ -1,6 +1,6 @@
-<h1 align="center"> Algorithm Name </h1>
+<h1 align="center"> Deep Belief Networks </h1>
 
-<h4 align="center"> Reimplementation of Algorithm Name </h4>
+<h4 align="center"> Reimplementation of Deep Belief Networks </h4>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
@@ -20,7 +20,7 @@
 </p>
 
 ## About:
-- overview of the algorithm and its implementation 
+DBNs are a type of generative graphical model that utilizes neural networks to create data points that are probabilistically feasible according to the training data. This model is trained with what is called contrastive divergence. CD uses the partition function to lower the "energy" of the system.
 
 ## Requirements:
 - include required libraries and versions

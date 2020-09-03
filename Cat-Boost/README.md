@@ -1,6 +1,6 @@
-<h1 align="center"> Algorithm Name </h1>
+<h1 align="center"> Cat Boost </h1>
 
-<h4 align="center"> Reimplementation of Algorithm Name </h4>
+<h4 align="center"> Reimplementation of Cat Boost </h4>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-v3.6+-blue.svg">
@@ -20,7 +20,14 @@
 </p>
 
 ## About:
-- overview of the algorithm and its implementation 
+CatBoost is a variant of gradient boosted decision trees that uses ordered boosting which provides a permutation method for optimal search and an additional algorithm for handling categorical features.
+
+ "encode each categorical feature with the estimate of the expected target y conditioned by the category"
+
+ "Fighting Prediction Shift"
+
+ "Ordered Target Statistic"
+
 
 ## Requirements:
 - include required libraries and versions
@@ -44,7 +51,7 @@
 - include closing thoughts + improvements
 
 ## Sources:
-- show sources
+- [Psuedocode](https://towardsdatascience.com/https-medium-com-talperetz24-mastering-the-new-generation-of-gradient-boosting-db04062a7ea2#:~:text=CatBoost%20is%20an%20algorithm%20for,tasks%2C%20forecasting%20and%20making%20recommendations)
 
 ## Meta:
 
