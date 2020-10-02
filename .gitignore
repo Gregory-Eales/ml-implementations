@@ -8,14 +8,14 @@
 Deep-Fake-Discriminator/DFD/Deep-Fake-Data/
 *.pt
 
-/Apriori-Algorithm/
-/Cat-Boost/
-/Decision-Trees/
-/Deep-Belief-Networks/
-/Deep-Boltzman-Machines/
-/Differential-Neural-Computers/
-/Generative-Adversarial-Networks/
-/Gradient-Boosting-Machines/
-/Hopfield-Network/
-/Light-GBM/
-/Stacked-Auto-Encoders/
+Apriori-Algorithm
+Cat-Boost
+Decision-Trees
+Deep-Belief-Networks
+Deep-Boltzman-Machines
+Differential-Neural-Computers
+Generative-Adversarial-Networks
+Gradient-Boosting-Machines
+Hopfield-Network
+Light-GBM
+Stacked-Auto-Encoders
