@@ -35,14 +35,14 @@ Linear regression is a line fitting algorithm that updates its parameters using 
 The data used is generated randomly to form two slightly overlapping gaussian distributions. This provides a perfect test case for a simple binary classifier.
 
 <p align="center">
-  <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Linear-Regression/img/class_data.png">
+  <img width="800" src="https://github.com/Gregory-Eales/ml-reimplementations/blob/master/linear-regressor/img/class_data.png">
 </p>
 
 ## Training:
 The model is trained using gradient descent with out batching and a learning rate of 0.001 with 10,000 iterations.
 
 <p align="center">
-  <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Linear-Regression/img/loss_per_iter.png">
+  <img width="800" src="https://github.com/Gregory-Eales/ml-reimplementations/blob/master/linear-regressor/img/loss_per_iter.png">
 </p>
 
 
@@ -50,11 +50,11 @@ The model is trained using gradient descent with out batching and a learning rat
 The model is able to achieve a very convincing decision boundary, clearly dividing the two class distributions and is able to correctly classify data with around 97% accuracy. 
 
 <p align="center">
-  <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Linear-Regression/img/accuracy_per_epoch.png">
+  <img width="800" src="https://github.com/Gregory-Eales/ml-reimplementations/blob/master/linear-regressor/img/accuracy_per_epoch.png">
 </p>
 
 <p align="center">
-  <img width="800" src="https://github.com/Gregory-Eales/ML-Reimplementations/blob/master/Linear-Regression/img/decision_boundry.png">
+  <img width="800" src="https://github.com/Gregory-Eales/ml-reimplementations/blob/master/linear-regressor/img/decision_boundry.png">
 </p>
 
 ## Sources:
