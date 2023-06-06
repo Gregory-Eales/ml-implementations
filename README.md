@@ -8,7 +8,7 @@
 </p>
 
 ## About
-This repository contains machine learning reimplementations done using either numpy or pytorch/tensorflow (cuda). Each implementation has a readme with sources and a short explanation about the algorithm as well as additional notes.
+This repository contains machine learning implementations done using either numpy or pytorch/tensorflow (cuda). Each implementation may have a readme with sources and a short explanation about the algorithm as well as additional notes.
 
 ## Meta
 
